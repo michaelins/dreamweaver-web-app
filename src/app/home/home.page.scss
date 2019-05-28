@@ -1,0 +1,24 @@
+ion-toolbar {
+  --border-width: 0;
+  //   --background: rgba(var(--ion-color-dark-rgb), 0.7);
+}
+ion-content {
+  --offset-bottom: 0;
+  --padding-top: 0;
+}
+div.searchbar-wrapper {
+  //   background: rgba(var(--ion-color-dark-rgb), 0.7);
+  //   background: var(--ion-color-primary);
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+ion-searchbar {
+  --background: rgba(var(--ion-color-light-rgb), 0.07);
+  --icon-color: rgba(var(--ion-color-dark-rgb), 1);
+}
+ion-refresher {
+  top: -68px;
+}
