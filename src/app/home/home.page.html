@@ -11,15 +11,18 @@
   </ion-header> -->
 <ion-header no-border>
   <ion-toolbar [appIonicProperty]="toolbarIonicProperties" [ngStyle]="{'opacity': toolBarOpacity}">
-    <ion-searchbar placeholder="输入你正在找的宝贝" [appIonicProperty]="searchbarIonicProperties"></ion-searchbar>
+    <ion-searchbar placeholder="输入你正在找的宝贝"></ion-searchbar>
+    <ion-label color="light" slot="start">{{scrollTop+','+scrollHeight+','+offsetHeight}}</ion-label>
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen="true" scrollEvents="true" (ionScroll)="onScroll($event)" (touchend)="onTouchEnd()">
+<ion-content #scrollable forceOverscroll="false" fullscreen="true" scrollEvents="true" (ionScroll)="onScroll($event)"
+  (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()">
 
-  <ion-refresher pullFactor="0.5" pullMin="68" pullMax="168" (ionPull)="onRefreshPull($event)" (ionRefresh)="doRefresh($event)">
+  <!-- <ion-refresher pullMin="68" pullMax="168" (ionStart)="onRefreshStart($event)"
+    (ionPull)="onRefreshPull($event)" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
-  </ion-refresher>
+  </ion-refresher> -->
 
   <ion-slides pager="true" [options]="slideOpts">
     <ion-slide>

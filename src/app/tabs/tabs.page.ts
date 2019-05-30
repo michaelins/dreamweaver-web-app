@@ -16,4 +16,10 @@ export class TabsPage implements OnInit {
     this.isTabBarHidden = this.uiStateService.getTabBarHidden();
   }
 
+  onTouchMove(event) {
+    console.log(event);
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
 }

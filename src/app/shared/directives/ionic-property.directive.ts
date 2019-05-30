@@ -13,9 +13,7 @@ export class IonicPropertyDirective implements OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log(changes);
     for (const property of this.appIonicProperty) {
-      console.log(property.name + ',' + property.value);
       if (this.elRef.nativeElement) {
         this.elRef.nativeElement.style.setProperty(property.name, property.value);
       }
