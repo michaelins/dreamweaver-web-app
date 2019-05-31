@@ -3,7 +3,8 @@ import { UiStateService } from '../shared/ui-state.service';
 import { Product } from '../shared/model/product.model';
 import { HomeService } from './home.service';
 import { IonicProperty } from '../shared/model/ionic-property.model';
-import { IonContent } from '@ionic/angular';
+import { IonContent, IonRefresher } from '@ionic/angular';
+import { fromEvent, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -23,18 +24,18 @@ export class HomePage implements OnInit {
     name: '--background',
     value: 'rgba(var(--ion-color-dark-rgb), 0)'
   }];
-  // searchbarIonicProperties: IonicProperty[] = [{
-  //   name: '--background',
-  //   value: 'rgba(var(--ion-color-light-rgb), 1)'
-  // }];
   toolBarOpacity = 1;
   refresherPullProgress = 0;
-  isRefresherInProgress = false;
+  isRefresherInProgress: boolean;
+  scrollEvents = true;
   scrollTop: number;
   scrollHeight: number;
   offsetHeight: number;
   pageX: number;
   pageY: number;
+  refresherAnimationTimer: any;
+
+  bodyTouchMoveEventSubscription: Subscription;
 
   constructor(
     private uiStateService: UiStateService,
@@ -42,29 +43,23 @@ export class HomePage implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.isRefresherInProgress = false;
     this.products.push(...this.homeService.products);
     this.products.push(...this.homeService.products);
     this.products.push(...this.homeService.products);
+  }
 
-    document.body.addEventListener('touchmove', (e) => {
-      // if (!e._isScroller) {
+  ionViewWillEnter() {
+    this.scrollEvents = true;
+    this.bodyTouchMoveEventSubscription = fromEvent<TouchEvent>(document.body, 'touchmove', { passive: false }).subscribe(e => {
       const bottomFaVal = this.scrollHeight - this.offsetHeight;
-      console.log(this.scrollTop);
-      console.log(bottomFaVal);
       if (this.scrollTop === 0) {
-        // console.log(e.touches[0].clientY);
-        // console.log(this.pageY);
         if (e.touches[0].clientY > this.pageY) {
-          console.log('you can not scroll top');
           e.preventDefault();
         } else {
           e.stopPropagation();
         }
-
       } else if (this.scrollTop === bottomFaVal) {
-        console.log('in the end');
-        console.log(e.touches[0].clientY);
-        console.log(this.pageY);
         if (e.touches[0].clientY < this.pageY) {
           e.preventDefault();
         } else {
@@ -75,21 +70,14 @@ export class HomePage implements OnInit {
       } else {
         e.preventDefault();
       }
-      // e.preventDefault();
-
-      // } else {
-      //   console.log(e._isScroller);
-      // }
-    }, { passive: false });
-
-  }
-
-  ionViewWillEnter() {
+    });
     this.uiStateService.setTabBarHidden(false);
     console.log('ionViewWillEnter');
   }
 
   ionViewWillLeave() {
+    this.scrollEvents = false;
+    this.bodyTouchMoveEventSubscription.unsubscribe();
     this.uiStateService.setTabBarHidden(true);
     console.log('ionViewWillLeave');
   }
@@ -102,7 +90,6 @@ export class HomePage implements OnInit {
     } else if (ratio > 1) {
       ratio = 1;
     }
-    // Only change background when necessary
     const currentToolbarBackgroundValue = 'rgba(var(--ion-color-dark-rgb), ' + ratio + ')';
     if (this.toolbarIonicProperties.length <= 0 || this.toolbarIonicProperties[0].value !== currentToolbarBackgroundValue) {
       this.toolbarIonicProperties = [{
@@ -110,16 +97,6 @@ export class HomePage implements OnInit {
         value: 'rgba(var(--ion-color-dark-rgb), ' + ratio + ')'
       }];
     }
-    // if (ratio < 0.07) {
-    //   ratio = 0.07;
-    // }
-    // const currentSearchbarBackgroundValue = 'rgba(var(--ion-color-light-rgb), ' + ratio + ')';
-    // if (this.searchbarIonicProperties.length <= 0 || this.searchbarIonicProperties[0].value !== currentSearchbarBackgroundValue) {
-    //   this.searchbarIonicProperties = [{
-    //     name: '--background',
-    //     value: 'rgba(var(--ion-color-light-rgb), ' + ratio + ')'
-    //   }];
-    // }
   }
 
   loadData(event) {
@@ -133,7 +110,7 @@ export class HomePage implements OnInit {
       if (this.products.length >= 50) {
         event.target.disabled = true;
       }
-    }, 1000);
+    }, 200);
   }
 
   doRefresh(event) {
@@ -148,14 +125,17 @@ export class HomePage implements OnInit {
       //   name: '--background',
       //   value: 'rgba(var(--ion-color-light-rgb), 1)'
       // }];
+      this.refresherPullProgress = 0;
       this.toolBarOpacity = 1;
       this.isRefresherInProgress = false;
-    }, 2000);
+
+      setTimeout(() => {
+        this.isRefresherInProgress = false;
+      }, 280);
+    }, 400);
   }
 
   onRefreshStart(event: CustomEvent) {
-    console.log('onRefreshStart');
-    console.log(event);
     this.isRefresherInProgress = true;
   }
 
@@ -173,63 +153,39 @@ export class HomePage implements OnInit {
     });
   }
 
-  onTouchEnd(event: CustomEvent) {
-    if (this.refresherPullProgress < 1 && this.toolBarOpacity < 1) {
-      this.toolBarOpacity = 1;
+  onTouchEnd(event: TouchEvent) {
+    if (this.refresherAnimationTimer) {
+      clearTimeout(this.refresherAnimationTimer);
     }
+    this.refresherAnimationTimer = setTimeout(() => {
+      if (this.refresherPullProgress > 0 && this.refresherPullProgress < 1 && this.toolBarOpacity < 1) {
+        this.toolBarOpacity = 1;
+        this.isRefresherInProgress = false;
+        this.refresherPullProgress = 0;
+      }
+    }, 280);
   }
 
-  onTouchMove(event) {
-    // console.log(event);
+  onTouchMove(event: TouchEvent) {
     if (this.isRefresherInProgress) {
       event.stopPropagation();
       event.preventDefault();
     }
-    // console.log(event.target);
     this.scrollable.getScrollElement().then(el => {
-      //   if (el.offsetHeight < el.scrollHeight) {
-      //     console.log('isScroller! ' + event._isScroller);
-      //     event._isScroller = true;
-      //     console.log('isScroller! ' + event._isScroller);
-      //   }
       this.scrollTop = el.scrollTop;
       this.scrollHeight = el.scrollHeight;
       this.offsetHeight = el.offsetHeight;
     });
   }
 
-  onTouchStart(event) {
+  onTouchStart(event: TouchEvent) {
+    if (this.isRefresherInProgress) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
     this.scrollable.getScrollElement().then(el => {
-
-      // If we're at the top or the bottom of the containers
-      // scroll, push up or down one pixel.
-      //
-      // this prevents the scroll from "passing through" to
-      // the body.
-      // if (el.scrollTop === 0) {
-      //   console.log('start...');
-      //   el.scrollTop = 1;
-      // } else if ((el.scrollTop + el.offsetHeight) === el.scrollHeight) {
-      //   console.log('end...');
-      //   el.scrollTop = el.scrollTop - 1;
-      // }
-
-      // console.log();
-      // console.log();
       this.pageX = event.touches[0].pageX;
       this.pageY = event.touches[0].pageY;
-
-      // var touch = evt.touches[0]; //获取第一个触点
-      //       var x = Number(touch.pageX); //页面触点X坐标
-      //       var y = Number(touch.pageY); //页面触点Y坐标
-      //       startX = x;
-      //       startY = y;
     });
-    // console.log();
-    // var top = el.scrollTop
-    //   , totalScroll = el.scrollHeight
-    //   , currentScroll = top + el.offsetHeight
-
-
   }
 }
