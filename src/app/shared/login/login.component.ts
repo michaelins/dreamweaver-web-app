@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +9,8 @@ import { ModalController } from '@ionic/angular';
 export class LoginComponent implements OnInit {
 
   constructor(
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() { }
@@ -18,4 +19,13 @@ export class LoginComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  onForgetPassword() {
+    this.modalCtrl.dismiss().then(a => {
+      console.log(a);
+      this.navCtrl.navigateForward('/register');
+    });
+
+    this.navCtrl.navigateForward('/register');
+
+  }
 }

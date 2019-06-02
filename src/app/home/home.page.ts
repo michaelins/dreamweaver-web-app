@@ -3,8 +3,9 @@ import { UiStateService } from '../shared/ui-state.service';
 import { Product } from '../shared/model/product.model';
 import { HomeService } from './home.service';
 import { IonicProperty } from '../shared/model/ionic-property.model';
-import { IonContent, IonRefresher } from '@ionic/angular';
+import { IonContent, ModalController } from '@ionic/angular';
 import { fromEvent, Subscription } from 'rxjs';
+import { LoginComponent } from '../shared/login/login.component';
 
 @Component({
   selector: 'app-home',
@@ -17,12 +18,12 @@ export class HomePage implements OnInit {
 
   products: Product[] = [];
   slideOpts = {
-    initialSlide: 1,
-    speed: 400
+    speed: 400,
+    autoplay: true
   };
   toolbarIonicProperties: IonicProperty[] = [{
     name: '--background',
-    value: 'rgba(var(--ion-color-dark-rgb), 0)'
+    value: 'rgba(var(--ion-color-primary-rgb), 0)'
   }];
   toolBarOpacity = 1;
   refresherPullProgress = 0;
@@ -39,7 +40,8 @@ export class HomePage implements OnInit {
 
   constructor(
     private uiStateService: UiStateService,
-    private homeService: HomeService
+    private homeService: HomeService,
+    private modalCtrl: ModalController
   ) { }
 
   ngOnInit(): void {
@@ -90,11 +92,11 @@ export class HomePage implements OnInit {
     } else if (ratio > 1) {
       ratio = 1;
     }
-    const currentToolbarBackgroundValue = 'rgba(var(--ion-color-dark-rgb), ' + ratio + ')';
+    const currentToolbarBackgroundValue = 'rgba(var(--ion-color-primary-rgb), ' + ratio + ')';
     if (this.toolbarIonicProperties.length <= 0 || this.toolbarIonicProperties[0].value !== currentToolbarBackgroundValue) {
       this.toolbarIonicProperties = [{
         name: '--background',
-        value: 'rgba(var(--ion-color-dark-rgb), ' + ratio + ')'
+        value: 'rgba(var(--ion-color-primary-rgb), ' + ratio + ')'
       }];
     }
   }
@@ -119,7 +121,7 @@ export class HomePage implements OnInit {
       event.target.complete();
       this.toolbarIonicProperties = [{
         name: '--background',
-        value: 'rgba(var(--ion-color-dark-rgb), 0)'
+        value: 'rgba(var(--ion-color-primary-rgb), 0)'
       }];
       // this.searchbarIonicProperties = [{
       //   name: '--background',

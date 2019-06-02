@@ -15,7 +15,7 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [BrowserModule, IonicModule.forRoot(
     {
       mode: 'ios',
-      backButtonText: '后退'
+      backButtonText: ''
     }
   ), AppRoutingModule],
   providers: [

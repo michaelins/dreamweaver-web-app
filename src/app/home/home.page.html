@@ -7,7 +7,7 @@
 <ion-content #scrollable forceOverscroll="false"  fullscreen="true" [scrollEvents]="scrollEvents" (ionScroll)="onScroll($event)"
   (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()">
 
-  <ion-refresher closeDuration="200ms" snapbackDuration="50ms" (ionStart)="onRefreshStart($event)" (ionPull)="onRefreshPull($event)"
+  <ion-refresher closeDuration="200ms" snapbackDuration="50ms" pullMax="400" (ionStart)="onRefreshStart($event)" (ionPull)="onRefreshPull($event)"
     (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
   </ion-refresher>

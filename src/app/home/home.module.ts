@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { HomePage } from './home.page';
 import { SharedModule } from '../shared/shared.module';
 import { IonicPropertyDirective } from '../shared/directives/ionic-property.directive';
+import { LoginComponent } from '../shared/login/login.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,7 @@ import { IonicPropertyDirective } from '../shared/directives/ionic-property.dire
       }
     ])
   ],
-  declarations: [HomePage]
+  declarations: [HomePage],
+  entryComponents: [LoginComponent]
 })
 export class HomePageModule { }

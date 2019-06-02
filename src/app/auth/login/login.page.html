@@ -8,9 +8,10 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="ion-padding" style="display: flex; align-items: center; justify-content: center; min-height: 100%; height: 100%; ">
-    <ion-grid>
+<ion-content forceOverscroll="false">
+  <div class="ion-padding"
+    style="display: flex; align-items: center; justify-content: center; min-height: 100%; height: 100%; ">
+    <ion-grid class="ion-no-padding"> 
       <ion-row>
         <ion-col size="12">
           <!-- <div style="background: green">
@@ -19,25 +20,25 @@
         </ion-col>
         <ion-col size="12" class="ion-no-padding">
           <ion-item lines="full">
-            <ion-input placeholder="请输入手机号"></ion-input>
+            <ion-input class="ion-padding-vertical" placeholder="请输入手机号"></ion-input>
           </ion-item>
         </ion-col>
         <ion-col size="12" class="ion-no-padding">
           <ion-item lines="full">
-            <ion-button slot="end" fill="outline" (click)="onForgetPassword()">忘记密码</ion-button>
-            <ion-input placeholder="请输入密码"></ion-input>
+            <ion-button slot="end" fill="outline" color="medium" style="--border-radius: 12px" [routerLink]="['/auth/password']">忘记密码</ion-button>
+            <ion-input class="ion-padding-vertical" placeholder="请输入密码"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col size="12" class="ion-no-padding">
+        <ion-col size="12" class="ion-padding-vertical">
           <ion-button expand="block">立即登录</ion-button>
         </ion-col>
-        <ion-col size="6">
-          <span>短信验证码登录</span>
+        <ion-col size="6" class="ion-padding-start">
+          <ion-text color="medium">短信验证码登录</ion-text>
         </ion-col>
-        <ion-col size="6" text-right>
-          <span>账号注册</span>
+        <ion-col size="6" class="ion-padding-end" text-right>
+          <a [routerLink]="['/auth/register']">账号注册</a>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -56,6 +57,6 @@
 
 <ion-footer no-border>
   <ion-toolbar text-center>
-    <span>登录即代表您已经同意《**隐私政策》</span>
+    <ion-text color="medium"><small>登录即代表您已经同意</small></ion-text><ion-text color="dark"><small>《**隐私政策》</small></ion-text>
   </ion-toolbar>
 </ion-footer>

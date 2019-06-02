@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Product } from '../shared/model/product.model';
+import { ModalController } from '@ionic/angular';
+import { LoginComponent } from '../shared/login/login.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HomeService {
 
-  constructor() { }
+  constructor(private modalCtrl: ModalController) { }
 
   private _products: Product[] = [
     new Product(
@@ -54,4 +56,11 @@ export class HomeService {
     return { ...this._products.find(p => p.id === ProductId) };
   }
 
+  getWrongInfo() {
+    this.modalCtrl.create({
+      component: LoginComponent
+    }).then(modal => {
+      modal.present();
+    });
+  }
 }
