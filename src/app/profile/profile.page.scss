@@ -34,5 +34,16 @@ ion-card {
   margin-top: 0;
   ion-card-content {
     padding: 0;
+    .activity {
+      background: linear-gradient(
+        -80deg,
+        rgba(255, 175, 189, 1) 0%,
+        rgba(255, 195, 160, 1) 100%
+      );
+      h2,
+      p {
+        margin: 0;
+      }
+    }
   }
 }
