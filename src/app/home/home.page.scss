@@ -53,7 +53,21 @@ ion-col {
 ion-card {
   &.headline {
     margin-top: 0;
-    background: #d7f3ff;
+    &.headline-1 {
+      background: #d7f3ff url('/assets/images/headline1_bg.png') no-repeat center right/contain;
+    }
+    &.headline-2 {
+      background: #e5f2e1 url('/assets/images/headline2_bg.png') no-repeat bottom right/contain;
+    }
+    &.headline-3 {
+      background: #f5e4e8;// url('/assets/images/headline1_bg.png') no-repeat center right/contain;
+    }
+    &.headline-4 {
+      background: #ede6f8;// url('/assets/images/headline1_bg.png') no-repeat center right/contain;
+    }
+    &.headline-5 {
+      background: #e0e9f9;// url('/assets/images/headline1_bg.png') no-repeat center right/contain;
+    }
     h1 {
       margin: 0;
       color: #547691;
