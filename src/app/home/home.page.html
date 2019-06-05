@@ -4,11 +4,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content #scrollable forceOverscroll="false"  fullscreen="true" [scrollEvents]="scrollEvents" (ionScroll)="onScroll($event)"
-  (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd()">
+<ion-content #scrollable forceOverscroll="false" fullscreen="true" [scrollEvents]="scrollEvents"
+  (ionScroll)="onScroll($event)" (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)"
+  (touchend)="onTouchEnd()">
 
-  <ion-refresher closeDuration="200ms" snapbackDuration="50ms" pullMax="400" (ionStart)="onRefreshStart($event)" (ionPull)="onRefreshPull($event)"
-    (ionRefresh)="doRefresh($event)">
+  <ion-refresher closeDuration="200ms" snapbackDuration="50ms" pullMax="400" (ionStart)="onRefreshStart($event)"
+    (ionPull)="onRefreshPull($event)" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
   </ion-refresher>
 
@@ -30,7 +31,7 @@
     </ion-slide>
   </ion-slides>
 
-  <ion-grid>
+  <ion-grid class="ion-no-padding">
     <!-- <ion-row>
         <ion-col text-center>
           <ion-card routerDirection="forward" [routerLink]="['/places/tabs/discover',featuredPlace.id]">
@@ -45,6 +46,79 @@
           </ion-card>
         </ion-col>
       </ion-row> -->
+    <ion-row class="brand ion-padding-start ion-padding-end">
+      <ion-col size=4 class="ion-padding-top ion-padding-bottom">
+        <div class="container">
+          <ion-icon name="medal" color="primary" class="ion-margin-end"></ion-icon>
+          <ion-text color="primary">品牌直供</ion-text>
+        </div>
+      </ion-col>
+      <ion-col size=4>
+        <div class="container">
+          <ion-icon name="medal" color="primary" class="ion-margin-end"></ion-icon>
+          <ion-text color="primary">独家授权</ion-text>
+        </div>
+      </ion-col>
+      <ion-col size=4>
+        <div class="container">
+          <ion-icon name="medal" color="primary" class="ion-margin-end"></ion-icon>
+          <ion-text color="primary">正品保证</ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="headline-row">
+      <ion-col>
+        <ion-card class="ion-margin headline">
+          <ion-card-content class="ion-padding">
+            <h2 class="ion-no-margin">甄选新品</h2>
+            <h2 class="ion-no-margin">尝鲜五月</h2>
+            <ion-button size="small">防晒低至满99减20</ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row class="headline-row">
+      <ion-col size=5 class="padding-bottom">
+        <ion-card class="ion-margin headline" style="height: 100%">
+          <ion-card-content class="ion-padding">
+            <h4 class="ion-no-margin">最新到货</h4>
+            <h6 class="ion-no-margin">组合优惠更划算</h6>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size=7>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-card class="ion-margin headline no-margin-start">
+                <ion-card-content class="ion-padding">
+                  <h4 class="ion-no-margin">面膜狂欢</h4>
+                  <h6 class="ion-no-margin">为你的美丽负责</h6>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size=6>
+              <ion-card class="ion-margin headline no-margin-start">
+                <ion-card-content class="ion-padding">
+                  <h4 class="ion-no-margin">商城精选</h4>
+                  <h6 class="ion-no-margin">大牌好货</h6>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+            <ion-col size=6>
+              <ion-card class="ion-margin headline no-margin-start">
+                <ion-card-content class="ion-padding">
+                  <h4 class="ion-no-margin">商城精选</h4>
+                  <h6 class="ion-no-margin">大牌好货</h6>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-col>
+    </ion-row>
     <ion-row>
       <ion-col>
         <ion-list>
