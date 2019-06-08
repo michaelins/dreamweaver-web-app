@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { AuthService } from '../../auth.service';
 
 @Component({
   selector: 'app-referral-input',
@@ -7,9 +10,30 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReferralInputPage implements OnInit {
 
-  constructor() { }
+  form: FormGroup;
+  constructor(
+    private authService: AuthService,
+    private navCtrl: NavController
+  ) { }
 
   ngOnInit() {
+    this.form = new FormGroup({
+      referralCode: new FormControl(null, {
+        updateOn: 'change',
+        validators: [Validators.required]
+      })
+    });
   }
 
+  onPrevStep() {
+    this.navCtrl.pop();
+  }
+
+  onNextStep() {
+
+  }
+
+  onNoReferralCodeClick() {
+    
+  }
 }

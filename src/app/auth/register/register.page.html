@@ -8,42 +8,47 @@
 </ion-header>
 
 <ion-content forceOverscroll="false">
-  <ion-grid class="ion-padding">
-    <ion-row>
-      <ion-col size="12" class="ion-no-padding">
-        <ion-item lines="full">
-          <ion-input class="ion-padding-vertical" placeholder="请设置您的昵称"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="12" class="ion-no-padding">
-        <ion-item lines="full">
-          <ion-input class="ion-padding-vertical" placeholder="请输入手机号码"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="12" class="ion-no-padding">
-        <ion-item lines="full">
-          <ion-button slot="end" fill="outline" color="medium" style="--border-radius: 12px"
-            [routerLink]="['/auth/password']">获取验证码</ion-button>
-          <ion-input class="ion-padding-vertical" placeholder="请输入验证码"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="12" class="ion-no-padding">
-        <ion-item lines="full">
-          <ion-input class="ion-padding-vertical" placeholder="请设置登录密码"></ion-input>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="12" class="ion-padding-vertical">
-        <ion-button expand="block">下一步</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <form [formGroup]="form">
 
+    <ion-grid class="ion-padding">
+      <ion-row>
+        <ion-col size="12" class="ion-no-padding">
+          <ion-item lines="full">
+            <ion-input class="ion-padding-vertical" placeholder="请设置您的昵称" type="text" formControlName="nickeName">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="ion-no-padding">
+          <ion-item lines="full">
+            <ion-input class="ion-padding-vertical" placeholder="请输入手机号码" type="tel" formControlName="phoneNo">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="ion-no-padding">
+          <ion-item lines="full">
+            <ion-button slot="end" fill="outline" color="medium" style="--border-radius: 12px" (click)="onGetAuthCode()"
+              [disabled]="isGetAuthCodeDisabled">获取验证码</ion-button>
+            <ion-input class="ion-padding-vertical" placeholder="请输入验证码" type="text" formControlName="code"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="ion-no-padding">
+          <ion-item lines="full">
+            <ion-input class="ion-padding-vertical" placeholder="请设置登录密码" type="password" formControlName="password">
+            </ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="ion-padding-vertical">
+          <ion-button expand="block" (click)="onSubmit()" [disabled]="false || !form.valid">下一步</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 </ion-content>
