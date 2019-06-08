@@ -10,38 +10,9 @@
 </ion-header>
 
 <ion-content fullscreen="true">
-  <!-- <ion-button expand="block" [routerLink]="['/auth/login']">登录</ion-button> -->
   <ion-grid class="ion-no-padding main">
     <ion-row>
       <ion-col>
-        <div Button (click)="showPicker()">{{ name }}</div>
-        <!-- <WhiteSpace></WhiteSpace>
-        <List className="my-list">
-          <ListItem Picker [data]="data" [extra]="name1" [arrow]="'horizontal'" [mask]="true" [title]="'Areas'"
-            [(ngModel)]="value1" (ngModelChange)="onOk1($event)" (onDismiss)="onDismiss1()">
-            Multiple & cascader
-          </ListItem>
-          <ListItem Picker [data]="delayData" [extra]="name1" [arrow]="'horizontal'" [mask]="true" [title]="'Areas'"
-            [(ngModel)]="value1" (ngModelChange)="onOk1($event)" (onDismiss)="onDismiss1()">
-            Multiple & delayData
-          </ListItem>
-          <ListItem Picker [extra]="name2" [arrow]="'horizontal'" [cascade]="false" [data]="seasons" [title]="'选择季节'"
-            [(ngModel)]="value2" (ngModelChange)="onOk2($event)">
-            Multiple
-          </ListItem>
-          <ListItem Picker [extra]="name3" [arrow]="'horizontal'" [data]="singleArea" [(ngModel)]="value3"
-            (ngModelChange)="onOk3($event)">
-            Single
-          </ListItem>
-          <ListItem Picker [data]="asynData" [cols]="cols" [extra]="name4" [arrow]="'horizontal'" [(ngModel)]="value4"
-            (onPickerChange)="onPickerChange($event)" (ngModelChange)="onOk4($event)">
-            Multiple & async
-          </ListItem>
-          <ListItem Picker [extra]="name1" [disabled]="true" [arrow]="'horizontal'" [mask]="true" [title]="'Areas'"
-            [(ngModel)]="value1" (ngModelChange)="onOk1($event)" (onDismiss)="onDismiss1()">
-            Disabled
-          </ListItem>
-        </List> -->
       </ion-col>
     </ion-row>
     <ion-row>
@@ -66,7 +37,7 @@
             <ion-grid>
               <ion-row>
                 <ion-col size=3>
-                  <ion-tab-button (click)="onSelect()">
+                  <ion-tab-button>
                     <ion-icon name="card" color="primary"></ion-icon>
                     <ion-label>待付款</ion-label>
                     <!-- <ion-badge>6</ion-badge> -->

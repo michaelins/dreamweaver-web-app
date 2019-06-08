@@ -8,10 +8,6 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { NgZorroAntdMobileModule } from 'ng-zorro-antd-mobile';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +17,7 @@ import { NgZorroAntdMobileModule } from 'ng-zorro-antd-mobile';
       mode: 'ios',
       backButtonText: ''
     }
-  ), AppRoutingModule, BrowserAnimationsModule, FormsModule, HttpClientModule, NgZorroAntdMobileModule],
+  ), AppRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,

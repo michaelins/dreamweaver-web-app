@@ -10,7 +10,7 @@ export class TabsPage implements OnInit {
 
   isTabBarHidden: boolean;
 
-  constructor(private uiStateService: UiStateService) { }
+  constructor(public uiStateService: UiStateService) { }
 
   ngOnInit() {
     this.isTabBarHidden = this.uiStateService.getTabBarHidden();
