@@ -41,3 +41,83 @@ ion-modal.auto-height {
     }
   }
 }
+
+@mixin multiline-ellipsis(
+  $lines,
+  $lineHeight: 1.4,
+  $ellipsisWidth: 3em,
+  $bgColor: white
+) {
+  box-sizing: content-box;
+  overflow: hidden;
+  height: $lines * $lineHeight * 1em;
+  line-height: $lineHeight;
+
+  &:before {
+    content: "";
+    float: left;
+    width: 5px;
+    height: $lines * $lineHeight * 1em;
+  }
+
+  & > *:first-child {
+    float: right;
+    width: 100%;
+    margin-left: -5px;
+  }
+
+  &:after {
+    content: "\02026";
+    float: right;
+    position: relative;
+    top: -$lineHeight * 1em;
+    left: 100%;
+    box-sizing: content-box !important;
+    width: $ellipsisWidth;
+    margin-left: -$ellipsisWidth;
+    padding-right: 5px;
+
+    text-align: right;
+    background: white;
+    background: -webkit-gradient(
+      linear,
+      left top,
+      right top,
+      from(rgba(255, 255, 255, 0)),
+      to($bgColor),
+      color-stop(50%, $bgColor)
+    );
+    background: -moz-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      $bgColor 50%,
+      $bgColor
+    );
+    background: -o-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      $bgColor 50%,
+      $bgColor
+    );
+    background: -ms-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      $bgColor 50%,
+      $bgColor
+    );
+    background: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0),
+      $bgColor 50%,
+      $bgColor
+    );
+  }
+}
+
+.box-2lines-ellipsis {
+  @include multiline-ellipsis(2);
+}
+
+#demo_box {
+  line-height: 1.4;
+}

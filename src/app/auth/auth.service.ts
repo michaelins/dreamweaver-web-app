@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { User } from './user.model';
 
 export interface SmsSendAuthCodeRsp {
     authKey: string; // 发送验证码短信成功后返回，验证时需要传递到通知服务系统 ,
@@ -37,6 +40,13 @@ export interface LoginRsp {
     providedIn: 'root'
 })
 export class AuthService {
+
+    private _user = new BehaviorSubject<User>(null);
+
+    get user() {
+        return this._user.asObservable();
+    }
+
     private _userIsAuthenticated = true;
     public registerReq: RegisterReq = {
         authKey: null,
@@ -70,7 +80,7 @@ export class AuthService {
             headers: new HttpHeaders({
                 ChannelCode: 'WXH5'
             }),
-        });
+        }).pipe(tap(this.setUserData.bind(this)));
     }
 
     login(loginReq: LoginReq) {
@@ -78,6 +88,18 @@ export class AuthService {
             headers: new HttpHeaders({
                 ChannelCode: 'WXH5'
             }),
-        });
+        }).pipe(tap(this.setUserData.bind(this)));
+    }
+
+    private setUserData(userData: LoginRsp) {
+        const user = new User(
+            userData.accountNo,
+            userData.accountStatus,
+            userData.headPortrait,
+            userData.nickName,
+            userData.token,
+            userData.userId
+        );
+        this._user.next(user);
     }
 }

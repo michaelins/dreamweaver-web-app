@@ -9,9 +9,10 @@
 </ion-header>
 
 <ion-content forceOverscroll="false">
-  <form [formGroup]="form">
-    <div class="ion-padding"
-      style="display: flex; align-items: center; justify-content: center; min-height: 100%; height: 100%; ">
+  <div class="ion-padding"
+    style="display: flex; align-items: center; justify-content: center; min-height: 100%; height: 100%; ">
+    <form [formGroup]="form">
+
       <ion-grid class="ion-no-padding">
         <ion-row>
           <ion-col size="12" class="ion-no-padding">
@@ -41,9 +42,8 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-
-    </div>
-  </form>
+    </form>
+  </div>
 </ion-content>
 
 <ion-footer no-border>

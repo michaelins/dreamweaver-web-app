@@ -22,7 +22,8 @@
             <ion-img [src]="'/assets/images/avatar.png'"></ion-img>
           </ion-thumbnail>
           <ion-label>
-            <h2 [routerLink]="['/auth/login']">登录/注册</h2>
+            <h2 *ngIf="!nickName" [routerLink]="['/auth/login']">登录/注册</h2>
+            <h2 *ngIf="nickName">{{nickName}}</h2>
             <!-- <ion-badge color="primary">注册用户</ion-badge> -->
           </ion-label>
         </ion-item>

@@ -19,7 +19,11 @@ export class HomePage implements OnInit {
   products: Product[] = [];
   slideOpts = {
     speed: 400,
-    autoplay: true
+    loop: true,
+    autoplay: {
+      delay: 3000,
+      disableOnInteraction: false
+    }
   };
   toolbarIonicProperties: IonicProperty[] = [{
     name: '--background',
@@ -112,7 +116,7 @@ export class HomePage implements OnInit {
       if (this.products.length >= 50) {
         event.target.disabled = true;
       }
-    }, 200);
+    }, 700);
   }
 
   doRefresh(event) {

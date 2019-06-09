@@ -7,7 +7,7 @@ ion-content {
   --padding-top: 0;
 }
 ion-searchbar {
-  --background: rgba(var(--ion-color-light-rgb), 1);
+  --background: #ffffff;
   --icon-color: rgba(var(--ion-color-dark-rgb), 1);
 }
 ion-refresher {
@@ -15,6 +15,8 @@ ion-refresher {
 }
 
 ion-row {
+  --ion-margin: 10px;
+  --ion-padding: 10px;
   &.brand {
     div.container {
       display: flex;
@@ -30,8 +32,6 @@ ion-row {
   }
 
   &.headline-row {
-    --ion-margin: 10px;
-    --ion-padding: 10px;
     margin: 0;
     padding: 0;
     ion-grid,
@@ -46,27 +46,28 @@ ion-row {
   }
 }
 
-ion-col {
-  // border: 1px solid green;
-}
-
 ion-card {
   &.headline {
     margin-top: 0;
     &.headline-1 {
-      background: #d7f3ff url('/assets/images/headline1_bg.png') no-repeat center right/contain;
+      background: #d7f3ff url("/assets/images/headline1_bg.png") no-repeat
+        center right/contain;
     }
     &.headline-2 {
-      background: #e5f2e1 url('/assets/images/headline2_bg.png') no-repeat bottom right/contain;
+      background: #e5f2e1 url("/assets/images/headline2_bg.png") no-repeat
+        bottom right/contain;
     }
     &.headline-3 {
-      background: #f5e4e8 url('/assets/images/headline3_bg.png') no-repeat center right/contain;
+      background: #f5e4e8 url("/assets/images/headline3_bg.png") no-repeat
+        center right/contain;
     }
     &.headline-4 {
-      background: #ede6f8 url('/assets/images/headline4_bg.png') no-repeat center right/contain;
+      background: #ede6f8 url("/assets/images/headline4_bg.png") no-repeat
+        center right/contain;
     }
     &.headline-5 {
-      background: #e0e9f9 url('/assets/images/headline5_bg.png') no-repeat center right/contain;
+      background: #e0e9f9 url("/assets/images/headline5_bg.png") no-repeat
+        center right/contain;
     }
     h1 {
       margin: 0;
@@ -91,4 +92,15 @@ ion-card {
     --background: #ffffff;
     --color: var(--ion-color-medium);
   }
+}
+
+ion-item {
+  &.product {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+  }
+}
+
+ion-badge {
+  font-size: 0.8em;
 }

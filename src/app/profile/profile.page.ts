@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UiStateService } from '../shared/ui-state.service';
 import { ModalController, PickerController } from '@ionic/angular';
 import { LoginComponent } from '../shared/login/login.component';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -10,13 +11,24 @@ import { LoginComponent } from '../shared/login/login.component';
 })
 export class ProfilePage implements OnInit {
 
+  nickName: string;
+
   constructor(
     private uiStateService: UiStateService,
+    private authService: AuthService,
     private modalCtrl: ModalController,
     private pickerCtrl: PickerController) {
   }
 
   ngOnInit() {
+    this.authService.user.subscribe(user => {
+      if (user) {
+        console.log(user);
+        this.nickName = user.nickName;
+      }
+    }, error => {
+      console.log(error);
+    });
   }
 
   ionViewWillEnter() {
