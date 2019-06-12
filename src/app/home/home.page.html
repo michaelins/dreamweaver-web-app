@@ -3,7 +3,7 @@
     <ion-label slot="start" color="dark" class="ion-padding-start">
       <h1>LOGO</h1>
     </ion-label>
-    <ion-searchbar placeholder="输入你正在找的宝贝"></ion-searchbar>
+    <ion-searchbar placeholder="输入你正在找的宝贝" searchIcon="../../assets/icon/search.svg"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
@@ -11,7 +11,7 @@
   (ionScroll)="onScroll($event)" (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)"
   (touchend)="onTouchEnd($event)">
 
-  <ion-refresher closeDuration="200ms" snapbackDuration="50ms" pullMax="400" (ionStart)="onRefreshStart($event)"
+  <ion-refresher pullFactor="0.5" closeDuration="200ms" snapbackDuration="50ms" pullMax="400" (ionStart)="onRefreshStart($event)"
     (ionPull)="onRefreshPull($event)" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
   </ion-refresher>
@@ -35,36 +35,22 @@
   </ion-slides>
 
   <ion-grid class="ion-no-padding">
-    <!-- <ion-row>
-        <ion-col text-center>
-          <ion-card routerDirection="forward" [routerLink]="['/places/tabs/discover',featuredPlace.id]">
-            <ion-card-header>
-              <ion-card-title>{{featuredPlace.title}}</ion-card-title>
-              <ion-card-subtitle>{{featuredPlace.price | currency }} 每晚</ion-card-subtitle>
-            </ion-card-header>
-            <ion-img [src]="featuredPlace.imageUrl"></ion-img>
-            <ion-card-content>
-              <p>{{featuredPlace.description}}</p>
-            </ion-card-content>
-          </ion-card>
-        </ion-col>
-      </ion-row> -->
     <ion-row class="brand ion-padding-start ion-padding-end">
       <ion-col size=4 class="ion-padding-top ion-padding-bottom">
         <div class="container">
-          <ion-icon name="medal" color="primary" class="ion-margin-end"></ion-icon>
+          <ion-icon src="../../assets/icon/brand.svg" color="primary" class="ion-margin-end"></ion-icon>
           <ion-text color="primary">品牌直供</ion-text>
         </div>
       </ion-col>
       <ion-col size=4>
         <div class="container">
-          <ion-icon name="medal" color="primary" class="ion-margin-end"></ion-icon>
+          <ion-icon src="../../assets/icon/granted.svg" color="primary" class="ion-margin-end"></ion-icon>
           <ion-text color="primary">独家授权</ion-text>
         </div>
       </ion-col>
       <ion-col size=4>
         <div class="container">
-          <ion-icon name="medal" color="primary" class="ion-margin-end"></ion-icon>
+          <ion-icon src="../../assets/icon/genuine.svg" color="primary" class="ion-margin-end"></ion-icon>
           <ion-text color="primary">正品保证</ion-text>
         </div>
       </ion-col>
@@ -130,7 +116,7 @@
     <ion-row>
       <ion-col>
         <ion-item lines="none">
-          <ion-icon name="trophy" slot="start" color="primary"></ion-icon>
+          <ion-icon src="../../assets/icon/crown.svg" slot="start" color="primary"></ion-icon>
           <ion-label color="dark">
             <h3>每日畅销榜单</h3>
           </ion-label>

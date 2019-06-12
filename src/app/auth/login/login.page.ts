@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { AuthService } from '../auth.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -11,10 +11,12 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class LoginPage implements OnInit {
 
   form: FormGroup;
+  loginInProcess = false;
 
   constructor(
     private authService: AuthService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private alertCtrl: AlertController
   ) { }
 
   ngOnInit() {
@@ -25,9 +27,10 @@ export class LoginPage implements OnInit {
       }),
       password: new FormControl(null, {
         updateOn: 'change',
-        validators: [Validators.required, Validators.minLength(6), Validators.maxLength(20)]
+        validators: [Validators.required]
       })
     });
+    this.loginInProcess = false;
   }
 
   onDismiss() {
@@ -35,17 +38,39 @@ export class LoginPage implements OnInit {
   }
 
   onLogin() {
-    console.log(this.form.value);
+    if (!this.form.value.accountNo || !this.form.value.password) {
+      this.alertCtrl.create({
+        header: '登录失败',
+        message: '请输入手机号和密码',
+        buttons: ['确定']
+      }).then(alert => {
+        alert.present();
+      });
+      return;
+    }
+
+    this.loginInProcess = true;
     this.authService.login({
       accountNo: this.form.value.accountNo,
       password: this.form.value.password,
       loginDeviceType: 'WXH5',
       loginDeviceNum: '1234567890'
     }).subscribe(response => {
-      console.log(response);
+      this.loginInProcess = false;
       this.navCtrl.navigateRoot(['/tabs/profile']);
     }, error => {
       console.log(error);
+      if (error.status === 404 || error.status === 400) {
+        this.alertCtrl.create({
+          header: '登录失败',
+          message: '手机号或密码错误',
+          buttons: ['确定']
+        }).then(alert => {
+          alert.present();
+        }).finally(() => {
+          this.loginInProcess = false;
+        });
+      }
     });
   }
 }
