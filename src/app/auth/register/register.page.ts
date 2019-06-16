@@ -20,7 +20,7 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({
-      nickeName: new FormControl(null, {
+      nickName: new FormControl(null, {
         updateOn: 'change',
         validators: [Validators.required, Validators.minLength(2), Validators.maxLength(15)]
       }),
@@ -44,7 +44,7 @@ export class RegisterPage implements OnInit {
       return;
     }
     console.log(this.form.value);
-    this.authService.registerReq.nickeName = this.form.value.nickeName;
+    this.authService.registerReq.nickName = this.form.value.nickName;
     this.authService.registerReq.phoneNo = this.form.value.phoneNo;
     this.authService.registerReq.code = this.form.value.code;
     this.authService.registerReq.password = this.form.value.password;

@@ -14,7 +14,7 @@ export interface RegisterReq {
     code: string; // 验证码
     loginDeviceNum: string; // 登录设备号
     loginDeviceType: string; // 登录设备类型 = ['WXH5', 'APP', 'WEB']stringEnum:"WXH5", "APP", "WEB"
-    nickeName: string; // 昵称，昵称格式支持中文/英文/数字2-15长度
+    nickName: string; // 昵称，昵称格式支持中文/英文/数字2-15长度
     password: string; // 密码，密码长度最短为6位，最长为20位
     phoneNo: string; // 手机号码
     referralCode?: string; // optional: 推荐码
@@ -53,7 +53,7 @@ export class AuthService {
         code: null,
         loginDeviceType: 'WXH5',
         loginDeviceNum: '1234567890',
-        nickeName: null,
+        nickName: null,
         phoneNo: null,
         password: null
     };
