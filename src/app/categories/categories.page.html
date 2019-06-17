@@ -1,9 +1,69 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>分类</ion-title>
+    <ion-searchbar placeholder="请输入商品名称" searchIcon="../../assets/icon/search.svg"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="ion-margin-start">
+
+  <ion-grid class="container ion-no-padding">
+    <ion-row>
+      <ion-col size=3 class="category-nav ion-no-padding">
+        <div>
+          <ul>
+            <li [ngClass]="{active: categorId===1}"><a (click)="onNav(1)">所有品牌</a></li>
+            <li [ngClass]="{active: categorId===2}"><a (click)="onNav(2)">身体保健</a></li>
+            <li [ngClass]="{active: categorId===3}"><a (click)="onNav(3)">肌肤护理</a></li>
+            <li [ngClass]="{active: categorId===4}"><a (click)="onNav(4)">品质生活</a></li>
+            <li [ngClass]="{active: categorId===5}"><a (click)="onNav(5)">特惠直升</a></li>
+          </ul>
+        </div>
+      </ion-col>
+      <ion-col size=9>
+        <ion-content scrollX="true" style="background: green; min-height: 100%; height: 100%;">
+          <h1>{{title}}</h1>
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa excepturi sunt provident tenetur delectus
+            voluptas
+            dolor natus. Provident architecto odio earum quis, aperiam voluptatibus, autem ipsam, quibusdam quos vitae
+            dolores.
+          </p>
+          <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, consectetur.</h1>
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa excepturi sunt provident tenetur delectus
+            voluptas
+            dolor natus. Provident architecto odio earum quis, aperiam voluptatibus, autem ipsam, quibusdam quos vitae
+            dolores.
+          </p>
+          <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, consectetur.</h1>
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa excepturi sunt provident tenetur delectus
+            voluptas
+            dolor natus. Provident architecto odio earum quis, aperiam voluptatibus, autem ipsam, quibusdam quos vitae
+            dolores.
+          </p>
+          <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, consectetur.</h1>
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa excepturi sunt provident tenetur delectus
+            voluptas
+            dolor natus. Provident architecto odio earum quis, aperiam voluptatibus, autem ipsam, quibusdam quos vitae
+            dolores.
+          </p>
+          <h1>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, consectetur.</h1>
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa excepturi sunt provident tenetur delectus
+            voluptas
+            dolor natus. Provident architecto odio earum quis, aperiam voluptatibus, autem ipsam, quibusdam quos vitae
+            dolores.
+          </p>
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa excepturi sunt provident tenetur delectus
+            voluptas
+            dolor natus. Provident architecto odio earum quis, aperiam voluptatibus, autem ipsam, quibusdam quos vitae
+            dolores.
+          </p>
+          <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Culpa excepturi sunt provident tenetur delectus
+            voluptas
+            dolor natus. Provident architecto odio earum quis, aperiam voluptatibus, autem ipsam, quibusdam quos vitae
+            dolores.
+          </p>
+        </ion-content>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

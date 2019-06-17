@@ -8,6 +8,9 @@ import { UiStateService } from '../shared/ui-state.service';
 })
 export class CategoriesPage implements OnInit {
 
+  title = 'fuck';
+  categorId = 1;
+
   constructor(
     private uiStateService: UiStateService
   ) { }
@@ -23,5 +26,10 @@ export class CategoriesPage implements OnInit {
   ionViewWillLeave() {
     this.uiStateService.setTabBarHidden(true);
     console.log('ionViewWillLeave');
+  }
+
+  onNav(id: number) {
+    this.title = 'Nav done ' + id;
+    this.categorId = id;
   }
 }
