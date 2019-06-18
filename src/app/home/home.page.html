@@ -11,26 +11,14 @@
   (ionScroll)="onScroll($event)" (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)"
   (touchend)="onTouchEnd($event)">
 
-  <ion-refresher pullFactor="0.5" closeDuration="200ms" snapbackDuration="50ms" pullMax="400" (ionStart)="onRefreshStart($event)"
-    (ionPull)="onRefreshPull($event)" (ionRefresh)="doRefresh($event)">
+  <ion-refresher pullFactor="0.5" closeDuration="200ms" snapbackDuration="50ms" pullMax="400"
+    (ionStart)="onRefreshStart($event)" (ionPull)="onRefreshPull($event)" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
   </ion-refresher>
 
   <ion-slides pager="true" [options]="slideOpts">
-    <ion-slide>
-      <ion-img src='../../assets/images/banner1.jpg'></ion-img>
-    </ion-slide>
-    <ion-slide>
-      <ion-img src='../../assets/images/banner2.jpg'></ion-img>
-    </ion-slide>
-    <ion-slide>
-      <ion-img src='../../assets/images/banner3.jpg'></ion-img>
-    </ion-slide>
-    <ion-slide>
-      <ion-img src='../../assets/images/banner4.jpg'></ion-img>
-    </ion-slide>
-    <ion-slide>
-      <ion-img src='../../assets/images/banner5.jpg'></ion-img>
+    <ion-slide *ngFor="let banner of banners">
+      <img [src]="banner.ossPath+'?x-oss-process=image/resize,m_fill,h_270,w_480'">
     </ion-slide>
   </ion-slides>
 

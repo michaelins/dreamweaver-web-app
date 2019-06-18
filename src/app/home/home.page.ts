@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UiStateService } from '../shared/ui-state.service';
 import { Product } from '../shared/model/product.model';
-import { HomeService } from './home.service';
+import { HomeService, Banner } from './home.service';
 import { IonicProperty } from '../shared/model/ionic-property.model';
 import { IonContent, ModalController } from '@ionic/angular';
 import { fromEvent, Subscription } from 'rxjs';
-import { LoginComponent } from '../shared/login/login.component';
 
 @Component({
   selector: 'app-home',
@@ -16,6 +15,7 @@ export class HomePage implements OnInit {
 
   @ViewChild('scrollable') scrollable: IonContent;
 
+  banners: Banner[] = [];
   products: Product[] = [];
   slideOpts = {
     speed: 400,
@@ -23,6 +23,15 @@ export class HomePage implements OnInit {
     autoplay: {
       delay: 3000,
       disableOnInteraction: false
+    },
+    // preloadImages: true,
+    // updateOnImagesReady: true
+    lazy: {
+      //  tell swiper to load images before they appear
+      loadPrevNext: true,
+      // amount of images to load
+      loadPrevNextAmount: 1,
+      loadOnTransitionStart: true
     }
   };
   toolbarIonicProperties: IonicProperty[] = [{
@@ -53,6 +62,13 @@ export class HomePage implements OnInit {
     this.products.push(...this.homeService.products);
     this.products.push(...this.homeService.products);
     this.products.push(...this.homeService.products);
+    this.homeService.getBanners().subscribe(resp => {
+      console.log(resp);
+      this.banners.push(...resp);
+      this.banners.push(...resp);
+    }, error => {
+      console.log(error);
+    });
   }
 
   ionViewWillEnter() {
