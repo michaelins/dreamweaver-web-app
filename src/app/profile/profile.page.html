@@ -9,7 +9,8 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen="true">
+<ion-content #scrollable forceOverscroll="false" fullscreen="true" [scrollEvents]="scrollEvents"
+  (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)">
   <ion-grid class="ion-no-padding main">
     <ion-row>
       <ion-col>

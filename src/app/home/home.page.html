@@ -126,19 +126,18 @@
             <ion-grid class="ion-no-padding">
               <ion-row>
                 <ion-col size=4 class="ion-no-padding ion-padding-end ion-padding-top ion-padding-bottom">
-                  <ion-img [src]="product.imageUrl"></ion-img>
+                  <ion-img [src]="product.headImg+'?x-oss-process=image/resize,m_fill,h_150,w_150'"></ion-img>
                 </ion-col>
                 <ion-col size=8 class="ion-no-padding ion-padding-top ion-padding-bottom">
                   <ion-label text-wrap>
                     <div class="box-2lines-ellipsis">
                       <div>
-                        <article>{{product.description}}</article>
+                        <article>{{product.name}}</article>
                       </div>
                     </div>
                     <div class="ion-padding-top ion-padding-bottom">
-                      <ion-badge *ngFor="let tag of product.tags" color="secondary" class="ion-margin-end">{{tag}}
+                      <ion-badge *ngFor="let tag of product.tagsView" color="secondary" class="ion-margin-end">{{tag}}
                       </ion-badge>
-                      <!-- <ion-badge color="secondary">医美面膜</ion-badge> -->
                     </div>
                     <ion-text color="primary">
                       <h2>{{product.price | currency: 'CNY':'symbol-narrow'}}</h2>
