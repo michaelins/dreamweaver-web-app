@@ -1,0 +1,13 @@
+ion-content {
+  --background: #f2f2f2;
+}
+ion-row {
+  --ion-margin: 10px;
+  --ion-padding: 10px;
+}
+ion-item {
+  &.product {
+    --padding-start: 0;
+    --inner-padding-end: 0;
+  }
+}
