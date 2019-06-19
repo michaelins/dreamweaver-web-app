@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UiStateService } from '../shared/ui-state.service';
-import { Product } from '../shared/model/product.model';
-import { HomeService } from './home.service';
+import { HomeService, Banner, Product, CollectionOfProduct } from './home.service';
 import { IonicProperty } from '../shared/model/ionic-property.model';
 import { IonContent, ModalController } from '@ionic/angular';
 import { fromEvent, Subscription } from 'rxjs';
-import { LoginComponent } from '../shared/login/login.component';
 
 @Component({
   selector: 'app-home',
@@ -16,13 +14,25 @@ export class HomePage implements OnInit {
 
   @ViewChild('scrollable') scrollable: IonContent;
 
-  products: Product[] = [];
+  banners: Banner[] = [];
+  products: Product[];
+  collectionOfProduct: CollectionOfProduct = {};
+  productsPageSize = 2;
   slideOpts = {
     speed: 400,
     loop: true,
     autoplay: {
       delay: 3000,
       disableOnInteraction: false
+    },
+    preloadImages: false,
+    // updateOnImagesReady: true
+    lazy: {
+      //  tell swiper to load images before they appear
+      loadPrevNext: true,
+      // amount of images to load
+      loadPrevNextAmount: 1,
+      loadOnTransitionStart: true
     }
   };
   toolbarIonicProperties: IonicProperty[] = [{
@@ -50,9 +60,19 @@ export class HomePage implements OnInit {
 
   ngOnInit(): void {
     this.isRefresherInProgress = false;
-    this.products.push(...this.homeService.products);
-    this.products.push(...this.homeService.products);
-    this.products.push(...this.homeService.products);
+    this.homeService.getBanners().subscribe(resp => {
+      console.log(resp);
+      this.banners.push(...resp);
+    }, error => {
+      console.log(error);
+    });
+    this.homeService.getProducts(1, this.productsPageSize).subscribe(resp => {
+      console.log(resp);
+      this.products = resp.content;
+      this.collectionOfProduct = resp;
+    }, error => {
+      console.log(error);
+    });
   }
 
   ionViewWillEnter() {
@@ -78,7 +98,6 @@ export class HomePage implements OnInit {
       }
     });
     this.uiStateService.setTabBarHidden(false);
-    console.log('ionViewWillEnter');
   }
 
   ionViewWillLeave() {
@@ -106,22 +125,35 @@ export class HomePage implements OnInit {
   }
 
   loadData(event) {
-    setTimeout(() => {
-      this.products.push(...this.homeService.products);
-      console.log('Done');
+    if (this.collectionOfProduct.last) {
       event.target.complete();
+      event.target.disabled = true;
+    } else if (this.collectionOfProduct.number + 2 <= this.collectionOfProduct.totalPages) {
+      this.homeService.getProducts(this.collectionOfProduct.number + 2, this.productsPageSize).subscribe(resp => {
+        console.log(resp);
+        this.products.push(...resp.content);
+        this.collectionOfProduct = resp;
+        event.target.complete();
+      }, error => {
+        console.log(error);
+      });
+    }
+    // setTimeout(() => {
+    //   // this.products.push(...this.homeService.products);
+    //   console.log('Done');
+    //   event.target.complete();
 
-      // App logic to determine if all data is loaded
-      // and disable the infinite scroll
-      if (this.products.length >= 50) {
-        event.target.disabled = true;
-      }
-    }, 700);
+    //   // App logic to determine if all data is loaded
+    //   // and disable the infinite scroll
+    //   // if (this.products.length >= 50) {
+    //   event.target.disabled = true;
+    //   // }
+    // }, 700);
   }
 
   doRefresh(event) {
     setTimeout(() => {
-      this.products.unshift(...this.homeService.products);
+      // this.products.unshift(...this.homeService.products);
       event.target.complete();
       this.toolbarIonicProperties = [{
         name: '--background',
