@@ -9,6 +9,17 @@ ion-grid {
   }
 }
 
+ion-text {
+  &.category-label {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    --ion-margin: 5px;
+    --ion-padding: 5px;
+    font-size: 0.8rem;
+  }
+}
+
 .category-nav {
   background: #fafafa;
   font-size: 0.8rem;

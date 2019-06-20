@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UiStateService } from '../shared/ui-state.service';
+import { Product } from '../home/home.service';
 
 @Component({
   selector: 'app-shopping-cart',
