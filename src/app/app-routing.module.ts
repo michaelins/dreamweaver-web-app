@@ -3,8 +3,10 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: 'auth', loadChildren: './auth/auth.module#AuthPageModule' },
+  { path: 'product', loadChildren: './product/product.module#ProductPageModule' },
   { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
-  { path: '**', redirectTo: '/tabs/home' }
+  { path: '**', redirectTo: '/tabs/home' },
+
 ];
 
 @NgModule({

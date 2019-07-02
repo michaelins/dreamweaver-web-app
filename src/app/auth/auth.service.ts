@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { User } from './user.model';
+import { environment } from 'src/environments/environment';
 
 export interface SmsSendAuthCodeRsp {
     authKey: string; // 发送验证码短信成功后返回，验证时需要传递到通知服务系统 ,
@@ -65,7 +66,7 @@ export class AuthService {
     constructor(private http: HttpClient) { }
 
     getAuthCode(phoneNo: string, templateCode: string) {
-        return this.http.post<SmsSendAuthCodeRsp>('http://39.98.57.32:21314/sms/sendauthcode', {
+        return this.http.post<SmsSendAuthCodeRsp>(`${environment.apiServer}/sms/sendauthcode`, {
             phoneNo,
             templateCode
         }, {
@@ -76,7 +77,7 @@ export class AuthService {
     }
 
     register() {
-        return this.http.post<LoginRsp>('http://39.98.57.32:21314/user/register', this.registerReq, {
+        return this.http.post<LoginRsp>(`${environment.apiServer}/user/register`, this.registerReq, {
             headers: new HttpHeaders({
                 ChannelCode: 'WXH5'
             }),
@@ -84,7 +85,7 @@ export class AuthService {
     }
 
     login(loginReq: LoginReq) {
-        return this.http.post<LoginRsp>('http://39.98.57.32:21314/user/login', loginReq, {
+        return this.http.post<LoginRsp>(`${environment.apiServer}/user/login`, loginReq, {
             headers: new HttpHeaders({
                 ChannelCode: 'WXH5'
             }),

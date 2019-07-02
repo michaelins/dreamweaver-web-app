@@ -3,6 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { LoginComponent } from '../shared/login/login.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 export interface Banner {
   ossPath: string;
@@ -78,7 +79,7 @@ export class HomeService {
   }
 
   getProducts(pageNum: number, pageSize: number) {
-    return this.http.post<CollectionOfProduct>('http://39.98.57.32:21314/goods/' + pageNum + '/' + pageSize, {
+    return this.http.post<CollectionOfProduct>(`${environment.apiServer}/goods/${pageNum}/${pageSize}`, {
       equal: [{
         eqObj: 0,
         field: 'status'
@@ -95,7 +96,7 @@ export class HomeService {
   }
 
   getBanners() {
-    return this.http.post<CollectionOfBanner>('http://39.98.57.32:21314/banner/1/10', {
+    return this.http.post<CollectionOfBanner>(`${environment.apiServer}/banner/1/10`, {
       equal: [{
         eqObj: 0,
         field: 'status'

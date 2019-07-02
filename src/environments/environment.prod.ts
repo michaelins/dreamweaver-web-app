@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiServer: 'http://39.98.57.32:21314'
 };

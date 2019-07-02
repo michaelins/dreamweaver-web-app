@@ -1,0 +1,28 @@
+.product-nav {
+  //   background: #fafafa;
+  //   font-size: 0.8rem;
+  ul {
+    min-height: 44px;
+    li {
+      display: inline-block;
+      min-height: 44px;
+      margin-inline-start: 10px;
+      margin-inline-end: 10px;
+      a {
+        display: flex;
+        min-height: 44px;
+        justify-content: center;
+        align-items: center;
+        color: var(--ion-color-dark);
+      }
+      &.active {
+        background: #ffffff;
+        //   border-left: 4px solid var(--ion-color-primary);
+        box-shadow: inset 0 -1px 0 0 var(--ion-color-primary);
+        a {
+          color: var(--ion-color-primary);
+        }
+      }
+    }
+  }
+}

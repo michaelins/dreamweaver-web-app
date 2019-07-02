@@ -1,8 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { UiStateService } from '../shared/ui-state.service';
 import { HomeService, Banner, Product, CollectionOfProduct } from './home.service';
 import { IonicProperty } from '../shared/model/ionic-property.model';
-import { IonContent, ModalController } from '@ionic/angular';
+import { IonContent, ModalController, IonSearchbar, NavController } from '@ionic/angular';
 import { fromEvent, Subscription } from 'rxjs';
 
 @Component({
@@ -13,6 +13,7 @@ import { fromEvent, Subscription } from 'rxjs';
 export class HomePage implements OnInit {
 
   @ViewChild('scrollable') scrollable: IonContent;
+  @ViewChild('searchbar') searchbar: ElementRef;
 
   banners: Banner[] = [];
   products: Product[];
@@ -23,23 +24,14 @@ export class HomePage implements OnInit {
     loop: true,
     autoplay: {
       delay: 3000,
-      disableOnInteraction: false
     },
-    preloadImages: false,
-    // updateOnImagesReady: true
-    lazy: {
-      //  tell swiper to load images before they appear
-      loadPrevNext: true,
-      // amount of images to load
-      loadPrevNextAmount: 1,
-      loadOnTransitionStart: true
-    }
+    lazy: true
   };
-  toolbarIonicProperties: IonicProperty[] = [{
-    name: '--background',
-    value: 'rgba(var(--ion-color-primary-rgb), 0)'
-  }];
-  toolBarOpacity = 1;
+  // toolbarIonicProperties: IonicProperty[] = [{
+  //   name: '--background',
+  //   value: 'rgba(var(--ion-color-primary-rgb), 0)'
+  // }];
+  // toolBarOpacity = 1;
   refresherPullProgress = 0;
   isRefresherInProgress: boolean;
   scrollEvents = true;
@@ -55,11 +47,11 @@ export class HomePage implements OnInit {
   constructor(
     private uiStateService: UiStateService,
     private homeService: HomeService,
-    private modalCtrl: ModalController
+    private navCtrl: NavController
   ) { }
 
   ngOnInit(): void {
-    this.isRefresherInProgress = false;
+    // this.isRefresherInProgress = false;
     this.homeService.getBanners().subscribe(resp => {
       console.log(resp);
       this.banners.push(...resp);
@@ -107,22 +99,22 @@ export class HomePage implements OnInit {
     console.log('ionViewWillLeave');
   }
 
-  onScroll(event: CustomEvent) {
-    this.toolBarOpacity = 1;
-    let ratio = event.detail.scrollTop / 150;
-    if (ratio < 0) {
-      return;
-    } else if (ratio > 1) {
-      ratio = 1;
-    }
-    const currentToolbarBackgroundValue = 'rgba(var(--ion-color-primary-rgb), ' + ratio + ')';
-    if (this.toolbarIonicProperties.length <= 0 || this.toolbarIonicProperties[0].value !== currentToolbarBackgroundValue) {
-      this.toolbarIonicProperties = [{
-        name: '--background',
-        value: 'rgba(var(--ion-color-primary-rgb), ' + ratio + ')'
-      }];
-    }
-  }
+  // onScroll(event: CustomEvent) {
+  //   this.toolBarOpacity = 1;
+  //   let ratio = event.detail.scrollTop / 150;
+  //   if (ratio < 0) {
+  //     return;
+  //   } else if (ratio > 1) {
+  //     ratio = 1;
+  //   }
+  //   const currentToolbarBackgroundValue = 'rgba(var(--ion-color-primary-rgb), ' + ratio + ')';
+  //   if (this.toolbarIonicProperties.length <= 0 || this.toolbarIonicProperties[0].value !== currentToolbarBackgroundValue) {
+  //     this.toolbarIonicProperties = [{
+  //       name: '--background',
+  //       value: 'rgba(var(--ion-color-primary-rgb), ' + ratio + ')'
+  //     }];
+  //   }
+  // }
 
   loadData(event) {
     if (this.collectionOfProduct.last) {
@@ -155,40 +147,44 @@ export class HomePage implements OnInit {
     setTimeout(() => {
       // this.products.unshift(...this.homeService.products);
       event.target.complete();
-      this.toolbarIonicProperties = [{
-        name: '--background',
-        value: 'rgba(var(--ion-color-primary-rgb), 0)'
-      }];
+      // this.toolbarIonicProperties = [{
+      //   name: '--background',
+      //   value: 'rgba(var(--ion-color-primary-rgb), 0)'
+      // }];
       // this.searchbarIonicProperties = [{
       //   name: '--background',
       //   value: 'rgba(var(--ion-color-light-rgb), 1)'
       // }];
-      this.refresherPullProgress = 0;
-      this.toolBarOpacity = 1;
-      this.isRefresherInProgress = false;
+      // this.refresherPullProgress = 0;
+      // this.toolBarOpacity = 1;
+      // this.isRefresherInProgress = false;
 
-      setTimeout(() => {
-        this.isRefresherInProgress = false;
-      }, 280);
+      // setTimeout(() => {
+      //   // this.isRefresherInProgress = false;
+      // }, 280);
     }, 400);
   }
 
   onRefreshStart(event: CustomEvent) {
-    this.isRefresherInProgress = true;
+    // this.isRefresherInProgress = true;
   }
 
   onRefreshPull(event) {
-    const progress: Promise<number> = event.target.getProgress();
-    progress.then(num => {
-      this.refresherPullProgress = num;
-      let ratio = 1 - num;
-      if (ratio < 0.03) {
-        ratio = 0;
-      } else if (ratio > 1) {
-        ratio = 1;
-      }
-      this.toolBarOpacity = ratio;
-    });
+    // const progress: Promise<number> = event.target.getProgress();
+    // progress.then(num => {
+    //   this.refresherPullProgress = num;
+    //   let ratio = 1 - num;
+    //   if (ratio < 0.03) {
+    //     ratio = 0;
+    //   } else if (ratio > 1) {
+    //     ratio = 1;
+    //   }
+    //   this.toolBarOpacity = ratio;
+    // });
+  }
+
+  onSearch() {
+    alert('fuck');
   }
 
   onTouchEnd(event: TouchEvent) {
@@ -196,8 +192,7 @@ export class HomePage implements OnInit {
       clearTimeout(this.refresherAnimationTimer);
     }
     this.refresherAnimationTimer = setTimeout(() => {
-      if (this.refresherPullProgress > 0 && this.refresherPullProgress < 1 && this.toolBarOpacity < 1) {
-        this.toolBarOpacity = 1;
+      if (this.refresherPullProgress > 0 && this.refresherPullProgress < 1) {
         this.isRefresherInProgress = false;
         this.refresherPullProgress = 0;
       }
@@ -225,5 +220,9 @@ export class HomePage implements OnInit {
       this.pageX = event.touches[0].pageX;
       this.pageY = event.touches[0].pageY;
     });
+  }
+
+  onProductClick() {
+    this.navCtrl.navigateForward(['/product']);
   }
 }
