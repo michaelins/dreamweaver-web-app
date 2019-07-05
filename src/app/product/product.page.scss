@@ -1,3 +1,21 @@
+ion-content {
+  --background: #f4f4f4;
+}
+ion-grid {
+  background: #ffffff;
+}
+h5 {
+  line-height: 1.5;
+  .deleted {
+    color: var(--ion-color-medium);
+  }
+}
+ion-item {
+  p {
+    font-size: 14px;
+  }
+}
+
 .product-nav {
   //   background: #fafafa;
   //   font-size: 0.8rem;
@@ -23,6 +41,29 @@
           color: var(--ion-color-primary);
         }
       }
+    }
+  }
+}
+
+ion-footer {
+  ion-toolbar {
+    --padding-top: 0px;
+    --padding-bottom: 0px;
+    --padding-end: 0px;
+    --padding-start: 0px;
+  }
+  ion-col {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.addcart {
+      color: #ffffff;
+      background: var(--ion-color-medium);
+    }
+    &.buynow {
+      color: #ffffff;
+      background: var(--ion-color-primary);
     }
   }
 }
