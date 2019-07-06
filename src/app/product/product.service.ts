@@ -38,6 +38,15 @@ export interface CollectionOfProduct {
     numberOfElements?: number;
 }
 
+export interface EqualObject {
+    eqObj: any;
+    field: string;
+}
+export interface SortObject {
+    direction: number;
+    field: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -46,16 +55,10 @@ export class ProductService {
     constructor(
         private http: HttpClient) { }
 
-    getProducts(pageNum: number, pageSize: number) {
+    getProducts(pageNum: number, pageSize: number, equal: EqualObject[], sort: SortObject[]) {
         return this.http.post<CollectionOfProduct>(`${environment.apiServer}/goods/${pageNum}/${pageSize}`, {
-            equal: [{
-                eqObj: 0,
-                field: 'status'
-            }],
-            sort: [{
-                direction: 0,
-                field: 'weight'
-            }]
+            equal,
+            sort
         }, {
                 headers: new HttpHeaders({
                     ChannelCode: 'WXH5'

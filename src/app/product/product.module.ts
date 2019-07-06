@@ -10,7 +10,16 @@ import { ProductPage } from './product.page';
 const routes: Routes = [
   {
     path: '',
-    component: ProductPage
+    children: [
+      {
+        path: ':productId',
+        component: ProductPage
+      },
+      {
+        path: '',
+        redirectTo: '/tabs/home'
+      }
+    ]
   }
 ];
 
@@ -23,4 +32,4 @@ const routes: Routes = [
   ],
   declarations: [ProductPage]
 })
-export class ProductPageModule {}
+export class ProductPageModule { }

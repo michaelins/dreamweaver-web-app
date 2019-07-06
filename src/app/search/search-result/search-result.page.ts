@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService, CollectionOfProduct, Product } from 'src/app/product/product.service';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-search-result',
@@ -12,10 +14,24 @@ export class SearchResultPage implements OnInit {
   collectionOfProduct: CollectionOfProduct = {};
   productsPageSize = 10;
 
-  constructor(private productService: ProductService) { }
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.productService.getProducts(1, this.productsPageSize).subscribe(resp => {
+    this.route.queryParams.pipe(switchMap(params => {
+      const equalObjs = [{ eqObj: 0, field: 'status' }];
+      if (params.categoryId) {
+        equalObjs.push({ eqObj: params.categoryId, field: 'categoryId' });
+      }
+      console.log(equalObjs);
+      return this.productService.getProducts(
+        1,
+        this.productsPageSize,
+        equalObjs,
+        [{ direction: 0, field: 'weight' }]
+      );
+    })).subscribe(resp => {
       console.log(resp);
       this.products = resp.content;
       this.collectionOfProduct = resp;
@@ -29,7 +45,19 @@ export class SearchResultPage implements OnInit {
       event.target.complete();
       event.target.disabled = true;
     } else if (this.collectionOfProduct.number + 2 <= this.collectionOfProduct.totalPages) {
-      this.productService.getProducts(this.collectionOfProduct.number + 2, this.productsPageSize).subscribe(resp => {
+      this.route.queryParams.pipe(switchMap(params => {
+        const equalObjs = [{ eqObj: 0, field: 'status' }];
+        if (params.categoryId) {
+          equalObjs.push({ eqObj: params.categoryId, field: 'categoryId' });
+        }
+        console.log(equalObjs);
+        return this.productService.getProducts(
+          this.collectionOfProduct.number + 2,
+          this.productsPageSize,
+          equalObjs,
+          [{ direction: 0, field: 'weight' }]
+        );
+      })).subscribe(resp => {
         console.log(resp);
         this.products.push(...resp.content);
         this.collectionOfProduct = resp;
@@ -39,5 +67,4 @@ export class SearchResultPage implements OnInit {
       });
     }
   }
-
 }

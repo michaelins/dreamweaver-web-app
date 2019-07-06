@@ -8,18 +8,17 @@
   <ion-grid class="container ion-no-padding">
     <ion-row>
       <ion-col size=3 class="category-nav ion-no-padding">
-        <div>
-          <ul>
-            <li [ngClass]="{active: categorId===-1}"><a (click)="onNav(-1)">所有品牌</a></li>
-            <li [ngClass]="{active: categorId===0}"><a (click)="onNav(0)">身体保健</a></li>
-            <li [ngClass]="{active: categorId===1}"><a (click)="onNav(1)">肌肤护理</a></li>
-            <li [ngClass]="{active: categorId===2}"><a (click)="onNav(2)">品质生活</a></li>
-            <li [ngClass]="{active: categorId===3}"><a (click)="onNav(3)">特惠直升</a></li>
-          </ul>
-        </div>
+        <ion-content scrollX="true">
+          <div>
+            <ul>
+              <li [ngClass]="{active: selectedRootCategoryId===category.id}" *ngFor="let category of rootCategories"><a
+                  (click)="onNav(category.id)">{{category.name}}</a></li>
+            </ul>
+          </div>
+        </ion-content>
       </ion-col>
       <ion-col size=9>
-        <ion-content scrollX="true" #scrollable>
+        <ion-content scrollX="true">
           <ion-grid class="ion-padding-top ion-padding-start">
             <ion-row>
               <ion-col class="ion-padding-end">
@@ -27,275 +26,88 @@
               </ion-col>
             </ion-row>
           </ion-grid>
-          <div #category>
-            <ion-grid>
-              <ion-row>
-                <ion-col class="ion-padding-top ion-padding-bottom">
-                  <ion-text color="dark">
-                    <p class="detail-title ion-padding-start">身体保健</p>
-                  </ion-text>
-                </ion-col>
-              </ion-row>
-              <ion-row class="category-grid-row">
-                <ion-col size=4 class="ion-padding-end" [routerLink]="['/search/result']"
-                  routerLinkActive="router-link-active">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/0f1c7b10c2ba437fa979e9b20f408fdd.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Swisse</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/10062fb6043a42e993117593231bffa5.jpg?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">卢卡斯</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/ddade2aba2f548538046b4ddb391e791.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Healthy Care</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/4078b5da3d2448b8a41269a9a7de2fab.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Unichi</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/2b9232cd7eb940438efb707ff593ea2d.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Fatblaster</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/89a47335b76747f0a3ee3744acde74ad.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">优思益</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/6b056ceb1e864e2ba95ac25a0eca9e99.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">星期四</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/fdf365b22a324142bc35282099849af8.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Aēsop 伊索</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/5ed93dadf46644f58807080bf0f05566.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">G&M 澳芝曼</ion-text>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
-          <div #category>
-            <ion-grid>
-              <ion-row>
-                <ion-col class="ion-padding-top ion-padding-bottom">
-                  <ion-text color="dark">
-                    <p class="detail-title ion-padding-start">肌肤护理</p>
-                  </ion-text>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/0f1c7b10c2ba437fa979e9b20f408fdd.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Swisse</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/10062fb6043a42e993117593231bffa5.jpg?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">卢卡斯</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/ddade2aba2f548538046b4ddb391e791.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Healthy Care</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/4078b5da3d2448b8a41269a9a7de2fab.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Unichi</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/2b9232cd7eb940438efb707ff593ea2d.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Fatblaster</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/89a47335b76747f0a3ee3744acde74ad.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">优思益</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/6b056ceb1e864e2ba95ac25a0eca9e99.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">星期四</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/fdf365b22a324142bc35282099849af8.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Aēsop 伊索</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/5ed93dadf46644f58807080bf0f05566.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">G&M 澳芝曼</ion-text>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
-          <div #category>
-            <ion-grid>
-              <ion-row>
-                <ion-col class="ion-padding-top ion-padding-bottom">
-                  <ion-text color="dark">
-                    <p class="detail-title ion-padding-start">品质生活</p>
-                  </ion-text>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/0f1c7b10c2ba437fa979e9b20f408fdd.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Swisse</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/10062fb6043a42e993117593231bffa5.jpg?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">卢卡斯</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/ddade2aba2f548538046b4ddb391e791.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Healthy Care</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/4078b5da3d2448b8a41269a9a7de2fab.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Unichi</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/2b9232cd7eb940438efb707ff593ea2d.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Fatblaster</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/89a47335b76747f0a3ee3744acde74ad.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">优思益</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/6b056ceb1e864e2ba95ac25a0eca9e99.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">星期四</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/fdf365b22a324142bc35282099849af8.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Aēsop 伊索</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/5ed93dadf46644f58807080bf0f05566.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">G&M 澳芝曼</ion-text>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
-          <div #category>
-            <ion-grid>
-              <ion-row>
-                <ion-col class="ion-padding-top ion-padding-bottom">
-                  <ion-text color="dark">
-                    <p class="detail-title ion-padding-start">特惠直升</p>
-                  </ion-text>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/0f1c7b10c2ba437fa979e9b20f408fdd.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Swisse</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/10062fb6043a42e993117593231bffa5.jpg?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">卢卡斯</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/ddade2aba2f548538046b4ddb391e791.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Healthy Care</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/4078b5da3d2448b8a41269a9a7de2fab.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Unichi</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/2b9232cd7eb940438efb707ff593ea2d.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Fatblaster</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/89a47335b76747f0a3ee3744acde74ad.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">优思益</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/6b056ceb1e864e2ba95ac25a0eca9e99.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">星期四</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/fdf365b22a324142bc35282099849af8.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">Aēsop 伊索</ion-text>
-                </ion-col>
-                <ion-col size=4 class="ion-padding-end">
-                  <ion-img
-                    src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/5ed93dadf46644f58807080bf0f05566.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
-                  </ion-img>
-                  <ion-text class="ion-padding-top ion-padding-bottom category-label">G&M 澳芝曼</ion-text>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </div>
+          <ion-grid *ngFor="let category of detailCategories">
+            <ion-row class="ion-padding-start">
+              <ion-col class="ion-padding-top ion-padding-bottom">
+                <ion-text color="dark">
+                  <p class="detail-title ion-padding-start">{{category.name}}</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row class="category-grid-row ion-padding-start">
+              <ion-col *ngFor="let item of category.subCategories.content" size=4 class="ion-padding-end"
+                [routerLink]="['/search/result']" [queryParams]="{categoryId: item.id}">
+                <ion-img [src]="item.headImg+'?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF'">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">{{item.name}}</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+          <!-- <ion-grid>
+            <ion-row>
+              <ion-col class="ion-padding-top ion-padding-bottom">
+                <ion-text color="dark">
+                  <p class="detail-title ion-padding-start">肌肤护理</p>
+                </ion-text>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size=4 class="ion-padding-end">
+                <ion-img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/0f1c7b10c2ba437fa979e9b20f408fdd.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">Swisse</ion-text>
+              </ion-col>
+              <ion-col size=4 class="ion-padding-end">
+                <ion-img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/10062fb6043a42e993117593231bffa5.jpg?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">卢卡斯</ion-text>
+              </ion-col>
+              <ion-col size=4 class="ion-padding-end">
+                <ion-img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/ddade2aba2f548538046b4ddb391e791.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">Healthy Care</ion-text>
+              </ion-col>
+              <ion-col size=4 class="ion-padding-end">
+                <ion-img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/4078b5da3d2448b8a41269a9a7de2fab.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">Unichi</ion-text>
+              </ion-col>
+              <ion-col size=4 class="ion-padding-end">
+                <ion-img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/2b9232cd7eb940438efb707ff593ea2d.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">Fatblaster</ion-text>
+              </ion-col>
+              <ion-col size=4 class="ion-padding-end">
+                <ion-img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/89a47335b76747f0a3ee3744acde74ad.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">优思益</ion-text>
+              </ion-col>
+              <ion-col size=4 class="ion-padding-end">
+                <ion-img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/6b056ceb1e864e2ba95ac25a0eca9e99.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">星期四</ion-text>
+              </ion-col>
+              <ion-col size=4 class="ion-padding-end">
+                <ion-img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/fdf365b22a324142bc35282099849af8.png?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">Aēsop 伊索</ion-text>
+              </ion-col>
+              <ion-col size=4 class="ion-padding-end">
+                <ion-img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/5ed93dadf46644f58807080bf0f05566.jpg?x-oss-process=image/resize,m_pad,h_150,w_150,color_FFFFFF">
+                </ion-img>
+                <ion-text class="ion-padding-top ion-padding-bottom category-label">G&M 澳芝曼</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid> -->
         </ion-content>
       </ion-col>
     </ion-row>
