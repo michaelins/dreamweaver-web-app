@@ -1,18 +1,20 @@
 ion-toolbar {
   --border-width: 0;
-  //   --background: rgba(var(--ion-color-dark-rgb), 0.7);
+  --background: var(--ion-color-primary);
 }
-ion-content {
-  --offset-bottom: 0;
-  --padding-top: 0;
-}
+// ion-content {
+//   --offset-bottom: 0;
+//   --padding-top: 0;
+// }
 ion-searchbar {
   --background: #ffffff;
   --icon-color: rgba(var(--ion-color-dark-rgb), 1);
+  padding: 10px;
+  height: 56px;
 }
-ion-refresher {
-  top: -68px;
-}
+// ion-refresher {
+//   top: -68px;
+// }
 
 ion-row {
   --ion-margin: 10px;

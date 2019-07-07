@@ -1,15 +1,17 @@
 <ion-header no-border>
-  <ion-toolbar class="ion-no-padding" [appIonicProperty]="toolbarIonicProperties" [ngStyle]="{'opacity': toolBarOpacity}">
+  <ion-toolbar class="ion-no-padding">
     <ion-label slot="start" color="dark" class="ion-padding-start">
       <h1>LOGO</h1>
     </ion-label>
-    <ion-searchbar placeholder="输入你正在找的宝贝" searchIcon="../../assets/icon/search.svg"></ion-searchbar>
+    <form action=".">
+      <ion-searchbar #searchbar placeholder="输入你正在找的宝贝" searchIcon="../../assets/icon/search.svg" type="search"
+        (search)="onSearch()"></ion-searchbar>
+    </form>
   </ion-toolbar>
 </ion-header>
 
-<ion-content #scrollable forceOverscroll="false" fullscreen="true" [scrollEvents]="scrollEvents"
-  (ionScroll)="onScroll($event)" (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)"
-  (touchend)="onTouchEnd($event)">
+<ion-content #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents" (touchstart)="onTouchStart($event)"
+  (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd($event)">
 
   <ion-refresher pullFactor="0.5" closeDuration="200ms" snapbackDuration="50ms" pullMax="400"
     (ionStart)="onRefreshStart($event)" (ionPull)="onRefreshPull($event)" (ionRefresh)="doRefresh($event)">
@@ -122,7 +124,8 @@
     <ion-row>
       <ion-col class="ion-no-padding ion-padding-start ion-padding-end">
         <ion-list>
-          <ion-item lines="full" class="product" *ngFor="let product of products">
+          <ion-item lines="full" class="product" *ngFor="let product of products"
+            [routerLink]="['/product', product.goodsId]">
             <ion-grid class="ion-no-padding">
               <ion-row>
                 <ion-col size=4 class="ion-no-padding ion-padding-end ion-padding-top ion-padding-bottom">

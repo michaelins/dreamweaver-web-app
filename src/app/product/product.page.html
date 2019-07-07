@@ -1,0 +1,178 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="product-nav">
+      <ul>
+        <li [ngClass]="{active: sectionId===1}"><a (click)="onNav(1)">商品</a></li>
+        <li [ngClass]="{active: sectionId===2}"><a (click)="onNav(2)">详情</a></li>
+      </ul>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="product" #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents"
+  (ionScroll)="onScroll($event)">
+
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide *ngFor="let slide of product.albumsForBanner">
+      <img [src]="slide.ossPath+'?x-oss-process=image/resize,m_fill,h_480,w_480'">
+    </ion-slide>
+  </ion-slides>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-padding-top ion-padding-start ion-padding-end">
+        <ion-text color="primary">
+          <h5>优惠价 {{product.price | currency: 'CNY':'symbol-narrow'}} <span
+              class="deleted">(售价{{product.price | currency: 'CNY':'symbol-narrow'}})</span></h5>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-top ion-padding-start ion-padding-end">
+        <ion-text color="dark">
+          <h5>{{product.name}}</h5>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding">
+        <ion-text color="medium">
+          <p>{{product.h1text}}</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid class="ion-margin-top">
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-item lines="full" (click)="onSelectSpec()" detail>
+          <ion-text color="medium" slot="start">
+            <p>已选</p>
+          </ion-text>
+          <ion-text color="dark">
+            <p>系列单瓶</p>
+          </ion-text>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-item lines="full" detail>
+          <ion-text color="medium" slot="start">
+            <p>送至</p>
+          </ion-text>
+          <ion-label>
+            <ion-text color="dark">
+              <p>
+                <ion-icon src="../../assets/icon/address.svg" color="primary"></ion-icon>四川省成都市高新区新天府大道中段1号新会展中心廊桥166号
+              </p>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-item lines="none">
+          <ion-text color="medium" slot="start">
+            <p>仓库</p>
+          </ion-text>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-button *ngFor="let warehouse of product.warehouses" (click)="onClickWarehouse(warehouse.id)"
+                  size="small" [color]="getWarehouseBtnColor(warehouse.id)" class="rounded ion-margin-end">
+                  {{warehouse.name}}
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-item lines="none">
+          <ion-text slot="start">
+            <p style="visibility: hidden">仓库</p>
+          </ion-text>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <p *ngIf="selectedWarehouse">{{selectedWarehouse.intro}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding">
+        <ul class="warehouse-list thumbnail ion-margin-bottom">
+          <li *ngFor="let warehouse of product.warehouses">
+            <div class="warehouse-img">
+              <ion-thumbnail>
+                <img [src]="warehouse.headImg+'?x-oss-process=image/resize,m_fill,h_40,w_40'">
+              </ion-thumbnail>
+            </div>
+          </li>
+        </ul>
+        <ul class="warehouse-list">
+          <li *ngFor="let warehouse of product.warehouses">
+            <ion-text color="medium" text-center>
+              <p>{{warehouse.name}}</p>
+            </ion-text>
+          </li>
+        </ul>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <div #detail></div>
+  <ion-grid class="ion-margin-top">
+    <ion-row>
+      <ion-col class="ion-padding">
+        <ion-text color="dark">
+          <p class="detail-title ion-padding-start">图文详情</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-img *ngFor="let image of product.albumsForContent" [src]="image.ossPath"></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="cart" size=3>
+          <ion-tab-button>
+            <ion-icon src="../../assets/icon/cart.svg" color="medium"></ion-icon>
+            <ion-label>购物车</ion-label>
+            <ion-badge>2</ion-badge>
+          </ion-tab-button>
+        </ion-col>
+        <ion-col size=9>
+          <ion-grid>
+            <ion-row>
+              <ion-col class="addcart" size=6>
+                <ion-text color="light">加入购物车</ion-text>
+              </ion-col>
+              <ion-col class="buynow" size=6>
+                <ion-text color="light">立即购买</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,22 @@
+ion-content {
+  --background: #f4f4f4;
+}
+
+ion-item {
+  --padding-start: 0px;
+}
+
+.product {
+  ion-img {
+    margin-inline-end: var(--ion-margin);
+    margin-right: var(--ion-margin);
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .product-block {
+    height: 128px;
+    ion-label {
+      height: 108px;
+    }
+  }
+}
