@@ -1,7 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { IonContent, IonGrid } from '@ionic/angular';
+import { IonContent, IonGrid, ModalController } from '@ionic/angular';
 import { of, Observable, Subject, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, switchMap } from 'rxjs/operators';
+import { ProductService, Product, Warehouse } from './product.service';
+import { ActivatedRoute } from '@angular/router';
+import { element } from '@angular/core/src/render3';
+import { AddToCartComponent } from '../shared/add-to-cart/add-to-cart.component';
 
 @Component({
   selector: 'app-product',
@@ -13,20 +17,38 @@ export class ProductPage implements OnInit {
   @ViewChild('scrollable') scrollable: IonContent;
   @ViewChild('detail') detail: ElementRef<HTMLElement>;
 
+  product: Product;
+  selectedWarehouseId: number;
+  selectedWarehouse: Warehouse;
+
   sectionId = 1;
   scrollEvents = true;
   slideOpts = {
     speed: 400,
     loop: true,
-    autoplay: {
-      delay: 3000,
-    },
     lazy: true
   };
 
-  constructor() { }
+  constructor(
+    private productService: ProductService,
+    private route: ActivatedRoute,
+    private modalCtrl: ModalController
+  ) { }
 
   ngOnInit() {
+    this.route.params.pipe(switchMap(params => {
+      if (params.productId) {
+        console.log(params.productId);
+        return this.productService.getProduct(params.productId);
+      }
+    })).subscribe(resp => {
+      this.product = resp;
+      if (this.product.warehouses && this.product.warehouses.length > 0) {
+        this.selectedWarehouseId = this.product.warehouses[0].id;
+        this.selectedWarehouse = this.product.warehouses[0];
+      }
+      console.log(resp);
+    });
   }
 
   ionViewWillEnter() {
@@ -37,6 +59,17 @@ export class ProductPage implements OnInit {
     this.scrollEvents = false;
   }
 
+  onClickWarehouse(id: number) {
+    this.selectedWarehouseId = id;
+    this.selectedWarehouse = this.product.warehouses.find(warehouse => {
+      return warehouse.id === id;
+    });
+  }
+
+  getWarehouseBtnColor(id: number) {
+    return (id === this.selectedWarehouseId) ? 'secondary' : 'light';
+  }
+
   onNav(id: number) {
     this.sectionId = id;
     if (this.sectionId === 1) {
@@ -44,6 +77,16 @@ export class ProductPage implements OnInit {
     } else if (this.sectionId === 2) {
       this.scrollable.scrollToPoint(0, this.detail.nativeElement.offsetTop, 100);
     }
+  }
+
+  onSelectSpec() {
+    this.modalCtrl.create({
+      component: AddToCartComponent,
+      componentProps: { selectedPlace: 'test' },
+      cssClass: 'auto-height bottom'
+    }).then(modal => {
+      modal.present();
+    });
   }
 
   onScroll(event: CustomEvent) {

@@ -45,6 +45,37 @@ ion-item {
   }
 }
 
+ul.warehouse-list {
+  display: flex;
+  justify-content: space-between;
+  &.thumbnail {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0) calc(50% - 1px),
+      rgba(var(--ion-color-medium-rgb), 1) calc(50%),
+      rgba(0, 0, 0, 0) calc(50% + 1px)
+    );
+    li {
+      background: #ffffff;
+      width: 80px;
+      .warehouse-img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        ion-thumbnail {
+          width: 30px;
+          height: 30px;
+          --border-radius: 50%;
+        }
+      }
+    }
+  }
+  li {
+    display: block;
+    width: 80px;
+  }
+}
+
 ion-footer {
   ion-toolbar {
     --padding-top: 0px;

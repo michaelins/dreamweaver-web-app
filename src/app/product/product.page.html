@@ -12,19 +12,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents" (ionScroll)="onScroll($event)">
+<ion-content *ngIf="product" #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents"
+  (ionScroll)="onScroll($event)">
+
   <ion-slides pager="true" [options]="slideOpts">
-    <ion-slide>
-      <img
-        [src]="'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/5aef1faa6bd34edcaa849018c415c7a0.jpg?x-oss-process=image/resize,m_fill,h_480,w_480'">
-    </ion-slide>
-    <ion-slide>
-      <img
-        [src]="'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/647c9ef90e9f4e82beedc9a5b04a86ea.jpg?x-oss-process=image/resize,m_fill,h_480,w_480'">
-    </ion-slide>
-    <ion-slide>
-      <img
-        [src]="'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/aa10e77f1887407cba1d1df86b0a3879.jpg?x-oss-process=image/resize,m_fill,h_480,w_480'">
+    <ion-slide *ngFor="let slide of product.albumsForBanner">
+      <img [src]="slide.ossPath+'?x-oss-process=image/resize,m_fill,h_480,w_480'">
     </ion-slide>
   </ion-slides>
 
@@ -32,21 +25,22 @@
     <ion-row>
       <ion-col class="ion-padding-top ion-padding-start ion-padding-end">
         <ion-text color="primary">
-          <h5>优惠价 ¥398.00 <span class="deleted">(售价¥398.00)</span></h5>
+          <h5>优惠价 {{product.price | currency: 'CNY':'symbol-narrow'}} <span
+              class="deleted">(售价{{product.price | currency: 'CNY':'symbol-narrow'}})</span></h5>
         </ion-text>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="ion-padding-top ion-padding-start ion-padding-end">
         <ion-text color="dark">
-          <h5>澳洲进口Swisse补钙维生素D钙片150片 Terrywhite chemmart澳洲连锁大药房</h5>
+          <h5>{{product.name}}</h5>
         </ion-text>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="ion-padding">
         <ion-text color="medium">
-          <p>富含丰富的钙和维生素D，在人体中的吸收率高于碳酸钙</p>
+          <p>{{product.h1text}}</p>
         </ion-text>
       </ion-col>
     </ion-row>
@@ -54,18 +48,28 @@
   <ion-grid class="ion-margin-top">
     <ion-row>
       <ion-col class="ion-padding-start ion-padding-end">
-        <ion-item lines="full" detail>
-          <ion-text color="medium" slot="start"><p>已选</p></ion-text>
-          <ion-text color="dark"><p>系列单瓶</p></ion-text>
+        <ion-item lines="full" (click)="onSelectSpec()" detail>
+          <ion-text color="medium" slot="start">
+            <p>已选</p>
+          </ion-text>
+          <ion-text color="dark">
+            <p>系列单瓶</p>
+          </ion-text>
         </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col class="ion-padding-start ion-padding-end">
         <ion-item lines="full" detail>
-          <ion-text color="medium" slot="start"><p>送至</p></ion-text>
+          <ion-text color="medium" slot="start">
+            <p>送至</p>
+          </ion-text>
           <ion-label>
-            <ion-text color="dark"><p><ion-icon src="../../assets/icon/address.svg" color="primary"></ion-icon>四川省成都市高新区新天府大道中段1号新会展中心廊桥166号</p></ion-text>
+            <ion-text color="dark">
+              <p>
+                <ion-icon src="../../assets/icon/address.svg" color="primary"></ion-icon>四川省成都市高新区新天府大道中段1号新会展中心廊桥166号
+              </p>
+            </ion-text>
           </ion-label>
         </ion-item>
       </ion-col>
@@ -73,24 +77,58 @@
     <ion-row>
       <ion-col class="ion-padding-start ion-padding-end">
         <ion-item lines="none">
-          <ion-text color="medium" slot="start"><p>仓库</p></ion-text>
+          <ion-text color="medium" slot="start">
+            <p>仓库</p>
+          </ion-text>
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-button size="small" color="secondary" class="rounded">悉尼仓</ion-button>
-                <ion-button size="small" color="light" class="rounded ion-margin-start">杭州仓</ion-button>
-                <ion-button size="small" color="light" class="rounded ion-margin-start">上海仓</ion-button>
+                <ion-button *ngFor="let warehouse of product.warehouses" (click)="onClickWarehouse(warehouse.id)"
+                  size="small" [color]="getWarehouseBtnColor(warehouse.id)" class="rounded ion-margin-end">
+                  {{warehouse.name}}
+                </ion-button>
               </ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
       </ion-col>
     </ion-row>
-    <!-- <ion-row>
-      <ion-col>
-        <ion-text color="medium"><p>发货信息说明，发货信息说明，发货信息说明，发货信息说明，发货信 息发货信息说明</p></ion-text>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-item lines="none">
+          <ion-text slot="start">
+            <p style="visibility: hidden">仓库</p>
+          </ion-text>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <p *ngIf="selectedWarehouse">{{selectedWarehouse.intro}}</p>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
       </ion-col>
-    </ion-row> -->
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding">
+        <ul class="warehouse-list thumbnail ion-margin-bottom">
+          <li *ngFor="let warehouse of product.warehouses">
+            <div class="warehouse-img">
+              <ion-thumbnail>
+                <img [src]="warehouse.headImg+'?x-oss-process=image/resize,m_fill,h_40,w_40'">
+              </ion-thumbnail>
+            </div>
+          </li>
+        </ul>
+        <ul class="warehouse-list">
+          <li *ngFor="let warehouse of product.warehouses">
+            <ion-text color="medium" text-center>
+              <p>{{warehouse.name}}</p>
+            </ion-text>
+          </li>
+        </ul>
+      </ion-col>
+    </ion-row>
   </ion-grid>
   <div #detail></div>
   <ion-grid class="ion-margin-top">
@@ -102,34 +140,13 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/36066/40/13931/376961/5d1c6ffbE96791f77/637db1cfc652c2e4.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/52169/19/4019/194013/5d1c6ffaE0150596b/9a942ce01de2fbd0.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/60129/39/3612/186117/5d1c6ffaE19f25e97/5cc24a5fb0da75c3.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/74639/5/3546/187020/5d1c6ffaEcff66b8a/ab754fe98007dcbe.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/81876/4/3572/274909/5d1c6ffbEa9aa9957/a8c2635ca6f4a19a.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/79647/4/3556/216404/5d1c6ffaEc5e9d805/7912086940f4d8b2.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/51028/24/4062/300863/5d1c6ffaEafac3f85/06ee5d2fd8ad7c2b.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/45783/4/4039/183918/5d1c6ffaEff57ea8b/5013a7165bb0eafe.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/34862/4/13870/280331/5d1c6ffaEe6f071e0/38b061e84684c080.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/58202/16/4049/378824/5d1c6ffbE5090ec21/37d25716b3b37d50.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/55788/15/4037/383015/5d1c6ffbEbc6c6ea9/6d99629987931a13.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/15849/38/9563/135967/5c7f23c8Ec2550997/4fd817c6cab3ca48.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/10950/14/11381/262599/5c6e1163Ee9c64042/72a5ef86467cad89.jpg">
-  </ion-img>
-  <ion-img src="https://img30.360buyimg.com/sku/jfs/t1/11255/8/3860/262043/5c23213dE5f2cd23c/cef84d8534d34a3d.jpg">
-  </ion-img>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-img *ngFor="let image of product.albumsForContent" [src]="image.ossPath"></ion-img>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 <ion-footer>

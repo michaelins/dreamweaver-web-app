@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChildren, QueryList, ElementRef, ViewChild } from '@angular/core';
 import { UiStateService } from '../shared/ui-state.service';
-import { IonContent } from '@ionic/angular';
+import { IonContent, LoadingController, ToastController } from '@ionic/angular';
 import { CategoriesService, Category, CollectionOfCategories } from './categories.service';
 import { switchMap, map, mergeMap, tap, concatMap, toArray } from 'rxjs/operators';
 import { forkJoin, of, from, merge } from 'rxjs';
@@ -20,10 +20,18 @@ export class CategoriesPage implements OnInit {
 
   constructor(
     private uiStateService: UiStateService,
-    private categoriesService: CategoriesService
+    private categoriesService: CategoriesService,
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
+    this.loadingCtrl.create({
+      message: '正在加载...',
+      spinner: 'crescent'
+    }).then(loading => {
+      loading.present();
+    });
     this.categoriesService.getRootCategories(1, this.rootCategoriesPageSize).pipe(
       switchMap((resp, index) => {
         this.rootCategories = resp.content;
@@ -35,6 +43,7 @@ export class CategoriesPage implements OnInit {
       })
       , mergeMap(category => {
         if (category && category.subCategories && category.subCategories.content && category.subCategories.content.length > 0) {
+          this.detailCategories = category.subCategories.content;
           return from(category.subCategories.content).pipe();
         } else {
           throw new Error('No subCategories found!');
@@ -43,12 +52,19 @@ export class CategoriesPage implements OnInit {
       , mergeMap(category => {
         return this.categoriesService.getCategory(category.id, 1, 999);
       })
-      , toArray()
     ).subscribe(resp => {
-      this.detailCategories = resp;
-      console.log(resp);
+      const updatedCategory = this.detailCategories.find(item => {
+        return item.id === resp.id;
+      });
+      const index = this.detailCategories.indexOf(updatedCategory);
+      this.detailCategories[index] = resp;
     }, error => {
+      this.detailCategories = [];
+      this.loadingCtrl.dismiss();
       console.log(error);
+    }, () => {
+      this.loadingCtrl.dismiss();
+      console.log('init complete');
     });
   }
 
@@ -65,11 +81,18 @@ export class CategoriesPage implements OnInit {
     if (id === this.selectedRootCategoryId) {
       return;
     } else {
+      this.loadingCtrl.create({
+        message: '正在加载...',
+        spinner: 'crescent'
+      }).then(loading => {
+        loading.present();
+      });
       this.selectedRootCategoryId = id;
     }
     this.categoriesService.getCategory(id, 1, 999).pipe(
       mergeMap(category => {
         if (category && category.subCategories && category.subCategories.content && category.subCategories.content.length > 0) {
+          this.detailCategories = category.subCategories.content;
           return from(category.subCategories.content).pipe();
         } else {
           throw new Error('No subCategories found!');
@@ -78,13 +101,25 @@ export class CategoriesPage implements OnInit {
       , mergeMap(category => {
         return this.categoriesService.getCategory(category.id, 1, 999);
       })
-      , toArray()
     ).subscribe(resp => {
-      this.detailCategories = resp;
-      console.log(resp);
+      const updatedCategory = this.detailCategories.find(item => {
+        return item.id === resp.id;
+      });
+      const index = this.detailCategories.indexOf(updatedCategory);
+      this.detailCategories[index] = resp;
     }, error => {
       this.detailCategories = [];
+      this.loadingCtrl.dismiss();
+      this.toastCtrl.create({
+        message: '服务器开小差了，请稍后再试...',
+        duration: 2000
+      }).then(toast => {
+        toast.present();
+      });
       console.log(error);
+    }, () => {
+      this.loadingCtrl.dismiss();
+      console.log('nav complete');
     });
   }
 
