@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -9,12 +9,16 @@ import { ModalController } from '@ionic/angular';
 export class AddToCartComponent implements OnInit {
 
   constructor(
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private navParams: NavParams
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.navParams);
+  }
 
   onDismiss() {
-    this.modalCtrl.dismiss({message: 'hello'});
+    console.log('dismissed');
+    this.modalCtrl.dismiss({ message: 'hello' });
   }
 }
