@@ -79,13 +79,19 @@ export class ProductPage implements OnInit {
     }
   }
 
-  onSelectSpec() {
+  onAddToCart() {
     this.modalCtrl.create({
       component: AddToCartComponent,
-      componentProps: { selectedPlace: 'test' },
+      componentProps: {
+        product: this.product,
+        selectedWarehouseId: this.selectedWarehouseId
+      },
       cssClass: 'auto-height bottom'
     }).then(modal => {
       modal.present();
+      return modal.onDidDismiss();
+    }).then(message => {
+      console.log(message);
     });
   }
 

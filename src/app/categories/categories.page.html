@@ -37,8 +37,7 @@
             <ion-row *ngIf="category.subCategories" class="category-grid-row ion-padding-start">
               <ion-col *ngFor="let item of category.subCategories.content" size=4 class="ion-padding-end"
                 [routerLink]="['/search/result']" [queryParams]="{categoryId: item.id}">
-                <ion-img [src]="item.headImg+'?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF'">
-                </ion-img>
+                <img [src]="item.headImg+'?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF'">
                 <ion-text class="ion-padding-top ion-padding-bottom category-label">{{item.name}}</ion-text>
               </ion-col>
             </ion-row>
