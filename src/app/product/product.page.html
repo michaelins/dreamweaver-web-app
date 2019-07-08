@@ -12,16 +12,17 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content *ngIf="product" #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents"
-  (ionScroll)="onScroll($event)">
-
-  <ion-slides pager="true" [options]="slideOpts">
-    <ion-slide *ngFor="let slide of product.albumsForBanner">
-      <img [src]="slide.ossPath+'?x-oss-process=image/resize,m_fill,h_480,w_480'">
-    </ion-slide>
-  </ion-slides>
-
-  <ion-grid>
+<ion-content #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents" (ionScroll)="onScroll($event)">
+  <ion-grid *ngIf="product">
+    <ion-row>
+      <ion-col>
+        <ion-slides pager="true" [options]="slideOpts">
+          <ion-slide *ngFor="let slide of product.albumsForBanner">
+            <img [src]="slide.ossPath+'?x-oss-process=image/resize,m_fill,h_480,w_480'">
+          </ion-slide>
+        </ion-slides>
+      </ion-col>
+    </ion-row>
     <ion-row>
       <ion-col class="ion-padding-top ion-padding-start ion-padding-end">
         <ion-text color="primary">
@@ -45,7 +46,7 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <ion-grid class="ion-margin-top">
+  <ion-grid *ngIf="product" class="ion-margin-top">
     <ion-row>
       <ion-col class="ion-padding-start ion-padding-end">
         <ion-item lines="full" (click)="onAddToCart()" detail>
@@ -132,7 +133,7 @@
     </ion-row>
   </ion-grid>
   <div #detail></div>
-  <ion-grid class="ion-margin-top">
+  <ion-grid *ngIf="product" class="ion-margin-top">
     <ion-row>
       <ion-col class="ion-padding">
         <ion-text color="dark">
@@ -140,8 +141,6 @@
         </ion-text>
       </ion-col>
     </ion-row>
-  </ion-grid>
-  <ion-grid>
     <ion-row>
       <ion-col>
         <ion-img *ngFor="let image of product.albumsForContent" [src]="image.ossPath"></ion-img>

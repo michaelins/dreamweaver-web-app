@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
+import { Product } from 'src/app/product/product.service';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -8,13 +9,31 @@ import { ModalController, NavParams } from '@ionic/angular';
 })
 export class AddToCartComponent implements OnInit {
 
+  product: Product;
+  selectedWarehouseId: number;
+  selectedSpecId: number;
+
   constructor(
     private modalCtrl: ModalController,
     private navParams: NavParams
   ) { }
 
   ngOnInit() {
-    console.log(this.navParams);
+    this.product = this.navParams.get('product');
+    this.selectedWarehouseId = this.navParams.get('selectedWarehouseId');
+    if (this.product && this.product.specifications && this.product.specifications.length > 0) {
+      this.selectedSpecId = this.product.specifications[0].id;
+    }
+    console.log(this.navParams.get('product'));
+    console.log(this.navParams.get('selectedWarehouseId'));
+  }
+
+  onSelectSpec(id: number) {
+    this.selectedSpecId = id;
+  }
+
+  onSelectWarehouse(id: number) {
+    this.selectedWarehouseId = id;
   }
 
   onDismiss() {
