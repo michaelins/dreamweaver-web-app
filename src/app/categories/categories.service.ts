@@ -46,11 +46,7 @@ export class CategoriesService {
                 direction: 0,
                 field: 'weight'
             }]
-        }, {
-                headers: new HttpHeaders({
-                    ChannelCode: 'WXH5'
-                }),
-            });
+        });
     }
 
     getCategory(id: number, pageNum: number, pageSize: number) {
@@ -63,10 +59,6 @@ export class CategoriesService {
                 direction: 0,
                 field: 'weight'
             }]
-        }, {
-                headers: new HttpHeaders({
-                    ChannelCode: 'WXH5'
-                }),
-            });
+        });
     }
 }

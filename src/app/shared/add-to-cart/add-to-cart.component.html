@@ -9,8 +9,8 @@
           <h5>{{product.price | currency: 'CNY':'symbol-narrow'}}</h5>
         </ion-text>
         <ion-text color="dark">
-          <p>库存 3500 件</p>
-          <p>已选择 丝绒水润白泥面膜 杭州仓</p>
+          <p>库存 {{product.amount}} 件</p>
+          <p>已选择 {{selectedSpec.name}} {{selectedWarehouse.name}}</p>
         </ion-text>
       </ion-col>
       <ion-col size=1 text-right>
@@ -26,8 +26,8 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-padding-start ion-padding-end ion-padding-top">
-        <ion-button *ngFor="let spec of product.specifications" (click)="onSelectSpec(spec.id)" size="small"
-          [color]="(spec.id === selectedSpecId) ? 'secondary' : 'light'" class="rounded ion-margin-end">
+        <ion-button *ngFor="let spec of product.specifications" (click)="onSelectSpec(spec)" size="small"
+          [color]="(spec.id === selectedSpec.id) ? 'secondary' : 'light'" class="rounded ion-margin-end">
           {{spec.name}}
         </ion-button>
       </ion-col>
@@ -41,8 +41,8 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-padding-start ion-padding-end ion-padding-top">
-        <ion-button *ngFor="let warehouse of product.warehouses" (click)="onSelectWarehouse(warehouse.id)" size="small"
-          [color]="(warehouse.id === selectedWarehouseId) ? 'secondary' : 'light'" class="rounded ion-margin-end">
+        <ion-button *ngFor="let warehouse of product.warehouses" (click)="onSelectWarehouse(warehouse)" size="small"
+          [color]="(warehouse.id === selectedWarehouse.id) ? 'secondary' : 'light'" class="rounded ion-margin-end">
           {{warehouse.name}}
         </ion-button>
       </ion-col>
@@ -54,19 +54,19 @@
         </ion-text>
       </ion-col>
       <ion-col size=4 class="product-amount">
-        <ion-icon name="remove" size="medium"></ion-icon>
-        <ion-input text-center></ion-input>
-        <ion-icon name="add"></ion-icon>
+        <ion-icon name="remove" size="medium" (click)="onReduceQuantity()"></ion-icon>
+        <ion-input text-center [value]="quantity"></ion-input>
+        <ion-icon name="add" (click)="onAddQuantity()"></ion-icon>
       </ion-col>
     </ion-row>
   </ion-grid>
   <ion-grid>
     <ion-row>
-      <ion-col class="footer addcart" size=6 (click)="onAddToCart()">
+      <!-- <ion-col class="footer addcart" size=6 (click)="onAddToCart()">
         <ion-text color="light">加入购物车</ion-text>
-      </ion-col>
-      <ion-col class="footer buynow" size=6>
-        <ion-text color="light">立即购买</ion-text>
+      </ion-col> -->
+      <ion-col class="footer buynow" (click)="onSubmit()">
+        <ion-text color="light">加入购物车</ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>

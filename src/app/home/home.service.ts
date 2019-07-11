@@ -88,11 +88,7 @@ export class HomeService {
         direction: 0,
         field: 'weight'
       }]
-    }, {
-        headers: new HttpHeaders({
-          ChannelCode: 'WXH5'
-        }),
-      });
+    });
   }
 
   getBanners() {
@@ -108,10 +104,6 @@ export class HomeService {
         direction: 0,
         field: 'weight'
       }]
-    }, {
-        headers: new HttpHeaders({
-          ChannelCode: 'WXH5'
-        }),
-      }).pipe(map(resp => resp.content));
+    }).pipe(map(resp => resp.content));
   }
 }

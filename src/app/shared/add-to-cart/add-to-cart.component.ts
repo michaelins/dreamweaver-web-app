@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { Product } from 'src/app/product/product.service';
+import { Product, Specification, Warehouse } from 'src/app/product/product.service';
+import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -10,34 +11,60 @@ import { Product } from 'src/app/product/product.service';
 export class AddToCartComponent implements OnInit {
 
   product: Product;
-  selectedWarehouseId: number;
-  selectedSpecId: number;
+  selectedWarehouse: Warehouse;
+  selectedSpec: Specification;
+  quantity = 1;
 
   constructor(
+    private shoppingCartService: ShoppingCartService,
     private modalCtrl: ModalController,
     private navParams: NavParams
   ) { }
 
   ngOnInit() {
-    this.product = this.navParams.get('product');
-    this.selectedWarehouseId = this.navParams.get('selectedWarehouseId');
-    if (this.product && this.product.specifications && this.product.specifications.length > 0) {
-      this.selectedSpecId = this.product.specifications[0].id;
-    }
     console.log(this.navParams.get('product'));
-    console.log(this.navParams.get('selectedWarehouseId'));
+    console.log(this.navParams.get('selectedSpec'));
+    console.log(this.navParams.get('selectedWarehouse'));
+    this.product = this.navParams.get('product');
+    this.selectedSpec = this.navParams.get('selectedSpec');
+    this.selectedWarehouse = this.navParams.get('selectedWarehouse');
   }
 
-  onSelectSpec(id: number) {
-    this.selectedSpecId = id;
+  onSelectSpec(spec: Specification) {
+    this.selectedSpec = spec;
   }
 
-  onSelectWarehouse(id: number) {
-    this.selectedWarehouseId = id;
+  onSelectWarehouse(warehouse: Warehouse) {
+    this.selectedWarehouse = warehouse;
+  }
+
+  onAddQuantity() {
+    this.quantity++;
+  }
+
+  onReduceQuantity() {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
+
+  onSubmit() {
+    this.shoppingCartService.addToShoppingCart(
+      this.product.goodsId,
+      'wtf is this',
+      this.quantity,
+      this.selectedSpec.id).subscribe(resp => {
+        console.log(resp);
+      }, error => {
+        console.log(error);
+      });
   }
 
   onDismiss() {
     console.log('dismissed');
-    this.modalCtrl.dismiss({ message: 'hello' });
+    this.modalCtrl.dismiss({
+      selectedSpec: this.selectedSpec,
+      selectedWarehouse: this.selectedWarehouse
+    });
   }
 }

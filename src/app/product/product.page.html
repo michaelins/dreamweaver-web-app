@@ -54,7 +54,7 @@
             <p>已选</p>
           </ion-text>
           <ion-text color="dark">
-            <p>系列单瓶</p>
+            <p>{{selectedSpec.name}}</p>
           </ion-text>
         </ion-item>
       </ion-col>
@@ -85,8 +85,8 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-button *ngFor="let warehouse of product.warehouses" (click)="onClickWarehouse(warehouse.id)"
-                  size="small" [color]="getWarehouseBtnColor(warehouse.id)" class="rounded ion-margin-end">
+                <ion-button *ngFor="let warehouse of product.warehouses" (click)="onClickWarehouse(warehouse)"
+                  size="small" [color]="(warehouse.id === selectedWarehouse.id) ? 'secondary' : 'light'" class="rounded ion-margin-end">
                   {{warehouse.name}}
                 </ion-button>
               </ion-col>

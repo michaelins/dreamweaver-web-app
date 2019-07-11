@@ -57,7 +57,8 @@ export class LoginPage implements OnInit {
       loginDeviceNum: '1234567890'
     }).subscribe(response => {
       this.loginInProcess = false;
-      this.navCtrl.navigateRoot(['/tabs/profile']);
+      // this.navCtrl.navigateRoot(['/tabs/profile']);
+      this.navCtrl.pop();
     }, error => {
       console.log(error);
       if (error.status === 404 || error.status === 400) {
