@@ -51,9 +51,11 @@ export class AddToCartComponent implements OnInit {
   onSubmit() {
     this.shoppingCartService.addToShoppingCart(
       this.product.goodsId,
-      'wtf is this',
+      'goodsSkuDesc',
+      'goodsWarehouseDesc',
       this.quantity,
-      this.selectedSpec.id).subscribe(resp => {
+      this.selectedSpec.id,
+      this.selectedWarehouse.id).subscribe(resp => {
         console.log(resp);
       }, error => {
         console.log(error);

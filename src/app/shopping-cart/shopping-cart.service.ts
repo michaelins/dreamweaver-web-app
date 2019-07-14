@@ -9,12 +9,24 @@ export class ShoppingCartService {
     constructor(
         private http: HttpClient) { }
 
-    addToShoppingCart(productId: string, goodsSkuDesc: string, quantity: number, specificationId: number) {
+    addToShoppingCart(
+        productId: string,
+        goodsSkuDesc: string,
+        goodsWarehouseDesc: string,
+        quantity: number,
+        specificationId: number,
+        warehouseId: number) {
         return this.http.post(`${environment.apiServer}/buyer-cart`, {
             goodsId: productId,
             goodsSkuDesc,
+            goodsWarehouseDesc,
             number: quantity,
-            specificationId
+            specificationId,
+            warehouseId
         });
+    }
+
+    getShoppingCart() {
+        return this.http.get(`${environment.apiServer}/buyer-cart`);
     }
 }

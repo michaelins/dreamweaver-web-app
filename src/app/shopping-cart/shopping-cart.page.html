@@ -6,63 +6,154 @@
 
 <ion-content>
   <ion-card>
-    <ion-grid class="ion-no-padding">
+    <ion-grid>
       <ion-row>
-        <ion-col class="ion-no-padding ion-padding-start ion-padding-end">
-          <ion-list>
-            <ion-item lines="full" class="product">
-              <ion-grid class="ion-no-padding">
+        <ion-col>
+          <div class="custom-radios">
+            <div>
+              <input type="radio" id="color-1" name="color" value="color-1" class="primary" checked>
+              <label for="color-1">
+                <span>
+                  <div></div>
+                  <!-- <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" /> -->
+                </span>
+              </label>
+            </div>
+
+            <div>
+                <input type="radio" id="color-5" name="color" value="ffff" class="primary">
+                <label for="color-5">
+                  <span>
+                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
+                  </span>
+                </label>
+              </div>
+
+            <div>
+              <input type="radio" id="color-2" name="color" value="color-2" class="secondary">
+              <label for="color-2">
+                <span>
+                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
+                </span>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" id="color-3" name="color" value="color-3" class="medium">
+              <label for="color-3">
+                <span>
+                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
+                </span>
+              </label>
+            </div>
+
+            <div>
+              <input type="radio" id="color-4" name="color" value="color-4" class="dark">
+              <label for="color-4">
+                <span>
+                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
+                </span>
+              </label>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-list class="ion-padding">
+            <ion-item class="product" detail="false">
+              <div slot="start" class="ion-margin-end product-image">
+                <ion-radio value="1" checked></ion-radio>
+                <ion-radio value="1"></ion-radio>
+                <img
+                  [src]="'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/66afd8f7596c462592a8ffd5c562fe42.jpg?x-oss-process=image/resize,m_fill,h_108,w_108'">
+              </div>
+              <ion-grid>
                 <ion-row>
-                  <ion-col size=4 class="ion-no-padding ion-padding-end ion-padding-top ion-padding-bottom">
-                    <ion-img
-                      src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/f64b19d3977b4c928cc379aa037ccb2d.jpg?x-oss-process=image/resize,m_fill,h_150,w_150">
-                    </ion-img>
-                  </ion-col>
-                  <ion-col size=8 class="ion-no-padding ion-padding-top ion-padding-bottom">
+                  <ion-col class="ion-padding-top product-block">
                     <ion-label text-wrap>
                       <div class="box-2lines-ellipsis">
                         <div>
-                          <article>WONJIN 原辰面膜透明质酸安瓶补水 保湿面膜10片装/盒</article>
+                          <article>澳洲进口Swisse补钙维生素D钙片150片 Terrywhite chemmart澳洲连锁大药房</article>
                         </div>
                       </div>
                       <div class="ion-padding-top ion-padding-bottom">
-                        <ion-badge color="secondary" class="ion-margin-end">丝绒水润白泥面膜</ion-badge>
+                        <ion-text color="medium">
+                          <p>丝绒水润白泥面膜</p>
+                        </ion-text>
                       </div>
-                      <ion-text color="primary">
-                        <h2>{{399 | currency: 'CNY':'symbol-narrow'}}</h2>
-                      </ion-text>
-                    </ion-label>
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
-            </ion-item>
-            <ion-item lines="full" class="product">
-              <ion-grid class="ion-no-padding">
-                <ion-row>
-                  <ion-col size=4 class="ion-no-padding ion-padding-end ion-padding-top ion-padding-bottom">
-                    <ion-img
-                      src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/f64b19d3977b4c928cc379aa037ccb2d.jpg?x-oss-process=image/resize,m_fill,h_150,w_150">
-                    </ion-img>
-                  </ion-col>
-                  <ion-col size=8 class="ion-no-padding ion-padding-top ion-padding-bottom">
-                    <ion-label text-wrap>
-                      <div class="box-2lines-ellipsis">
-                        <div>
-                          <article>WONJIN 原辰面膜透明质酸安瓶补水 保湿面膜10片装/盒</article>
+                      <div class="product-price-amount-wrapper">
+                        <div class="product-price">
+                          <ion-text color="primary">
+                            <p>{{199 | currency: 'CNY':'symbol-narrow'}}</p>
+                          </ion-text>
+                        </div>
+                        <div class="product-amount">
+                          <ion-icon name="remove" class="ion-padding-end" (click)="onReduceQuantity()"></ion-icon>
+                          <ion-input text-center [value]="quantity"></ion-input>
+                          <ion-icon name="add" class="ion-padding-start" (click)="onAddQuantity()"></ion-icon>
                         </div>
                       </div>
-                      <div class="ion-padding-top ion-padding-bottom">
-                        <ion-badge color="secondary" class="ion-margin-end">丝绒水润白泥面膜</ion-badge>
-                      </div>
-                      <ion-text color="primary">
-                        <h2>{{399 | currency: 'CNY':'symbol-narrow'}}</h2>
-                      </ion-text>
                     </ion-label>
                   </ion-col>
                 </ion-row>
               </ion-grid>
             </ion-item>
           </ion-list>
+          <!-- <ion-list>
+            <ion-item lines="full" class="product">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col size=4 class="ion-no-padding ion-padding-end ion-padding-top ion-padding-bottom">
+                    <ion-img
+                      src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/f64b19d3977b4c928cc379aa037ccb2d.jpg?x-oss-process=image/resize,m_fill,h_150,w_150">
+                    </ion-img>
+                  </ion-col>
+                  <ion-col size=8 class="ion-no-padding ion-padding-top ion-padding-bottom">
+                    <ion-label text-wrap>
+                      <div class="box-2lines-ellipsis">
+                        <div>
+                          <article>WONJIN 原辰面膜透明质酸安瓶补水 保湿面膜10片装/盒</article>
+                        </div>
+                      </div>
+                      <div class="ion-padding-top ion-padding-bottom">
+                        <ion-badge color="secondary" class="ion-margin-end">丝绒水润白泥面膜</ion-badge>
+                      </div>
+                      <ion-text color="primary">
+                        <h2>{{399 | currency: 'CNY':'symbol-narrow'}}</h2>
+                      </ion-text>
+                    </ion-label>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+            <ion-item lines="full" class="product">
+              <ion-grid class="ion-no-padding">
+                <ion-row>
+                  <ion-col size=4 class="ion-no-padding ion-padding-end ion-padding-top ion-padding-bottom">
+                    <ion-img
+                      src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/f64b19d3977b4c928cc379aa037ccb2d.jpg?x-oss-process=image/resize,m_fill,h_150,w_150">
+                    </ion-img>
+                  </ion-col>
+                  <ion-col size=8 class="ion-no-padding ion-padding-top ion-padding-bottom">
+                    <ion-label text-wrap>
+                      <div class="box-2lines-ellipsis">
+                        <div>
+                          <article>WONJIN 原辰面膜透明质酸安瓶补水 保湿面膜10片装/盒</article>
+                        </div>
+                      </div>
+                      <div class="ion-padding-top ion-padding-bottom">
+                        <ion-badge color="secondary" class="ion-margin-end">丝绒水润白泥面膜</ion-badge>
+                      </div>
+                      <ion-text color="primary">
+                        <h2>{{399 | currency: 'CNY':'symbol-narrow'}}</h2>
+                      </ion-text>
+                    </ion-label>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list> -->
         </ion-col>
       </ion-row>
     </ion-grid>

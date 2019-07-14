@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UiStateService } from '../shared/ui-state.service';
 import { Product } from '../home/home.service';
+import { ShoppingCartService } from './shopping-cart.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -10,10 +11,14 @@ import { Product } from '../home/home.service';
 export class ShoppingCartPage implements OnInit {
 
   constructor(
-    private uiStateService: UiStateService
+    private uiStateService: UiStateService,
+    private shoppingCartService: ShoppingCartService
   ) { }
 
   ngOnInit() {
+    // this.shoppingCartService.getShoppingCart().subscribe(resp => {
+    //   console.log(resp);
+    // });
   }
 
   ionViewWillEnter() {
