@@ -6,6 +6,7 @@ import { ProductService, Product, Warehouse, Specification } from './product.ser
 import { ActivatedRoute } from '@angular/router';
 import { element } from '@angular/core/src/render3';
 import { AddToCartComponent } from '../shared/add-to-cart/add-to-cart.component';
+import { ShoppingCartService } from '../shopping-cart/shopping-cart.service';
 
 @Component({
   selector: 'app-product',
@@ -20,6 +21,7 @@ export class ProductPage implements OnInit {
   product: Product;
   selectedWarehouse: Warehouse;
   selectedSpec: Specification;
+  shoppingCartItemSize: number;
 
   sectionId = 1;
   scrollEvents = true;
@@ -32,6 +34,7 @@ export class ProductPage implements OnInit {
 
   constructor(
     private productService: ProductService,
+    private shoppingCartService: ShoppingCartService,
     private route: ActivatedRoute,
     private modalCtrl: ModalController
   ) { }
@@ -51,6 +54,12 @@ export class ProductPage implements OnInit {
         this.selectedSpec = this.product.specifications[0];
       }
       console.log(resp);
+    });
+    this.shoppingCartService.shoppingCartObservable.subscribe(resp => {
+      console.log(resp);
+      if (resp && resp.items && resp.items.length > 0) {
+        this.shoppingCartItemSize = resp.items.length;
+      }
     });
   }
 

@@ -49,16 +49,17 @@ export class AddToCartComponent implements OnInit {
   }
 
   onSubmit() {
-    this.shoppingCartService.addToShoppingCart(
-      this.product.goodsId,
-      this.quantity,
-      this.selectedSpec.id,
-      this.selectedWarehouse.id).subscribe(resp => {
-        this.onDismiss();
-        console.log(resp);
-      }, error => {
-        console.log(error);
-      });
+    this.shoppingCartService.addToShoppingCart({
+      goodsId: this.product.goodsId,
+      number: this.quantity,
+      specificationId: this.selectedSpec.id,
+      warehouseId: this.selectedWarehouse.id
+    }).subscribe(resp => {
+      this.onDismiss();
+      console.log(resp);
+    }, error => {
+      console.log(error);
+    });
   }
 
   onDismiss() {

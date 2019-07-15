@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { UiStateService } from '../shared/ui-state.service';
 import { Product } from '../home/home.service';
-import { ShoppingCartService, ShoppingCartItem, ShoppingCart } from './shopping-cart.service';
+import { ShoppingCartService, ShoppingCartItem, ShoppingCart, ShoppingCartItemRef } from './shopping-cart.service';
 import { AuthService } from '../auth/auth.service';
 import { switchMap, take } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, from } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 
 @Component({
@@ -49,6 +49,10 @@ export class ShoppingCartPage implements OnInit {
     console.log('ionViewWillLeave');
   }
 
+  ionViewDidLeave() {
+    this.editMode = false;
+  }
+
   switchEditMode() {
     this.editMode = !this.editMode;
   }
@@ -60,12 +64,12 @@ export class ShoppingCartPage implements OnInit {
   }
 
   onAddQuantity(item: ShoppingCartItem) {
-    this.shoppingCartService.addToShoppingCart(
-      item.goodsId,
-      1,
-      item.specificationId,
-      item.warehouseId
-    ).subscribe(resp => {
+    this.shoppingCartService.addToShoppingCart({
+      goodsId: item.goodsId,
+      number: 1,
+      specificationId: item.specificationId,
+      warehouseId: item.warehouseId
+    }).subscribe(resp => {
       console.log(resp.items.length);
     });
   }
@@ -74,12 +78,12 @@ export class ShoppingCartPage implements OnInit {
     if (item.number <= 1) {
       return;
     }
-    this.shoppingCartService.removeFromShoppingCart(
-      item.goodsId,
-      item.number - 1,
-      item.specificationId,
-      item.warehouseId
-    ).subscribe(resp => {
+    this.shoppingCartService.removeFromShoppingCart([{
+      goodsId: item.goodsId,
+      number: item.number - 1,
+      specificationId: item.specificationId,
+      warehouseId: item.warehouseId
+    }]).subscribe(resp => {
       console.log(resp.items.length);
     });
   }
@@ -119,7 +123,7 @@ export class ShoppingCartPage implements OnInit {
   }
 
   onDeleteItems() {
-    this.alertCtrl.create({
+    from(this.alertCtrl.create({
       message: '确定删除该商品吗？',
       buttons: [{
         text: '取消',
@@ -128,20 +132,54 @@ export class ShoppingCartPage implements OnInit {
         text: '确定',
         role: 'ok'
       }]
-    }).then(dialog => {
-      dialog.present();
-      return dialog.onDidDismiss();
-    }).then(data => {
-      if (data && data.role === 'ok') {
-        const checkedItems = this.cart.items.filter(item => {
-          return item.checked === true;
-        });
-        console.log(checkedItems);
-      }
-      console.log(data);
-      console.log(this.cart);
-    }).catch(error => {
-      console.log(error);
-    });
+    })).pipe(
+      switchMap(dialog => {
+        dialog.present();
+        return dialog.onDidDismiss();
+      }),
+      switchMap(data => {
+        if (data && data.role === 'ok') {
+          const checkedItems = this.cart.items.filter(item => {
+            return item.checked === true;
+          }).map<ShoppingCartItemRef>(item => {
+            return {
+              goodsId: item.goodsId,
+              number: 0,
+              specificationId: item.specificationId,
+              warehouseId: item.warehouseId
+            };
+          });
+          // console.log(checkedItems);
+          return this.shoppingCartService.removeFromShoppingCart(checkedItems);
+        }
+      })
+    ).subscribe(resp => {
+      console.log(resp);
+      this.cart = resp;
+    }, console.log);
+
+
+    // .then(dialog => {
+    //   dialog.present();
+    //   return dialog.onDidDismiss();
+    // }).then(data => {
+    //   if (data && data.role === 'ok') {
+    //     const checkedItems = this.cart.items.filter(item => {
+    //       return item.checked === true;
+    //     }).map<ShoppingCartItemRef>(item => {
+    //       return {
+    //         goodsId: item.goodsId,
+    //         number: 0,
+    //         specificationId: item.specificationId,
+    //         warehouseId: item.warehouseId
+    //       };
+    //     });
+    //     console.log(checkedItems);
+    //   }
+    //   console.log(data);
+    //   console.log(this.cart);
+    // }).catch(error => {
+    //   console.log(error);
+    // });
   }
 }

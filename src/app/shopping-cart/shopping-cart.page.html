@@ -14,23 +14,19 @@
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
   </ion-refresher> -->
 
-  <ion-card>
+  <ion-card *ngIf="cart && cart.items.length>0">
     <ion-grid>
       <ion-row>
         <ion-col>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-list class="ion-padding" *ngIf="cart">
+          <ion-list class="ion-padding">
             <!-- <ion-item-sliding> -->
             <ion-item class="product" detail="false" *ngFor="let item of cart.items; index as i">
               <div slot="start" class="ion-margin-end product-image">
                 <div class="custom-radios ion-margin-end">
                   <div>
-                    <input type="checkbox" [id]="item.goodsId" name="color" [checked]="item.checked"
-                      (change)="onSelectForPurchase(item,$event)" class="primary">
-                    <label [for]="item.goodsId">
+                    <input type="checkbox" [id]="item.goodsId+'-'+item.specificationId+'-'+item.warehouseId"
+                      name="color" [checked]="item.checked" (change)="onSelectForPurchase(item,$event)" class="primary">
+                    <label [for]="item.goodsId+'-'+item.specificationId+'-'+item.warehouseId">
                       <span>
                         <div></div>
                         <img src="../../assets/icon/check-icn.svg" alt="Checked Icon" />

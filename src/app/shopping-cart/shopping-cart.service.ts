@@ -40,6 +40,13 @@ export interface ShoppingCartRef {
     userId: string;
 }
 
+export interface ShoppingCartItemRef {
+    goodsId: string;
+    number: number;
+    specificationId: number;
+    warehouseId: number;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -54,35 +61,17 @@ export class ShoppingCartService {
         return this.shoppingCart.asObservable();
     }
 
-    addToShoppingCart(
-        productId: string,
-        quantity: number,
-        specificationId: number,
-        warehouseId: number) {
-        return this.http.post<ShoppingCart>(`${environment.apiServer}/buyer-cart`, {
-            goodsId: productId,
-            number: quantity,
-            specificationId,
-            warehouseId
-        }).pipe(
+    addToShoppingCart(item: ShoppingCartItemRef) {
+        return this.http.post<ShoppingCart>(`${environment.apiServer}/buyer-cart`, item).pipe(
             tap(resp => {
                 this.shoppingCart.next(resp);
             })
         );
     }
 
-    removeFromShoppingCart(
-        productId: string,
-        quantity: number,
-        specificationId: number,
-        warehouseId: number) {
+    removeFromShoppingCart(items: ShoppingCartItemRef[]) {
         return this.http.request<ShoppingCart>('delete', `${environment.apiServer}/buyer-cart`, {
-            body: {
-                goodsId: productId,
-                number: quantity,
-                specificationId,
-                warehouseId
-            }
+            body: items
         }).pipe(
             tap(resp => {
                 this.shoppingCart.next(resp);

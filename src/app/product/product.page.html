@@ -88,7 +88,8 @@
             <ion-row>
               <ion-col>
                 <ion-button *ngFor="let warehouse of product.warehouses" (click)="onClickWarehouse(warehouse)"
-                  size="small" [color]="(warehouse.id === selectedWarehouse.id) ? 'secondary' : 'light'" class="rounded ion-margin-end">
+                  size="small" [color]="(warehouse.id === selectedWarehouse.id) ? 'secondary' : 'light'"
+                  class="rounded ion-margin-end">
                   {{warehouse.name}}
                 </ion-button>
               </ion-col>
@@ -159,7 +160,7 @@
           <ion-tab-button [routerLink]="['/tabs/cart']">
             <ion-icon src="../../assets/icon/cart.svg" color="medium"></ion-icon>
             <ion-label>购物车</ion-label>
-            <ion-badge>2</ion-badge>
+            <ion-badge>{{shoppingCartItemSize}}</ion-badge>
           </ion-tab-button>
         </ion-col>
         <ion-col size=9>
