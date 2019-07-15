@@ -5,8 +5,9 @@ const routes: Routes = [
   { path: 'auth', loadChildren: './auth/auth.module#AuthPageModule' },
   { path: 'product', loadChildren: './product/product.module#ProductPageModule' },
   { path: 'search', loadChildren: './search/search.module#SearchPageModule' },
+  { path: 'address', loadChildren: './address/address.module#AddressPageModule' },
   { path: '', loadChildren: './tabs/tabs.module#TabsPageModule' },
-  { path: '**', redirectTo: '/tabs/home' },
+  { path: '**', redirectTo: '/tabs/home' }
 ];
 
 @NgModule({
