@@ -89,7 +89,7 @@ export class AuthService {
         return this.http.post<LoginRsp>(`${environment.apiServer}/user/login`, loginReq).pipe(tap(this.setUserData.bind(this)));
     }
 
-    authLogin() {
+    autoLogin() {
         return from(Plugins.Storage.get({ key: 'authData' })).pipe(
             map(storedData => {
                 if (!storedData || !storedData.value) {

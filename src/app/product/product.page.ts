@@ -23,6 +23,7 @@ export class ProductPage implements OnInit {
 
   sectionId = 1;
   scrollEvents = true;
+  isScrolling = false;
   slideOpts = {
     speed: 400,
     loop: true,
@@ -66,6 +67,10 @@ export class ProductPage implements OnInit {
   }
 
   onNav(id: number) {
+    if (this.isScrolling) {
+      console.log('scrolling, ignore nav');
+      return;
+    }
     this.sectionId = id;
     if (this.sectionId === 1) {
       this.scrollable.scrollToTop(100);
@@ -110,5 +115,15 @@ export class ProductPage implements OnInit {
         }
       }
     });
+  }
+
+  onIonScrollStart() {
+    this.isScrolling = true;
+    console.log('onIonScrollStart');
+  }
+
+  onIonScrollEnd() {
+    this.isScrolling = false;
+    console.log('onIonScrollEnd');
   }
 }

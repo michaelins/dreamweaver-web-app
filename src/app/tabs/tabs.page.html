@@ -1,5 +1,6 @@
 <ion-tabs>
-  <ion-tab-bar (touchmove)="onTouchMove($event)" slot="bottom" [ngStyle]="{'display': uiStateService.getTabBarHidden()?'none':'flex'}">
+  <ion-tab-bar (touchmove)="onTouchMove($event)" slot="bottom"
+    [ngStyle]="{'display': uiStateService.getTabBarHidden()?'none':'flex'}">
     <ion-tab-button tab="home">
       <ion-label>首页</ion-label>
       <ion-icon src="../../assets/icon/home.svg"></ion-icon>
@@ -11,7 +12,7 @@
     <ion-tab-button tab="cart">
       <ion-label>购物车</ion-label>
       <ion-icon src="../../assets/icon/cart.svg"></ion-icon>
-      <ion-badge>31</ion-badge>
+      <ion-badge *ngIf="shoppingCartItemSize">{{shoppingCartItemSize}}</ion-badge>
     </ion-tab-button>
     <ion-tab-button tab="profile">
       <ion-label>我的</ion-label>

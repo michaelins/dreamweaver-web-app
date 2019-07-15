@@ -19,7 +19,7 @@ export class AuthInterceptorService implements HttpInterceptor {
             take(1),
             switchMap(user => {
                 if (!user) {
-                    return this.authService.authLogin();
+                    return this.authService.autoLogin();
                 } else {
                     return of(user);
                 }

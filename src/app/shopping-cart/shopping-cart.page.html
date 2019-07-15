@@ -1,104 +1,82 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>购物车</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button color="dark" (click)="editMode = !editMode">{{editMode?'完成':'编辑'}}</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+
+  <!-- <ion-refresher pullFactor="0.5" closeDuration="200ms" snapbackDuration="50ms" pullMax="400"
+    (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
+  </ion-refresher> -->
+
   <ion-card>
     <ion-grid>
       <ion-row>
         <ion-col>
-          <div class="custom-radios">
-            <div>
-              <input type="radio" id="color-1" name="color" value="color-1" class="primary" checked>
-              <label for="color-1">
-                <span>
-                  <div></div>
-                  <!-- <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" /> -->
-                </span>
-              </label>
-            </div>
-
-            <div>
-                <input type="radio" id="color-5" name="color" value="ffff" class="primary">
-                <label for="color-5">
-                  <span>
-                    <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
-                  </span>
-                </label>
-              </div>
-
-            <div>
-              <input type="radio" id="color-2" name="color" value="color-2" class="secondary">
-              <label for="color-2">
-                <span>
-                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
-                </span>
-              </label>
-            </div>
-
-            <div>
-              <input type="radio" id="color-3" name="color" value="color-3" class="medium">
-              <label for="color-3">
-                <span>
-                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
-                </span>
-              </label>
-            </div>
-
-            <div>
-              <input type="radio" id="color-4" name="color" value="color-4" class="dark">
-              <label for="color-4">
-                <span>
-                  <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/242518/check-icn.svg" alt="Checked Icon" />
-                </span>
-              </label>
-            </div>
-          </div>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col>
-          <ion-list class="ion-padding">
-            <ion-item class="product" detail="false">
+          <ion-list class="ion-padding" *ngIf="cart">
+            <!-- <ion-item-sliding> -->
+            <ion-item class="product" detail="false" *ngFor="let item of cart.items; index as i">
               <div slot="start" class="ion-margin-end product-image">
-                <ion-radio value="1" checked></ion-radio>
-                <ion-radio value="1"></ion-radio>
-                <img
-                  [src]="'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/66afd8f7596c462592a8ffd5c562fe42.jpg?x-oss-process=image/resize,m_fill,h_108,w_108'">
+                <div class="custom-radios ion-margin-end">
+                  <div>
+                    <input type="checkbox" [id]="item.goodsId" name="color" [checked]="item.checked"
+                      (change)="onSelectForPurchase(item,$event)" class="primary">
+                    <label [for]="item.goodsId">
+                      <span>
+                        <div></div>
+                        <img src="../../assets/icon/check-icn.svg" alt="Checked Icon" />
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <img class="thumbnail" [src]="item.goodsImg+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
               </div>
               <ion-grid>
                 <ion-row>
-                  <ion-col class="ion-padding-top product-block">
-                    <ion-label text-wrap>
-                      <div class="box-2lines-ellipsis">
-                        <div>
-                          <article>澳洲进口Swisse补钙维生素D钙片150片 Terrywhite chemmart澳洲连锁大药房</article>
-                        </div>
+                  <ion-col class="ion-padding-top ion-padding-bottom product-block">
+                    <!-- <ion-label text-wrap> -->
+                    <div class="box-2lines-ellipsis">
+                      <div>
+                        <article>{{item.goodsName}}</article>
                       </div>
-                      <div class="ion-padding-top ion-padding-bottom">
-                        <ion-text color="medium">
-                          <p>丝绒水润白泥面膜</p>
+                    </div>
+                    <div class="ion-padding-top ion-padding-bottom">
+                      <ion-text color="medium">
+                        <p>{{item.goodsSpecificationDesc}}/{{item.goodsWarehouseDesc}}</p>
+                      </ion-text>
+                    </div>
+                    <div class="product-price-amount-wrapper">
+                      <div class="product-price">
+                        <ion-text color="primary">
+                          <p>{{item.goodsPrice | currency: 'CNY':'symbol-narrow'}}</p>
                         </ion-text>
                       </div>
-                      <div class="product-price-amount-wrapper">
-                        <div class="product-price">
-                          <ion-text color="primary">
-                            <p>{{199 | currency: 'CNY':'symbol-narrow'}}</p>
-                          </ion-text>
-                        </div>
-                        <div class="product-amount">
-                          <ion-icon name="remove" class="ion-padding-end" (click)="onReduceQuantity()"></ion-icon>
-                          <ion-input text-center [value]="quantity"></ion-input>
-                          <ion-icon name="add" class="ion-padding-start" (click)="onAddQuantity()"></ion-icon>
-                        </div>
+                      <div class="product-amount">
+                        <ion-icon name="remove" class="ion-padding-end" (click)="onReduceQuantity(item)"></ion-icon>
+                        <ion-input text-center [value]="item.number"></ion-input>
+                        <ion-icon name="add" class="ion-padding-start" (click)="onAddQuantity(item)"></ion-icon>
                       </div>
-                    </ion-label>
+                    </div>
+                    <!-- </ion-label> -->
                   </ion-col>
                 </ion-row>
               </ion-grid>
             </ion-item>
+            <!-- <ion-item-options side="end">
+                <ion-item-option color="danger">
+                  <ion-icon slot="icon-only" name="trash"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding> -->
           </ion-list>
           <!-- <ion-list>
             <ion-item lines="full" class="product">
@@ -159,3 +137,74 @@
     </ion-grid>
   </ion-card>
 </ion-content>
+
+<ion-footer *ngIf="editMode">
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col size=8>
+          <ion-grid>
+            <ion-row>
+              <ion-col class="select" size=6>
+                <div class="custom-radios">
+                  <div>
+                    <input type="checkbox" id="selectall" name="color" class="primary"
+                      (change)="onSelectAllForEdit($event)">
+                    <label for="selectall">
+                      <span>
+                        <div></div>
+                        <img src="../../assets/icon/check-icn.svg" alt="Checked Icon" />
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <ion-text color="dark" class="ion-margin-start">全选</ion-text>
+              </ion-col>
+              <ion-col class="total" size=6>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+        <ion-col class="purchase" size=4 (click)="onDeleteItems()">
+          <ion-text color="light">删除</ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
+
+<ion-footer *ngIf="!editMode">
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col size=8>
+          <ion-grid>
+            <ion-row>
+              <ion-col class="select" size=6>
+                <div class="custom-radios">
+                  <div>
+                    <input type="checkbox" id="selectall" name="color" class="primary"
+                      (change)="onSelectAllForPurchase($event)">
+                    <label for="selectall">
+                      <span>
+                        <div></div>
+                        <img src="../../assets/icon/check-icn.svg" alt="Checked Icon" />
+                      </span>
+                    </label>
+                  </div>
+                </div>
+                <ion-text color="dark" class="ion-margin-start">全选</ion-text>
+              </ion-col>
+              <ion-col class="total" size=6>
+                <ion-text color="primary">合计：{{price | currency: 'CNY':'symbol-narrow'}}</ion-text>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-col>
+        <ion-col class="purchase" size=4>
+          <ion-text color="light">去结算 ({{quantity}})</ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

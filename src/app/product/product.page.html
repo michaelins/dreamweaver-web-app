@@ -5,14 +5,16 @@
     </ion-buttons>
     <ion-title class="product-nav">
       <ul>
-        <li [ngClass]="{active: sectionId===1}"><a (click)="onNav(1)">商品</a></li>
-        <li [ngClass]="{active: sectionId===2}"><a (click)="onNav(2)">详情</a></li>
+        <li [ngClass]="{active: sectionId===1, disabled: isScrolling}"><a (click)="onNav(1)">商品</a></li>
+        <li [ngClass]="{active: sectionId===2, disabled: isScrolling}"><a (click)="onNav(2)">详情</a></li>
       </ul>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents" (ionScroll)="onScroll($event)">
+<ion-content #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents" (ionScroll)="onScroll($event)"
+  (ionScrollStart)="onIonScrollStart()" (ionScrollEnd)="onIonScrollEnd()">
+
   <ion-grid *ngIf="product">
     <ion-row>
       <ion-col>
@@ -154,7 +156,7 @@
     <ion-grid>
       <ion-row>
         <ion-col class="cart" size=3>
-          <ion-tab-button>
+          <ion-tab-button [routerLink]="['/tabs/cart']">
             <ion-icon src="../../assets/icon/cart.svg" color="medium"></ion-icon>
             <ion-label>购物车</ion-label>
             <ion-badge>2</ion-badge>
