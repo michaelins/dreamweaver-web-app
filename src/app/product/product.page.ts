@@ -2,10 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { IonContent, IonGrid, ModalController } from '@ionic/angular';
 import { of, Observable, Subject, Subscription } from 'rxjs';
 import { take, switchMap } from 'rxjs/operators';
-import { ProductService, Product, Warehouse } from './product.service';
+import { ProductService, Product, Warehouse, Specification } from './product.service';
 import { ActivatedRoute } from '@angular/router';
 import { element } from '@angular/core/src/render3';
 import { AddToCartComponent } from '../shared/add-to-cart/add-to-cart.component';
+import { ShoppingCartService } from '../shopping-cart/shopping-cart.service';
 
 @Component({
   selector: 'app-product',
@@ -18,11 +19,13 @@ export class ProductPage implements OnInit {
   @ViewChild('detail') detail: ElementRef<HTMLElement>;
 
   product: Product;
-  selectedWarehouseId: number;
   selectedWarehouse: Warehouse;
+  selectedSpec: Specification;
+  shoppingCartItemSize: number;
 
   sectionId = 1;
   scrollEvents = true;
+  isScrolling = false;
   slideOpts = {
     speed: 400,
     loop: true,
@@ -31,6 +34,7 @@ export class ProductPage implements OnInit {
 
   constructor(
     private productService: ProductService,
+    private shoppingCartService: ShoppingCartService,
     private route: ActivatedRoute,
     private modalCtrl: ModalController
   ) { }
@@ -44,10 +48,18 @@ export class ProductPage implements OnInit {
     })).subscribe(resp => {
       this.product = resp;
       if (this.product.warehouses && this.product.warehouses.length > 0) {
-        this.selectedWarehouseId = this.product.warehouses[0].id;
         this.selectedWarehouse = this.product.warehouses[0];
       }
+      if (this.product.specifications && this.product.specifications.length > 0) {
+        this.selectedSpec = this.product.specifications[0];
+      }
       console.log(resp);
+    });
+    this.shoppingCartService.shoppingCartObservable.subscribe(resp => {
+      console.log(resp);
+      if (resp && resp.items && resp.items.length > 0) {
+        this.shoppingCartItemSize = resp.items.length;
+      }
     });
   }
 
@@ -59,18 +71,15 @@ export class ProductPage implements OnInit {
     this.scrollEvents = false;
   }
 
-  onClickWarehouse(id: number) {
-    this.selectedWarehouseId = id;
-    this.selectedWarehouse = this.product.warehouses.find(warehouse => {
-      return warehouse.id === id;
-    });
-  }
-
-  getWarehouseBtnColor(id: number) {
-    return (id === this.selectedWarehouseId) ? 'secondary' : 'light';
+  onClickWarehouse(warehouse: Warehouse) {
+    this.selectedWarehouse = warehouse;
   }
 
   onNav(id: number) {
+    if (this.isScrolling) {
+      console.log('scrolling, ignore nav');
+      return;
+    }
     this.sectionId = id;
     if (this.sectionId === 1) {
       this.scrollable.scrollToTop(100);
@@ -84,7 +93,8 @@ export class ProductPage implements OnInit {
       component: AddToCartComponent,
       componentProps: {
         product: this.product,
-        selectedWarehouseId: this.selectedWarehouseId
+        selectedSpec: this.selectedSpec,
+        selectedWarehouse: this.selectedWarehouse
       },
       cssClass: 'auto-height bottom'
     }).then(modal => {
@@ -92,6 +102,12 @@ export class ProductPage implements OnInit {
       return modal.onDidDismiss();
     }).then(message => {
       console.log(message);
+      if (message.data && message.data.selectedSpec) {
+        this.selectedSpec = message.data.selectedSpec;
+      }
+      if (message.data && message.data.selectedWarehouse) {
+        this.selectedWarehouse = message.data.selectedWarehouse;
+      }
     });
   }
 
@@ -108,5 +124,15 @@ export class ProductPage implements OnInit {
         }
       }
     });
+  }
+
+  onIonScrollStart() {
+    this.isScrolling = true;
+    console.log('onIonScrollStart');
+  }
+
+  onIonScrollEnd() {
+    this.isScrolling = false;
+    console.log('onIonScrollEnd');
   }
 }

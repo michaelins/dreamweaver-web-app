@@ -41,6 +41,11 @@ ion-item {
           color: var(--ion-color-primary);
         }
       }
+      &.disabled {
+        a {
+          color: var(--ion-color-medium);
+        }
+      }
     }
   }
 }

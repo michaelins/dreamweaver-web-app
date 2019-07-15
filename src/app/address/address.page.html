@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>地址管理</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button color="dark" size="small" [routerLink]="['/address','detail']">新增</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-margin-top ion-padding" *ngFor="let i of [1,2,3,4,5]">
+    <ion-row class="ion-padding">
+      <ion-col>
+        <ion-text color="dark">
+          <h5>谭艾艳</h5>
+        </ion-text>
+        <ion-text color="dark" class="phone ion-margin-start">
+          <p>136****9532</p>
+        </ion-text>
+        <ion-chip color="primary" outline="true">
+          <ion-label>有身份证</ion-label>
+        </ion-chip>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding-start ion-padding-end">
+      <ion-col>
+        <ion-text color="dark">
+          <p>四川省成都市高新区新天府大道中段1号新会展中心廊桥166号</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top">
+      <ion-col>
+        <div class="custom-radios">
+          <div>
+            <input type="checkbox" id="selectall" name="color" class="primary"
+              (change)="onSelectAllForPurchase($event)">
+            <label for="selectall">
+              <span>
+                <div></div>
+                <img src="../../assets/icon/check-icn.svg" alt="Checked Icon" />
+              </span>
+            </label>
+          </div>
+        </div>
+        <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1">设为默认</ion-text>
+        <div class="tool ion-margin-start">
+          <ion-icon name="create" color="medium"></ion-icon>
+          <ion-text color="dark">编辑</ion-text>
+        </div>
+        <div class="tool ion-margin-start">
+          <ion-icon name="trash" color="medium"></ion-icon>
+          <ion-text color="dark">删除</ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

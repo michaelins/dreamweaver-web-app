@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { BehaviorSubject, from } from 'rxjs';
+import { tap, map } from 'rxjs/operators';
 import { User } from './user.model';
+import { Plugins } from '@capacitor/core';
 import { environment } from 'src/environments/environment';
 
 export interface SmsSendAuthCodeRsp {
@@ -42,13 +43,13 @@ export interface LoginRsp {
 })
 export class AuthService {
 
-    private _user = new BehaviorSubject<User>(null);
+    // tslint:disable-next-line: variable-name
+    private userSubject = new BehaviorSubject<User>(null);
 
     get user() {
-        return this._user.asObservable();
+        return this.userSubject.asObservable();
     }
 
-    private _userIsAuthenticated = true;
     public registerReq: RegisterReq = {
         authKey: null,
         code: null,
@@ -60,7 +61,15 @@ export class AuthService {
     };
 
     get userIsAuthenticated() {
-        return this._userIsAuthenticated;
+        return this.userSubject.asObservable().pipe(
+            map(user => {
+                if (user) {
+                    return !!user.token;
+                } else {
+                    return false;
+                }
+            })
+        );
     }
 
     constructor(private http: HttpClient) { }
@@ -69,27 +78,47 @@ export class AuthService {
         return this.http.post<SmsSendAuthCodeRsp>(`${environment.apiServer}/sms/sendauthcode`, {
             phoneNo,
             templateCode
-        }, {
-                headers: new HttpHeaders({
-                    ChannelCode: 'WXH5'
-                }),
-            });
+        });
     }
 
     register() {
-        return this.http.post<LoginRsp>(`${environment.apiServer}/user/register`, this.registerReq, {
-            headers: new HttpHeaders({
-                ChannelCode: 'WXH5'
-            }),
-        }).pipe(tap(this.setUserData.bind(this)));
+        return this.http.post<LoginRsp>(`${environment.apiServer}/user/register`, this.registerReq).pipe(tap(this.setUserData.bind(this)));
     }
 
     login(loginReq: LoginReq) {
-        return this.http.post<LoginRsp>(`${environment.apiServer}/user/login`, loginReq, {
-            headers: new HttpHeaders({
-                ChannelCode: 'WXH5'
-            }),
-        }).pipe(tap(this.setUserData.bind(this)));
+        return this.http.post<LoginRsp>(`${environment.apiServer}/user/login`, loginReq).pipe(tap(this.setUserData.bind(this)));
+    }
+
+    autoLogin() {
+        return from(Plugins.Storage.get({ key: 'authData' })).pipe(
+            map(storedData => {
+                if (!storedData || !storedData.value) {
+                    return null;
+                }
+                const parsedData = JSON.parse(storedData.value) as {
+                    accountNo: string,
+                    accountStatus: string,
+                    headPortrait: string,
+                    nickName: string,
+                    token: string,
+                    userId: string,
+                    tokenExpirationDate: string
+                };
+                const user = new User(
+                    parsedData.accountNo,
+                    parsedData.accountStatus,
+                    parsedData.headPortrait,
+                    parsedData.nickName,
+                    parsedData.token,
+                    parsedData.userId
+                );
+                return user;
+            }), tap(user => {
+                if (user !== null) {
+                    this.userSubject.next(user);
+                }
+            })
+        );
     }
 
     private setUserData(userData: LoginRsp) {
@@ -101,6 +130,26 @@ export class AuthService {
             userData.token,
             userData.userId
         );
-        this._user.next(user);
+        this.userSubject.next(user);
+        this.storeAuthData(
+            userData.accountNo,
+            userData.accountStatus,
+            userData.headPortrait,
+            userData.nickName,
+            userData.token,
+            userData.userId,
+            null);
+    }
+
+    private storeAuthData(
+        accountNo: string,
+        accountStatus: string,
+        headPortrait: string,
+        nickName: string,
+        token: string,
+        userId: string,
+        tokenExpirationDate: string) {
+        const data = JSON.stringify({ accountNo, accountStatus, headPortrait, nickName, userId, token, tokenExpirationDate });
+        Plugins.Storage.set({ key: 'authData', value: data });
     }
 }

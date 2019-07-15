@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { AuthGuard } from '../auth/auth.guard';
 
 const routes: Routes = [
     {
@@ -22,11 +23,13 @@ const routes: Routes = [
             },
             {
                 path: 'cart',
-                loadChildren: '../shopping-cart/shopping-cart.module#ShoppingCartPageModule'
+                loadChildren: '../shopping-cart/shopping-cart.module#ShoppingCartPageModule',
+                canLoad: [AuthGuard]
             },
             {
                 path: 'profile',
-                loadChildren: '../profile/profile.module#ProfilePageModule'
+                loadChildren: '../profile/profile.module#ProfilePageModule',
+                canLoad: [AuthGuard]
             },
             {
                 path: '',

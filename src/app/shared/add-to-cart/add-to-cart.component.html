@@ -1,11 +1,73 @@
 <div class="inner-content">
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <h2>Test</h2>
-          <p>Test</p>
-          <ion-button expand='block' (click)="onDismiss()">Close</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-col size=3>
+        <img [src]="product.headImg+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
+      </ion-col>
+      <ion-col class="product-info ion-padding-top" size=8>
+        <ion-text color="primary">
+          <h5>{{product.price | currency: 'CNY':'symbol-narrow'}}</h5>
+        </ion-text>
+        <ion-text color="dark">
+          <p>库存 {{product.amount}} 件</p>
+          <p>已选择 {{selectedSpec.name}} {{selectedWarehouse.name}}</p>
+        </ion-text>
+      </ion-col>
+      <ion-col size=1 text-right>
+        <ion-icon class="close" name="close" (click)="onDismiss()"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end ion-padding-top">
+        <ion-text color="dark">
+          <p>请选择商品规格</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end ion-padding-top">
+        <ion-button *ngFor="let spec of product.specifications" (click)="onSelectSpec(spec)" size="small"
+          [color]="(spec.id === selectedSpec.id) ? 'secondary' : 'light'" class="rounded ion-margin-end">
+          {{spec.name}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end ion-padding-top">
+        <ion-text color="dark">
+          <p>请选择发货仓库</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end ion-padding-top">
+        <ion-button *ngFor="let warehouse of product.warehouses" (click)="onSelectWarehouse(warehouse)" size="small"
+          [color]="(warehouse.id === selectedWarehouse.id) ? 'secondary' : 'light'" class="rounded ion-margin-end">
+          {{warehouse.name}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding">
+      <ion-col size=8 class="product-amount title">
+        <ion-text color="dark">
+          <p>选择购买数量</p>
+        </ion-text>
+      </ion-col>
+      <ion-col size=4 class="product-amount">
+        <ion-icon name="remove" size="medium" (click)="onReduceQuantity()"></ion-icon>
+        <ion-input text-center [value]="quantity"></ion-input>
+        <ion-icon name="add" (click)="onAddQuantity()"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <!-- <ion-col class="footer addcart" size=6 (click)="onAddToCart()">
+        <ion-text color="light">加入购物车</ion-text>
+      </ion-col> -->
+      <ion-col class="footer buynow" (click)="onSubmit()">
+        <ion-text color="light">加入购物车</ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>

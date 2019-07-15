@@ -111,18 +111,10 @@ export class ProductService {
         return this.http.post<CollectionOfProduct>(`${environment.apiServer}/goods/${pageNum}/${pageSize}`, {
             equal,
             sort
-        }, {
-                headers: new HttpHeaders({
-                    ChannelCode: 'WXH5'
-                }),
-            });
+        });
     }
 
     getProduct(productId: string) {
-        return this.http.get<Product>(`${environment.apiServer}/goods/${productId}/users`, {
-            headers: new HttpHeaders({
-                ChannelCode: 'WXH5'
-            }),
-        });
+        return this.http.get<Product>(`${environment.apiServer}/goods/${productId}/users`);
     }
 }
