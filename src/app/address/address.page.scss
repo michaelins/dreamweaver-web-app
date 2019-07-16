@@ -24,6 +24,13 @@ ion-content {
             font-weight: normal;
           }
         }
+        .id-positive {
+          font-size: 12px;
+          line-height: 100%;
+          border: 1px solid var(--ion-color-primary);
+          border-radius: 11px;
+          padding: 4px 6px;
+        }
       }
     }
   }

@@ -8,5 +8,79 @@
 </ion-header>
 
 <ion-content>
+  <ion-grid class="ion-margin-top ion-padding-start ion-padding-end">
+    <ion-row class="ion-padding-start ion-padding-end">
+      <ion-col>
+        <ion-list>
+          <ion-item lines="full">
+            <ion-label slot="start">
+              收货人
+            </ion-label>
+            <ion-input placeholder="请输入收货人姓名"></ion-input>
+          </ion-item>
+          <ion-item lines="full">
+            <ion-label slot="start">
+              手机号码
+            </ion-label>
+            <ion-input placeholder="请输入收货人手机号"></ion-input>
+          </ion-item>
+          <ion-item lines="full" detail>
+            <ion-label slot="start">
+              所在地区
+            </ion-label>
+            <ion-input placeholder="省、市、县（区）"></ion-input>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label slot="start">
+              详细地址
+            </ion-label>
+            <ion-input placeholder="请输入详细地址（街道号、门牌号等）"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
+  <ion-grid class="ion-margin-top ion-padding-start ion-padding-end">
+    <ion-row class="ion-padding-start ion-padding-end">
+      <ion-col>
+        <ion-list>
+          <ion-item lines="none">
+            <ion-label slot="start">
+              设置默认地址
+            </ion-label>
+            <ion-toggle color="primary" slot="end"></ion-toggle>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="ion-margin-top ion-padding-start ion-padding-end">
+    <ion-row class="ion-padding-start ion-padding-end">
+      <ion-col>
+        <ion-list>
+          <ion-item lines="full">
+            <ion-label slot="start">
+              身份证名字
+            </ion-label>
+            <ion-input placeholder="请输入身份证上的姓名"></ion-input>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label slot="start">
+              身份证号
+            </ion-label>
+            <ion-input placeholder="请输入身份证号码"></ion-input>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-text color="primary">
+    <p class="ion-margin ion-padding">为什么要上传身份证信息？</p>
+  </ion-text>
+  <ion-text color="medium">
+    <p class="ion-margin ion-padding-horizontal">文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字文字 文字文字文字</p>
+  </ion-text>
 </ion-content>

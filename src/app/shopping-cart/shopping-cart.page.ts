@@ -157,29 +157,5 @@ export class ShoppingCartPage implements OnInit {
       console.log(resp);
       this.cart = resp;
     }, console.log);
-
-
-    // .then(dialog => {
-    //   dialog.present();
-    //   return dialog.onDidDismiss();
-    // }).then(data => {
-    //   if (data && data.role === 'ok') {
-    //     const checkedItems = this.cart.items.filter(item => {
-    //       return item.checked === true;
-    //     }).map<ShoppingCartItemRef>(item => {
-    //       return {
-    //         goodsId: item.goodsId,
-    //         number: 0,
-    //         specificationId: item.specificationId,
-    //         warehouseId: item.warehouseId
-    //       };
-    //     });
-    //     console.log(checkedItems);
-    //   }
-    //   console.log(data);
-    //   console.log(this.cart);
-    // }).catch(error => {
-    //   console.log(error);
-    // });
   }
 }
