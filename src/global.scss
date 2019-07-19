@@ -37,6 +37,14 @@ p {
   }
 }
 
+.my-column {
+  .picker-opt {
+    color: var(--ion-color-dark);
+    // font-size: 12px;
+    padding: 0 20px;
+  }
+}
+
 // custom radios
 .custom-radios {
   div {

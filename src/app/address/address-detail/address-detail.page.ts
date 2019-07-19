@@ -24,10 +24,11 @@ export class AddressDetailPage implements OnInit {
 
   onPickerSelected() {
     let addressPicker: HTMLIonPickerElement;
-    this.addressService.generateColumns(0).pipe(
+    this.addressService.generateColumns(null, null, null).pipe(
       switchMap(data => {
         return from(this.pickerCtrl.create({
           columns: data,
+          cssClass: 'my-column',
           buttons: [
             {
               text: '取消',
@@ -57,8 +58,22 @@ export class AddressDetailPage implements OnInit {
             const colSelectedIndex = data.selectedIndex;
             const colOptions = data.options;
 
-            console.log(colSelectedIndex, colOptions);
-            return this.addressService.generateColumns(colSelectedIndex);
+            // console.log(data.name, data.options[data.selectedIndex]);
+            // console.log(data.options[data.selectedIndex]);
+            const provinceCode = picker.columns[0].options[picker.columns[0].selectedIndex].value;
+            let cityCode = picker.columns[1].options[picker.columns[1].selectedIndex].value;
+            let districtCode = picker.columns[2].options[picker.columns[2].selectedIndex].value;
+            if (data.name === 'province') {
+              cityCode = picker.columns[1].options[0].value;
+              districtCode = picker.columns[2].options[0].value;
+            } else if (data.name === 'city') {
+              districtCode = picker.columns[2].options[0].value;
+            }
+            console.log(provinceCode, cityCode, districtCode);
+            return this.addressService.generateColumns(
+              provinceCode,
+              cityCode,
+              districtCode);
           })
         );
       })

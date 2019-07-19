@@ -26,7 +26,6 @@ export class AuthInterceptorService implements HttpInterceptor {
             }),
             switchMap(user => {
                 const authorization = 'Bearer ' + (user ? user.token : '');
-                console.log(authorization);
                 const modifiedReq = req.clone({
                     headers: req.headers.append('ChannelCode', 'WXH5').append('Authorization', authorization)
                 });
