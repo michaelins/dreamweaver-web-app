@@ -113,38 +113,5 @@ export class AddressService {
                 return of(columns);
             })
         );
-        // return of(columns).pipe(delay(200));
-
-        // columns.push({
-        //     name: 'city',
-        //     selectedIndex: cityCode,
-        //     options: provinceCode === 0 ? [
-        //         {
-        //             text: '太原'
-        //         },
-        //         {
-        //             text: '临汾'
-        //         }
-        //     ] : [
-        //             {
-        //                 text: '成都'
-        //             },
-        //             {
-        //                 text: '绵阳'
-        //             }
-        //         ]
-        // });
-        // columns.push({
-        //     name: 'district',
-        //     selectedIndex: districtCode,
-        //     options: [
-        //         {
-        //             text: '朝阳'
-        //         },
-        //         {
-        //             text: '高新'
-        //         }
-        //     ]
-        // });
     }
 }

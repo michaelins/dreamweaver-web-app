@@ -5,6 +5,7 @@ import { from, fromEvent } from 'rxjs';
 import { AddressService } from '../address.service';
 import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
 import { switchMap, tap } from 'rxjs/operators';
+import { PickerColumnOption } from '@ionic/core';
 
 @Component({
   selector: 'app-address-detail',
@@ -20,6 +21,17 @@ export class AddressDetailPage implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  createDummyPickerColumnOptions(): PickerColumnOption[] {
+    const columnOptions: PickerColumnOption[] = [];
+    for (let index = 0; index < 100; index++) {
+      columnOptions.push({
+        text: '' + index,
+        value: index
+      });
+    }
+    return columnOptions;
   }
 
   onPickerSelected() {
@@ -78,9 +90,15 @@ export class AddressDetailPage implements OnInit {
         );
       })
     ).subscribe(columns => {
-      console.log(columns);
-      console.log(addressPicker.columns);
+      // addressPicker.columns[1].options = this.createDummyPickerColumnOptions();
+      // addressPicker.columns[2].options = this.createDummyPickerColumnOptions();
       addressPicker.columns = columns;
+      console.log(addressPicker.columns);
+
+      addressPicker.getColumn('city').then(column => {
+        column.selectedIndex = 1;
+        console.log(addressPicker.columns);
+      });
     });
   }
 }
