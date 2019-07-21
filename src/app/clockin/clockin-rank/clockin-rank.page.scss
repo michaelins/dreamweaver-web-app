@@ -1,0 +1,25 @@
+ion-content {
+  --background: #f2f2f2;
+  > ion-grid {
+    background: #ffffff;
+  }
+}
+ion-list {
+  margin: 0;
+  ion-item {
+    --min-height: 60px;
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-start: 0;
+    --inner-padding-end: 0;
+  }
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  ion-avatar {
+    margin: 0 10px 0 20px;
+  }
+}

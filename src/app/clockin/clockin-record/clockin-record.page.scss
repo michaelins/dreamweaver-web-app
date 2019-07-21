@@ -1,0 +1,40 @@
+ion-content {
+  --background: #f2f2f2;
+  > ion-grid {
+    background: #ffffff;
+  }
+}
+ion-list {
+  margin: 0;
+  ion-item {
+    --min-height: 60px;
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-start: 0;
+    --inner-padding-end: 0;
+  }
+}
+
+.date {
+  min-width: 70px;
+  ion-text {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    h3 {
+      font-size: 17px;
+    }
+    p {
+      font-size: 12px;
+    }
+  }
+}
+
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  cursor: pointer;
+  height: 56px;
+  width: 56px;
+}

@@ -1,9 +1,48 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>clockin-record</ion-title>
+    <ion-title>我的饮食记录</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-grid class="ion-margin-top ion-padding-start ion-padding-end">
+    <ion-row class="ion-padding-start ion-padding-end">
+      <ion-col>
+        <ion-list>
+          <ion-item>
+            <div class="date" slot="start">
+              <ion-text>
+                <h3 class="ion-margin-end">今天</h3>
+                <p class="ion-padding-end"></p>
+              </ion-text>
+            </div>
+            <label for="file-upload" class="custom-file-upload ion-margin-vertical ion-margin-end">
+              <img
+                src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/8720f0de17ed492796c560ec485e179e.png?x-oss-process=image/resize,m_fill,h_56,w_56">
+            </label>
+            <input #file id="file-upload" type="file" accept="image/*" multiple (change)="preview($event)" />
+          </ion-item>
+          <ion-item *ngFor="let i of [1,32,3,4,25,6,7,8,9]">
+            <div class="date" slot="start">
+              <ion-text>
+                <h3 class="ion-margin-end">{{i}}</h3>
+                <p class="ion-padding-end">15月</p>
+              </ion-text>
+            </div>
+            <ion-thumbnail class="ion-margin-vertical ion-margin-end">
+              <img
+                src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/0ff8ab9ed2fa4c3398325da84815db56.jpg?x-oss-process=image/resize,m_fill,h_56,w_56">
+            </ion-thumbnail>
+            <ion-label>
+              <h3>早餐</h3>
+              <p>共2张</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

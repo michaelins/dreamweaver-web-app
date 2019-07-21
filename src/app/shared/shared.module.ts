@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { LoginComponent } from './login/login.component';
 import { IonicPropertyDirective } from './directives/ionic-property.directive';
 import { AddToCartComponent } from './add-to-cart/add-to-cart.component';
+import { OssService } from './oss.service';
 
 @NgModule({
   declarations: [

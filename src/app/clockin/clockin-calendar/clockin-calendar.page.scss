@@ -1,0 +1,24 @@
+ion-calendar {
+  padding: 0;
+}
+
+ion-card {
+  margin-top: -20px;
+  ion-card-content {
+    padding: 0;
+  }
+}
+
+ion-col {
+  min-height: 130px;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-light);
+  h1 {
+    font-size: 28px;
+    line-height: 100%;
+    padding: 1em 0 0 0;
+  }
+  p {
+    font-size: 12px;
+  }
+}

@@ -6,6 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 
 import { ClockinRecordPage } from './clockin-record.page';
+import { ClockinRecordNewComponent } from './clockin-record-new/clockin-record-new.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 const routes: Routes = [
   {
@@ -17,10 +19,12 @@ const routes: Routes = [
 @NgModule({
   imports: [
     CommonModule,
+    SharedModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [ClockinRecordPage]
+  declarations: [ClockinRecordPage, ClockinRecordNewComponent],
+  entryComponents: [ClockinRecordNewComponent]
 })
-export class ClockinRecordPageModule {}
+export class ClockinRecordPageModule { }

@@ -7,6 +7,10 @@ const routes: Routes = [
         path: '',
         children: [
             {
+                path: 'record',
+                loadChildren: './clockin-record/clockin-record.module#ClockinRecordPageModule'
+            },
+            {
                 path: 'calendar',
                 loadChildren: './clockin-calendar/clockin-calendar.module#ClockinCalendarPageModule'
             },
@@ -17,10 +21,6 @@ const routes: Routes = [
             {
                 path: 'rank',
                 loadChildren: './clockin-rank/clockin-rank.module#ClockinRankPageModule'
-            },
-            {
-                path: 'record',
-                loadChildren: './clockin-record/clockin-record.module#ClockinRecordPageModule'
             },
             {
                 path: '',

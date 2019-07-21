@@ -1,9 +1,34 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>clockin-rank</ion-title>
+    <ion-title>打卡排行榜</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-grid class="ion-margin-top ion-padding-start ion-padding-end">
+    <ion-row class="ion-padding-start ion-padding-end">
+      <ion-col>
+        <ion-list>
+          <ion-item lines="full" *ngFor="let i of [1,2,3,4,5,6,7,8,9]">
+            <div class="avatar ion-padding-vertical" slot="start">
+              <ion-text>{{i}}</ion-text>
+              <ion-avatar>
+                <img
+                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/0ff8ab9ed2fa4c3398325da84815db56.jpg?x-oss-process=image/resize,m_fill,h_108,w_108">
+              </ion-avatar>
+            </div>
+            <ion-label>
+              Flora_Yee
+            </ion-label>
+            <ion-label color="secondary" slot="end" text-right>
+              持续26天
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

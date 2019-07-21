@@ -1,9 +1,55 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>clockin-bodydata</ion-title>
+    <ion-title>身体数据</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-card>
+    <ion-card-content>
+      <ion-item detail lines="full" (click)="onClick()">
+        <ion-label color="dark">
+          体重
+        </ion-label>
+        <ion-label color="primary" slot="end" text-right>
+          --
+        </ion-label>
+      </ion-item>
+      <ion-item detail lines="full">
+        <ion-label color="dark">
+          胸围
+        </ion-label>
+        <ion-label color="primary" slot="end" text-right>
+          --
+        </ion-label>
+      </ion-item>
+      <ion-item detail lines="full">
+        <ion-label color="dark">
+          腰围
+        </ion-label>
+        <ion-label color="primary" slot="end" text-right>
+          --
+        </ion-label>
+      </ion-item>
+      <ion-item detail lines="full">
+        <ion-label color="dark">
+          臀围
+        </ion-label>
+        <ion-label color="primary" slot="end" text-right>
+          --
+        </ion-label>
+      </ion-item>
+      <ion-item detail lines="full">
+        <ion-label color="dark">
+          身高
+        </ion-label>
+        <ion-label color="primary" slot="end" text-right>
+          --
+        </ion-label>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
