@@ -22,17 +22,77 @@
           </ion-label>
         </ion-item>
         <div class="body-data ion-margin-vertical">
-          <ion-card *ngFor="let i of [1,2,3,4,5]" [routerLink]="['/clockin/bodydata']">
+          <ion-card [routerLink]="['/clockin/bodydata']">
+            <ion-card-content>
+              <ion-text class="title">
+                <p>身高</p>
+              </ion-text>
+              <div class="data ion-margin-top">
+                <ion-text class="val">
+                  <p>{{bodyData?bodyData.height:'--'}}</p>
+                </ion-text>
+                <ion-text class="unit">
+                  <p>cm</p>
+                </ion-text>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/clockin/bodydata']">
             <ion-card-content>
               <ion-text class="title">
                 <p>体重</p>
               </ion-text>
               <div class="data ion-margin-top">
                 <ion-text class="val">
-                  <p>46.2</p>
+                  <p>{{bodyData?bodyData.weight:'--'}}</p>
                 </ion-text>
                 <ion-text class="unit">
                   <p>kg</p>
+                </ion-text>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/clockin/bodydata']">
+            <ion-card-content>
+              <ion-text class="title">
+                <p>胸围</p>
+              </ion-text>
+              <div class="data ion-margin-top">
+                <ion-text class="val">
+                  <p>{{bodyData?bodyData.circumference:'--'}}</p>
+                </ion-text>
+                <ion-text class="unit">
+                  <p>cm</p>
+                </ion-text>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/clockin/bodydata']">
+            <ion-card-content>
+              <ion-text class="title">
+                <p>腰围</p>
+              </ion-text>
+              <div class="data ion-margin-top">
+                <ion-text class="val">
+                  <p>{{bodyData?bodyData.waistline:'--'}}</p>
+                </ion-text>
+                <ion-text class="unit">
+                  <p>cm</p>
+                </ion-text>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/clockin/bodydata']">
+            <ion-card-content>
+              <ion-text class="title">
+                <p>臀围</p>
+              </ion-text>
+              <div class="data ion-margin-top">
+                <ion-text class="val">
+                  <p>{{bodyData?bodyData.hipline:'--'}}</p>
+                </ion-text>
+                <ion-text class="unit">
+                  <p>cm</p>
                 </ion-text>
               </div>
             </ion-card-content>
@@ -56,7 +116,7 @@
               <p class="ion-margin-bottom">总打卡 (天数)</p>
             </ion-text>
             <ion-text class="val">
-              <h1>25</h1>
+              <h1>{{totalDays}}</h1>
             </ion-text>
           </div>
           <ion-text>
@@ -78,19 +138,13 @@
             <h3>我的饮食记录</h3>
           </ion-label>
         </ion-item>
-        <div class="record ion-margin">
+        <div class="record ion-margin" *ngIf="records && records.length>0">
           <ion-text>
-            <p class="ion-margin-bottom">2019-05-28</p>
+            <p class="ion-margin-bottom">{{records[0].day | date:'yyyy-MM-dd'}}</p>
           </ion-text>
           <div class="gallery">
-            <ion-img
-              src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/0ff8ab9ed2fa4c3398325da84815db56.jpg?x-oss-process=image/resize,m_fill,h_108,w_108">
-            </ion-img>
-            <ion-img
-              src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/2eae5312442d4d64882d1bd60a15516e.jpg?x-oss-process=image/resize,m_fill,h_108,w_108">
-            </ion-img>
-            <ion-img
-              src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/40825e10164841419d7818fc9b1ae8ea.jpg?x-oss-process=image/resize,m_fill,h_108,w_108">
+            <ion-img *ngFor="let image of records[0].imgs"
+              [src]="image+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
             </ion-img>
           </div>
         </div>

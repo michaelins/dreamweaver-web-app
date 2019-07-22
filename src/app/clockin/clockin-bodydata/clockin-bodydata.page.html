@@ -4,50 +4,53 @@
     <ion-buttons slot="start">
       <ion-back-button color="medium"></ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button color="dark" size="small" (click)="onSubmit()">保存</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-card>
     <ion-card-content>
-      <ion-item detail lines="full" (click)="onClick()">
+      <ion-item detail lines="full" (click)="onClick(BodyDataType.Weight)">
         <ion-label color="dark">
           体重
         </ion-label>
         <ion-label color="primary" slot="end" text-right>
-          --
+          {{bodyData.weight?bodyData.weight:'--'}} kg
         </ion-label>
       </ion-item>
-      <ion-item detail lines="full">
+      <ion-item detail lines="full" (click)="onClick(BodyDataType.Circumference)">
         <ion-label color="dark">
           胸围
         </ion-label>
         <ion-label color="primary" slot="end" text-right>
-          --
+          {{bodyData.circumference?bodyData.circumference:'--'}} cm
         </ion-label>
       </ion-item>
-      <ion-item detail lines="full">
+      <ion-item detail lines="full" (click)="onClick(BodyDataType.Waistline)">
         <ion-label color="dark">
           腰围
         </ion-label>
         <ion-label color="primary" slot="end" text-right>
-          --
+          {{bodyData.waistline?bodyData.waistline:'--'}} cm
         </ion-label>
       </ion-item>
-      <ion-item detail lines="full">
+      <ion-item detail lines="full" (click)="onClick(BodyDataType.Hipline)">
         <ion-label color="dark">
           臀围
         </ion-label>
         <ion-label color="primary" slot="end" text-right>
-          --
+          {{bodyData.hipline?bodyData.hipline:'--'}} cm
         </ion-label>
       </ion-item>
-      <ion-item detail lines="full">
+      <ion-item detail lines="full" (click)="onClick(BodyDataType.Height)">
         <ion-label color="dark">
           身高
         </ion-label>
         <ion-label color="primary" slot="end" text-right>
-          --
+          {{bodyData.height?bodyData.height:'--'}} cm
         </ion-label>
       </ion-item>
     </ion-card-content>

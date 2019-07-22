@@ -8,27 +8,32 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid class="ion-margin-top ion-padding-start ion-padding-end">
+  <ion-refresher pullFactor="0.5" closeDuration="200ms" snapbackDuration="50ms" pullMax="400"
+    (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid class="ion-margin-top ion-padding-start ion-padding-end" *ngIf="ranks">
     <ion-row class="ion-padding-start ion-padding-end">
       <ion-col>
-        <ion-list>
-          <ion-item lines="full" *ngFor="let i of [1,2,3,4,5,6,7,8,9]">
+        <ion-list class="ion-padding-bottom">
+          <ion-item lines="full" *ngFor="let rank of ranks; index as i">
             <div class="avatar ion-padding-vertical" slot="start">
-              <ion-text>{{i}}</ion-text>
+              <ion-text>{{i+1}}</ion-text>
               <ion-avatar>
-                <img
-                  src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/0ff8ab9ed2fa4c3398325da84815db56.jpg?x-oss-process=image/resize,m_fill,h_108,w_108">
+                <img [src]="rank.headImg+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
               </ion-avatar>
             </div>
-            <ion-label>
-              Flora_Yee
-            </ion-label>
+            <ion-label>{{rank.nickname}}</ion-label>
             <ion-label color="secondary" slot="end" text-right>
-              持续26天
+              持续 {{rank.count}} 天
             </ion-label>
           </ion-item>
         </ion-list>
       </ion-col>
     </ion-row>
   </ion-grid>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="正在加载更多...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

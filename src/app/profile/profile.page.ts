@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UiStateService } from '../shared/ui-state.service';
-import { ModalController, PickerController, IonContent } from '@ionic/angular';
+import { ModalController, PickerController, IonContent, AlertController, NavController } from '@ionic/angular';
 import { LoginComponent } from '../shared/login/login.component';
 import { AuthService } from '../auth/auth.service';
-import { Subscription, fromEvent } from 'rxjs';
+import { Subscription, fromEvent, from } from 'rxjs';
+import { ClockinService } from '../clockin/clockin.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-profile',
@@ -24,10 +26,15 @@ export class ProfilePage implements OnInit {
 
   bodyTouchMoveEventSubscription: Subscription;
 
+  hasClockinPermission = false;
+
   constructor(
     private uiStateService: UiStateService,
     private authService: AuthService,
+    private clockinService: ClockinService,
     private modalCtrl: ModalController,
+    private alertCtrl: AlertController,
+    private navCtrl: NavController,
     private pickerCtrl: PickerController) {
   }
 
@@ -39,6 +46,12 @@ export class ProfilePage implements OnInit {
       }
     }, error => {
       console.log(error);
+    });
+    this.clockinService.getClockinPermission().subscribe(resp => {
+      console.log(resp);
+      if (resp.status === 'NORMAL' && resp.type === 'APPROVED') {
+        this.hasClockinPermission = true;
+      }
     });
   }
 
@@ -88,6 +101,34 @@ export class ProfilePage implements OnInit {
     this.bodyTouchMoveEventSubscription.unsubscribe();
     this.uiStateService.setTabBarHidden(true);
     console.log('ionViewWillLeave');
+  }
+
+  onClockin() {
+    if (!this.hasClockinPermission) {
+      from(this.alertCtrl.create({
+        header: '打卡达人',
+        message: '您尚未成为达人，请先购买产品',
+        buttons: [{
+          text: '暂不购买',
+          role: 'cancel'
+        }, {
+          text: '立即购买',
+          role: 'ok'
+        }]
+      })).pipe(
+        switchMap(dialog => {
+          dialog.present();
+          return dialog.onDidDismiss();
+        })
+      ).subscribe(data => {
+        console.log(data);
+        if (data.role === 'ok') {
+          this.navCtrl.navigateForward(['/home']);
+        }
+      }, console.log);
+    } else {
+      this.navCtrl.navigateForward(['/clockin']);
+    }
   }
 
   onClick() {
