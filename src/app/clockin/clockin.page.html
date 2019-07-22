@@ -1,0 +1,154 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>打卡达人</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="primary">
+      <ion-button color="primary" sise="small" [routerLink]="['/clockin/calendar']">
+        <ion-icon slot="icon-only" name="calendar"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid class="ion-margin-top">
+    <ion-row class="ion-padding-horizontal">
+      <ion-col>
+        <ion-item detail lines="full" [routerLink]="['/clockin/bodydata']">
+          <ion-label>
+            <h3>我的身体数据</h3>
+          </ion-label>
+        </ion-item>
+        <div class="body-data ion-margin-vertical">
+          <ion-card [routerLink]="['/clockin/bodydata']">
+            <ion-card-content>
+              <ion-text class="title">
+                <p>身高</p>
+              </ion-text>
+              <div class="data ion-margin-top">
+                <ion-text class="val">
+                  <p>{{bodyData?bodyData.height:'--'}}</p>
+                </ion-text>
+                <ion-text class="unit">
+                  <p>cm</p>
+                </ion-text>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/clockin/bodydata']">
+            <ion-card-content>
+              <ion-text class="title">
+                <p>体重</p>
+              </ion-text>
+              <div class="data ion-margin-top">
+                <ion-text class="val">
+                  <p>{{bodyData?bodyData.weight:'--'}}</p>
+                </ion-text>
+                <ion-text class="unit">
+                  <p>kg</p>
+                </ion-text>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/clockin/bodydata']">
+            <ion-card-content>
+              <ion-text class="title">
+                <p>胸围</p>
+              </ion-text>
+              <div class="data ion-margin-top">
+                <ion-text class="val">
+                  <p>{{bodyData?bodyData.circumference:'--'}}</p>
+                </ion-text>
+                <ion-text class="unit">
+                  <p>cm</p>
+                </ion-text>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/clockin/bodydata']">
+            <ion-card-content>
+              <ion-text class="title">
+                <p>腰围</p>
+              </ion-text>
+              <div class="data ion-margin-top">
+                <ion-text class="val">
+                  <p>{{bodyData?bodyData.waistline:'--'}}</p>
+                </ion-text>
+                <ion-text class="unit">
+                  <p>cm</p>
+                </ion-text>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-card [routerLink]="['/clockin/bodydata']">
+            <ion-card-content>
+              <ion-text class="title">
+                <p>臀围</p>
+              </ion-text>
+              <div class="data ion-margin-top">
+                <ion-text class="val">
+                  <p>{{bodyData?bodyData.hipline:'--'}}</p>
+                </ion-text>
+                <ion-text class="unit">
+                  <p>cm</p>
+                </ion-text>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="ion-margin-top">
+    <ion-row class="ion-padding-horizontal">
+      <ion-col>
+        <ion-item detail lines="full" [routerLink]="['/clockin/rank']">
+          <ion-label>
+            <h3>达人秀 - 排行榜</h3>
+          </ion-label>
+        </ion-item>
+        <div class="rank ion-margin">
+          <div>
+            <ion-text>
+              <p class="ion-margin-bottom">总打卡 (天数)</p>
+            </ion-text>
+            <ion-text class="val">
+              <h1>{{totalDays}}</h1>
+            </ion-text>
+          </div>
+          <ion-text>
+            <p class="ion-padding-end">本周排名</p>
+          </ion-text>
+          <ion-text>
+            <p class="ion-padding-start">第<span class="ion-padding-horizontal">5</span>名</p>
+          </ion-text>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="ion-margin-top">
+    <ion-row class="ion-padding-horizontal">
+      <ion-col>
+        <ion-item detail lines="full" [routerLink]="['/clockin/record']">
+          <ion-label>
+            <h3>我的饮食记录</h3>
+          </ion-label>
+        </ion-item>
+        <div class="record ion-margin" *ngIf="records && records.length>0">
+          <ion-text>
+            <p class="ion-margin-bottom">{{records[0].day | date:'yyyy-MM-dd'}}</p>
+          </ion-text>
+          <div class="gallery">
+            <ion-img *ngFor="let image of records[0].imgs"
+              [src]="image+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
+            </ion-img>
+          </div>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

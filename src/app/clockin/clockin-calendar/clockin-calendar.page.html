@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>打卡日历</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col text-center>
+        <ion-text>
+          <h1>{{totalDays}}</h1>
+        </ion-text>
+        <ion-text>
+          <p>累计打卡 (天)</p>
+        </ion-text>
+      </ion-col>
+      <ion-col text-center>
+        <ion-text>
+          <h1>{{continuousDays}}</h1>
+        </ion-text>
+        <ion-text>
+          <p>连续打卡 (天)</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card>
+    <ion-card-content>
+      <ion-calendar [(ngModel)]="dateMulti" [options]="calendarOptions" (change)="onChange($event)" [type]="'js-date'"
+        [format]="'YYYY-MM-DD'" readonly="true">
+      </ion-calendar>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

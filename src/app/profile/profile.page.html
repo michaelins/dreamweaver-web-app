@@ -89,7 +89,7 @@
           </ion-card-content>
         </ion-card>
         <ion-card class="sign">
-          <ion-item detail lines="full">
+          <ion-item detail lines="full" (click)="onClockin()">
             <ion-label>
               <h3>打卡达人</h3>
             </ion-label>
@@ -101,7 +101,7 @@
                 <ion-col class="activity ion-margin ion-padding-top ion-padding-start ion-padding-bottom">
                   <h1 class="ion-no-margin"><small>全民打卡挑战</small></h1>
                   <h4>签到打卡乐享好礼</h4>
-                  <ion-button class="ion-margin-top" size="small">去打卡</ion-button>
+                  <ion-button class="ion-margin-top" size="small" (click)="onClockin()">去打卡</ion-button>
                 </ion-col>
               </ion-row>
             </ion-grid>

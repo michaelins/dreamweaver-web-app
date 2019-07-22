@@ -20,9 +20,10 @@
         <ion-text color="dark" class="phone ion-margin-start">
           <p>136****9532</p>
         </ion-text>
-        <ion-chip color="primary" outline="true">
+        <!-- <ion-chip color="primary" outline="true">
           <ion-label>有身份证</ion-label>
-        </ion-chip>
+        </ion-chip> -->
+        <ion-text color="primary" class="id-positive">有身份证</ion-text>
       </ion-col>
     </ion-row>
     <ion-row class="ion-padding-start ion-padding-end">
@@ -36,8 +37,7 @@
       <ion-col>
         <div class="custom-radios">
           <div>
-            <input type="checkbox" id="selectall" name="color" class="primary"
-              (change)="onSelectAllForPurchase($event)">
+            <input type="checkbox" id="selectall" name="color" class="primary">
             <label for="selectall">
               <span>
                 <div></div>
@@ -51,7 +51,7 @@
           <ion-icon name="create" color="medium"></ion-icon>
           <ion-text color="dark">编辑</ion-text>
         </div>
-        <div class="tool ion-margin-start">
+        <div class="tool ion-margin-start" (click)="onDeleteAddress()">
           <ion-icon name="trash" color="medium"></ion-icon>
           <ion-text color="dark">删除</ion-text>
         </div>

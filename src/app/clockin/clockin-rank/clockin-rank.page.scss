@@ -12,8 +12,14 @@ ion-list {
     --padding-end: 0;
     --inner-padding-start: 0;
     --inner-padding-end: 0;
-    ion-label {
-      min-width: 86px;
-    }
+  }
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  ion-avatar {
+    margin: 0 10px 0 20px;
   }
 }
