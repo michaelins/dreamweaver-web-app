@@ -5,6 +5,7 @@ import { LoginComponent } from './login/login.component';
 import { IonicPropertyDirective } from './directives/ionic-property.directive';
 import { AddToCartComponent } from './add-to-cart/add-to-cart.component';
 import { OssService } from './oss.service';
+import { AddressDisplayPipe } from './pipes/address-display.pipe';
 
 @NgModule({
   declarations: [

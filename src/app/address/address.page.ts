@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { from } from 'rxjs';
 import { AlertController } from '@ionic/angular';
 import { switchMap } from 'rxjs/operators';
+import { AddressService } from './address.service';
 
 @Component({
   selector: 'app-address',
@@ -11,10 +12,14 @@ import { switchMap } from 'rxjs/operators';
 export class AddressPage implements OnInit {
 
   constructor(
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private addressService: AddressService
   ) { }
 
   ngOnInit() {
+    this.addressService.getAddressList(1, 10).subscribe(resp => {
+      console.log(resp);
+    });
   }
 
   onDeleteAddress() {

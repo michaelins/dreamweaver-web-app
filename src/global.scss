@@ -38,6 +38,21 @@ p {
   margin: 0;
 }
 
+.sc-ion-input-ios-h,
+ion-input {
+  --placeholder-color: var(--ion-color-medium);
+}
+
+.picker-columns.sc-ion-picker-ios {
+  // justify-content: flex-start;
+  display: inline-block;
+}
+.picker-col {
+  float: left;
+  width: 30%;
+  // flex: 0;
+}
+
 ul {
   list-style: none;
   margin: 0;

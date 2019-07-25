@@ -1,6 +1,6 @@
 ion-content {
   --background: #f2f2f2;
-  > ion-grid {
+  ion-grid {
     background: #ffffff;
   }
 }
@@ -16,4 +16,11 @@ ion-list {
       min-width: 86px;
     }
   }
+}
+
+ion-picker-column {
+  width: 33%;
+}
+.picker-col {
+  width: 33%;
 }

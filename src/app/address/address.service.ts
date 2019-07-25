@@ -18,6 +18,17 @@ export interface AddressDictListItem {
     updateTime: string;
 }
 
+export interface AddressReqItem {
+    addressCode: string;
+    addressName: string;
+    consignee: string;
+    detailedAddress: string;
+    identificationName?: string;
+    identificationNumber?: string;
+    isDefault?: string;
+    phoneNo: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -26,8 +37,32 @@ export class AddressService {
         private http: HttpClient
     ) { }
 
+    addAddress(address: AddressReqItem) {
+        return this.http.post(`${environment.apiServer}/user/address`, address);
+    }
+
+    getAddressList(pageNum: number, pageSize: number) {
+        return this.http.post(`${environment.apiServer}/user/address/${pageNum}/${pageSize}`, null);
+    }
+
     getAddressDictList(dictTypeCode: string, parentDictCode: string) {
         return this.http.get<AddressDictListItem[]>(`${environment.apiServer}/dictionary/cache/${dictTypeCode}/${parentDictCode}`);
+    }
+
+    getAddressCode(addressCode: string): { provinceCode: string, cityCode: string, districtCode: string } {
+        if (!addressCode) {
+            return { provinceCode: null, cityCode: null, districtCode: null };
+        }
+        const items = addressCode.split('||');
+        if (items && items.length > 3) {
+            return {
+                provinceCode: (items[1] === 'null' ? null : items[1]),
+                cityCode: (items[2] === 'null' ? null : items[2]),
+                districtCode: (items[3] === 'null' ? null : items[3])
+            };
+        } else {
+            return { provinceCode: null, cityCode: null, districtCode: null };
+        }
     }
 
     generateColumns(provinceCode: string, cityCode: string, districtCode: string): Observable<PickerColumn[]> {
@@ -55,10 +90,13 @@ export class AddressService {
                     selectedIndex: provinceIndex,
                     options: provinces
                 });
-                console.log('province', provinces, provinceIndex, provinceCode);
+                // console.log('province', provinces, provinceIndex, provinceCode);
                 return this.getAddressDictList('city', provinceCode);
             }),
             map(cities => {
+                if (!cities) {
+                    return null;
+                }
                 return cities.map(item => {
                     return {
                         text: item.dictName,
@@ -67,6 +105,10 @@ export class AddressService {
                 });
             }),
             switchMap(cities => {
+
+                if (!cities) {
+                    return of(null);
+                }
 
                 let cityIndex = 0;
                 if (!cityCode) {
@@ -82,10 +124,13 @@ export class AddressService {
                     selectedIndex: cityIndex,
                     options: cities
                 });
-                console.log('city', cities, cityIndex, cityCode);
+                // console.log('city', cities, cityIndex, cityCode);
                 return this.getAddressDictList('district', cityCode);
             }),
             map(districts => {
+                if (!districts) {
+                    return null;
+                }
                 return districts.map(item => {
                     return {
                         text: item.dictName,
@@ -94,6 +139,10 @@ export class AddressService {
                 });
             }),
             switchMap(districts => {
+
+                if (!districts) {
+                    return of(columns);
+                }
 
                 let districtIndex = 0;
                 if (!districtCode) {
@@ -109,7 +158,7 @@ export class AddressService {
                     selectedIndex: districtIndex,
                     options: districts
                 });
-                console.log('district', districts, districtIndex, districtCode);
+                // console.log('district', districts, districtIndex, districtCode);
                 return of(columns);
             })
         );
