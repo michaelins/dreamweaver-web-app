@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>地址管理</ion-title>
+    <ion-title>{{isModal?'选择地址':'地址管理'}}</ion-title>
     <ion-buttons slot="start">
       <ion-back-button color="medium" *ngIf="!isModal"></ion-back-button>
       <ion-button color="medium" *ngIf="isModal" (click)="onDismissModal()">
@@ -36,7 +36,7 @@
         </ion-text>
       </ion-col>
     </ion-row>
-    <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top" *ngIf="!isModal">
+    <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top">
       <ion-col>
         <div class="custom-radios">
           <div>
@@ -50,11 +50,11 @@
           </div>
         </div>
         <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1">设为默认</ion-text>
-        <div class="tool ion-margin-start" [routerLink]="['/address','detail',addr.addressId]">
+        <div class="tool ion-margin-start" (click)="onOpenDetailAddress(addr.addressId)">
           <ion-icon name="create" color="medium"></ion-icon>
           <ion-text color="dark">编辑</ion-text>
         </div>
-        <div class="tool ion-margin-start" (click)="onDeleteAddress()">
+        <div class="tool ion-margin-start" (click)="onDeleteAddress(addr.addressId)" *ngIf="!isModal">
           <ion-icon name="trash" color="medium"></ion-icon>
           <ion-text color="dark">删除</ion-text>
         </div>
@@ -62,9 +62,9 @@
     </ion-row>
   </ion-grid>
   <div class="ion-padding">
-    <ion-button expand="block" color="primary" class="ion-margin" (click)="onOpenNewAddressModal()">新建收货地址</ion-button>
+    <ion-button expand="block" color="primary" class="ion-margin" (click)="onOpenDetailAddress()">新建收货地址</ion-button>
   </div>
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" [disabled]="infiniteScrollDisabled">
     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="正在加载更多...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>

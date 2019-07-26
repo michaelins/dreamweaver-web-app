@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { PickerController } from '@ionic/angular';
+import { Component, OnInit, Input } from '@angular/core';
+import { PickerController, NavController, ModalController } from '@ionic/angular';
 import { PickerColumnOption, PickerColumn } from '@ionic/core';
 import { from, fromEvent, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
 import { AddressReqItem, AddressService, Address } from '../address.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -15,14 +15,20 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class AddressDetailPage implements OnInit {
 
+  @Input() isModal: boolean;
+  @Input() addressId: string;
+
   form: FormGroup;
   addressReqObj: AddressReqItem;
   addressName: string;
   addressCode: string;
   address: Address;
+  editMode = false;
 
   constructor(
     private pickerCtrl: PickerController,
+    private modalCtrl: ModalController,
+    private navCtrl: NavController,
     private route: ActivatedRoute,
     private addressService: AddressService
   ) { }
@@ -35,7 +41,7 @@ export class AddressDetailPage implements OnInit {
       }),
       phoneNo: new FormControl(null, {
         updateOn: 'change',
-        validators: [Validators.required, Validators.maxLength(11)]
+        validators: [Validators.required, Validators.minLength(11), Validators.maxLength(11)]
       }),
       detailedAddress: new FormControl(null, {
         updateOn: 'change',
@@ -49,45 +55,67 @@ export class AddressDetailPage implements OnInit {
       }),
       identificationNumber: new FormControl(null, {
         updateOn: 'change',
-        validators: [Validators.maxLength(18)]
+        validators: [Validators.minLength(18), Validators.maxLength(18)]
       }),
     });
 
-
-    this.route.params.pipe(switchMap(params => {
-      if (params.addressId) {
-        console.log(params.addressId);
-        return this.addressService.getAddress(params.addressId);
+    if (this.isModal) {
+      if (this.addressId) {
+        this.editMode = true;
+        this.addressService.getAddress(this.addressId).subscribe(resp => {
+          this.loadAddress(resp);
+        }, error => {
+          console.log(error);
+          this.form.patchValue({
+            isDefault: false
+          });
+        });
       } else {
-        throw new Error('no address id');
+        this.editMode = false;
       }
-    })).subscribe(resp => {
-      console.log(resp);
-      this.address = resp;
-      this.addressCode = resp.addressCode;
-      this.addressName = resp.addressName;
-      this.form.patchValue({
-        consignee: resp.consignee,
-        phoneNo: resp.phoneNo,
-        detailedAddress: resp.detailedAddress,
-        isDefault: resp.isDefault
-      });
-      if (resp.identificationName) {
+    } else {
+      this.route.params.pipe(switchMap(params => {
+        if (params.addressId) {
+          this.editMode = true;
+          console.log(params.addressId);
+          return this.addressService.getAddress(params.addressId);
+        } else {
+          this.editMode = false;
+          throw new Error('no address id');
+        }
+      })).subscribe(resp => {
+        this.loadAddress(resp);
+      }, error => {
+        console.log(error);
         this.form.patchValue({
-          identificationName: resp.identificationName
+          isDefault: false
         });
-      }
-      if (resp.identificationNumber) {
-        this.form.patchValue({
-          identificationNumber: resp.identificationNumber
-        });
-      }
-    }, error => {
-      console.log(error);
-      this.form.patchValue({
-        isDefault: false
       });
+    }
+
+  }
+
+  loadAddress(loadedAddress: Address) {
+    console.log(loadedAddress);
+    this.address = loadedAddress;
+    this.addressCode = loadedAddress.addressCode;
+    this.addressName = loadedAddress.addressName;
+    this.form.patchValue({
+      consignee: loadedAddress.consignee,
+      phoneNo: loadedAddress.phoneNo,
+      detailedAddress: loadedAddress.detailedAddress,
+      isDefault: loadedAddress.isDefault
     });
+    if (loadedAddress.identificationName) {
+      this.form.patchValue({
+        identificationName: loadedAddress.identificationName
+      });
+    }
+    if (loadedAddress.identificationNumber) {
+      this.form.patchValue({
+        identificationNumber: loadedAddress.identificationNumber
+      });
+    }
   }
 
   onSubmit() {
@@ -103,30 +131,70 @@ export class AddressDetailPage implements OnInit {
     };
     if (this.form.value.identificationName) {
       addressReq.identificationName = this.form.value.identificationName;
+      this.address.identificationName = this.form.value.identificationName;
     }
     if (this.form.value.identificationNumber) {
       addressReq.identificationNumber = this.form.value.identificationNumber;
+      this.address.identificationNumber = this.form.value.identificationNumber;
     }
     if (this.form.value.isDefault) {
       addressReq.isDefault = this.form.value.isDefault;
+      this.address.isDefault = this.form.value.isDefault;
     }
+
     if (this.address && this.address.addressId) {
+      this.address.addressCode = this.addressCode;
+      this.address.addressName = this.addressName;
+      this.address.consignee = this.form.value.consignee;
+      this.address.detailedAddress = this.form.value.detailedAddress;
+      this.address.phoneNo = this.form.value.phoneNo;
+      if (this.form.value.identificationName) {
+        this.address.identificationName = this.form.value.identificationName;
+      }
+      if (this.form.value.identificationNumber) {
+        this.address.identificationNumber = this.form.value.identificationNumber;
+      }
+      if (this.form.value.isDefault) {
+        this.address.isDefault = this.form.value.isDefault;
+      }
       addressReq.addressId = this.address.addressId;
       this.addressService.modifyAddress(addressReq).subscribe(resp => {
-        console.log(resp);
-        this.navBack();
+        console.log(this.address);
+        this.navBack(this.address);
       }, error => console.log);
     } else {
-      this.addressService.addAddress(addressReq).subscribe(resp => {
-        console.log(resp);
-        this.navBack();
+      let addedAddress: Address;
+      this.addressService.addAddress(addressReq).pipe(
+        tap(resp => {
+          addedAddress = resp;
+        }),
+        switchMap(resp => {
+          return this.addressService.fetchLatestAddresses();
+        })
+      ).subscribe(resp => {
+        console.log(addedAddress);
+        this.navBack(addedAddress);
       }, error => console.log);
     }
     console.log(addressReq);
   }
 
-  navBack() {
+  onDismissModal() {
+    if (this.isModal) {
+      this.modalCtrl.dismiss({
+        selectedAddress: null
+      });
+    }
+  }
 
+  navBack(address: Address) {
+    if (this.isModal) {
+      this.modalCtrl.dismiss({
+        savedAddress: address
+      });
+    } else {
+      this.navCtrl.pop();
+    }
   }
 
   onPickerSelected() {

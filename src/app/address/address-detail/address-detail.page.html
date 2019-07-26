@@ -1,11 +1,15 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>新增收货地址</ion-title>
+    <ion-title>{{editMode?'修改':'新增'}}收货地址</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button color="medium"></ion-back-button>
+      <ion-back-button color="medium" *ngIf="!isModal"></ion-back-button>
+      <ion-button color="medium" *ngIf="isModal" (click)="onDismissModal()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-buttons slot="primary">
-      <ion-button color="dark" size="small" (click)="onSubmit()" [disabled]="!form.valid || !addressCode">保存</ion-button>
+    <ion-buttons slot="primary" *ngIf="!isModal">
+      <ion-button color="dark" size="small" (click)="onSubmit()" [disabled]="!form.valid || !addressCode">保存
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -26,7 +30,8 @@
               <ion-label slot="start">
                 手机号码
               </ion-label>
-              <ion-input placeholder="请输入收货人手机号" formControlName="phoneNo"></ion-input>
+              <ion-input type="tel" placeholder="请输入收货人手机号" formControlName="phoneNo" minlength="11" maxlength="11">
+              </ion-input>
             </ion-item>
             <ion-item lines="full" detail (click)="onPickerSelected()">
               <ion-label slot="start" style="flex:0">
@@ -75,7 +80,8 @@
               <ion-label slot="start">
                 身份证号
               </ion-label>
-              <ion-input placeholder="请输入身份证号码" formControlName="identificationNumber"></ion-input>
+              <ion-input type="number" placeholder="请输入身份证号码" formControlName="identificationNumber" minlength="18"
+                maxlength="18"></ion-input>
             </ion-item>
           </ion-list>
         </ion-col>
@@ -90,7 +96,7 @@
     </ion-text>
     <div class="ion-padding">
       <ion-button expand="block" color="primary" class="ion-margin" (click)="onSubmit()"
-        [disabled]="!form.valid || !addressCode">保存
+        [disabled]="!form.valid || !addressCode">保存{{isModal?'并使用':''}}
       </ion-button>
     </div>
   </form>

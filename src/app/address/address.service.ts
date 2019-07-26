@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { PickerColumn, PickerColumnOption } from '@ionic/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { delay, switchMap, map } from 'rxjs/operators';
+import { Observable, of, BehaviorSubject } from 'rxjs';
+import { delay, switchMap, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 export interface AddressDictListItem {
@@ -45,6 +45,7 @@ export interface Address {
     label: any;
     userId: string;
     zipCode: string;
+    certificationId?: any;
     createTime: string;
     updateTime: string;
 }
@@ -64,23 +65,55 @@ export interface CollectionsOfAddress {
     providedIn: 'root'
 })
 export class AddressService {
+
+    private latestAddressesSubject = new BehaviorSubject<CollectionsOfAddress>(null);
+    private addressPageSize = 10;
+
+    get latestAddresses() {
+        return this.latestAddressesSubject.asObservable();
+    }
+
+    get pageSize() {
+        return this.addressPageSize;
+    }
+
     constructor(
         private http: HttpClient
     ) { }
 
     addAddress(address: AddressReqItem) {
-        return this.http.post(`${environment.apiServer}/user/address`, address);
+        return this.http.post<Address>(`${environment.apiServer}/user/address`, address);
     }
 
     modifyAddress(address: AddressReqItem) {
-        return this.http.put(`${environment.apiServer}/user/address`, address);
+        return this.http.put(`${environment.apiServer}/user/address`, address).pipe(
+            switchMap(resp => {
+                return this.fetchLatestAddresses();
+            })
+        );
+    }
+
+    deleteAddress(addressId: string) {
+        return this.http.delete(`${environment.apiServer}/user/address/${addressId}`).pipe(
+            switchMap(resp => {
+                return this.fetchLatestAddresses();
+            })
+        );
     }
 
     getAddress(addressId: string) {
         return this.http.get<Address>(`${environment.apiServer}/user/address/model/${addressId}`);
     }
 
-    getAddressList(pageNum: number, pageSize: number) {
+    fetchLatestAddresses() {
+        return this.http.post<CollectionsOfAddress>(`${environment.apiServer}/user/address/1/${this.pageSize}`, null).pipe(
+            tap(resp => {
+                this.latestAddressesSubject.next(resp);
+            })
+        );
+    }
+
+    getAddresses(pageNum: number, pageSize: number) {
         return this.http.post<CollectionsOfAddress>(`${environment.apiServer}/user/address/${pageNum}/${pageSize}`, null);
     }
 

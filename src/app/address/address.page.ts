@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { from } from 'rxjs';
-import { AlertController, ModalController } from '@ionic/angular';
+import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { switchMap } from 'rxjs/operators';
 import { AddressService, Address, CollectionsOfAddress } from './address.service';
 import { Product } from '../product/product.service';
@@ -16,6 +16,7 @@ export class AddressPage implements OnInit {
   @Input() isModal: boolean;
   @Input() product: Product;
 
+  infiniteScrollDisabled = false;
   addresses: Address[];
   collectionOfAddresses: CollectionsOfAddress;
   addressPageSize = 10;
@@ -23,24 +24,29 @@ export class AddressPage implements OnInit {
   constructor(
     private alertCtrl: AlertController,
     private modalCtrl: ModalController,
+    private navCtrl: NavController,
     private addressService: AddressService
   ) { }
 
   ngOnInit() {
     console.log(this.isModal, this.product);
-    this.addressService.getAddressList(1, this.addressPageSize).subscribe(resp => {
-      console.log(resp);
-      this.addresses = resp.content;
-      this.collectionOfAddresses = resp;
+    this.addressService.latestAddresses.subscribe(collectionOfAddresses => {
+      if (collectionOfAddresses) {
+        this.collectionOfAddresses = collectionOfAddresses;
+        this.addresses = collectionOfAddresses.content;
+        this.infiniteScrollDisabled = false;
+      }
     });
+    this.addressService.fetchLatestAddresses().subscribe();
   }
 
   loadData(event) {
+    console.log(event);
     if (this.collectionOfAddresses.last) {
       event.target.complete();
-      event.target.disabled = true;
+      this.infiniteScrollDisabled = true;
     } else if (this.collectionOfAddresses.number + 2 <= this.collectionOfAddresses.totalPages) {
-      this.addressService.getAddressList(
+      this.addressService.getAddresses(
         this.collectionOfAddresses.number + 2,
         this.addressPageSize,
       ).subscribe(resp => {
@@ -54,7 +60,7 @@ export class AddressPage implements OnInit {
     }
   }
 
-  onDeleteAddress() {
+  onDeleteAddress(addressId: string) {
     from(this.alertCtrl.create({
       message: '确定删除该收货地址吗？',
       buttons: [{
@@ -68,23 +74,13 @@ export class AddressPage implements OnInit {
       switchMap(dialog => {
         dialog.present();
         return dialog.onDidDismiss();
+      }),
+      switchMap(data => {
+        if (data && data.role === 'ok') {
+          console.log('deleting address: ', addressId);
+          return this.addressService.deleteAddress(addressId);
+        }
       })
-      // switchMap(data => {
-      //   if (data && data.role === 'ok') {
-      //     const checkedItems = this.cart.items.filter(item => {
-      //       return item.checked === true;
-      //     }).map<ShoppingCartItemRef>(item => {
-      //       return {
-      //         goodsId: item.goodsId,
-      //         number: 0,
-      //         specificationId: item.specificationId,
-      //         warehouseId: item.warehouseId
-      //       };
-      //     });
-      //     // console.log(checkedItems);
-      //     return this.shoppingCartService.removeFromShoppingCart(checkedItems);
-      //   }
-      // })
     ).subscribe(console.log, console.log);
   }
 
@@ -105,24 +101,31 @@ export class AddressPage implements OnInit {
     }
   }
 
-  onOpenNewAddressModal() {
-    this.modalCtrl.create({
-      component: AddressDetailPage,
-      componentProps: {
-        isModal: true
+  onOpenDetailAddress(addressId?: string) {
+    if (this.isModal) {
+      this.modalCtrl.create({
+        component: AddressDetailPage,
+        componentProps: {
+          isModal: true,
+          addressId
+        }
+      }).then(modal => {
+        modal.present();
+        return modal.onDidDismiss();
+      }).then(message => {
+        console.log(message);
+        if (message.data && message.data.savedAddress) {
+          this.onSelectAddress(message.data.savedAddress);
+        }
+      });
+    } else {
+      const url = ['/address', 'detail'];
+      if (addressId) {
+        url.push(addressId);
       }
-    }).then(modal => {
-      modal.present();
-      return modal.onDidDismiss();
-    }).then(message => {
-      console.log(message);
-      // if (message.data && message.data.selectedSpec) {
-      //   this.selectedSpec = message.data.selectedSpec;
-      // }
-      // if (message.data && message.data.selectedWarehouse) {
-      //   this.selectedWarehouse = message.data.selectedWarehouse;
-      // }
-    });
+      this.navCtrl.navigateForward(url);
+    }
+
   }
 
 }
