@@ -19,6 +19,7 @@ export interface AddressDictListItem {
 }
 
 export interface AddressReqItem {
+    addressId?: string;
     addressCode: string;
     addressName: string;
     consignee: string;
@@ -27,6 +28,36 @@ export interface AddressReqItem {
     identificationNumber?: string;
     isDefault?: string;
     phoneNo: string;
+}
+
+export interface Address {
+    addressId: string;
+    addressName: string;
+    addressCode?: string;
+    addressStatus: string;
+    consignee: string;
+    detailedAddress: string;
+    phoneNo: string;
+    identificationName?: string;
+    identificationNumber: string;
+    id: number;
+    isDefault: boolean;
+    label: any;
+    userId: string;
+    zipCode: string;
+    createTime: string;
+    updateTime: string;
+}
+
+export interface CollectionsOfAddress {
+    content?: Address[];
+    last?: boolean;
+    totalElements?: number;
+    totalPages?: number;
+    number?: number;
+    size?: number;
+    first?: boolean;
+    numberOfElements?: number;
 }
 
 @Injectable({
@@ -41,8 +72,16 @@ export class AddressService {
         return this.http.post(`${environment.apiServer}/user/address`, address);
     }
 
+    modifyAddress(address: AddressReqItem) {
+        return this.http.put(`${environment.apiServer}/user/address`, address);
+    }
+
+    getAddress(addressId: string) {
+        return this.http.get<Address>(`${environment.apiServer}/user/address/model/${addressId}`);
+    }
+
     getAddressList(pageNum: number, pageSize: number) {
-        return this.http.post(`${environment.apiServer}/user/address/${pageNum}/${pageSize}`, null);
+        return this.http.post<CollectionsOfAddress>(`${environment.apiServer}/user/address/${pageNum}/${pageSize}`, null);
     }
 
     getAddressDictList(dictTypeCode: string, parentDictCode: string) {

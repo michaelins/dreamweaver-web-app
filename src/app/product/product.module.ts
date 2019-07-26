@@ -8,6 +8,8 @@ import { IonicModule } from '@ionic/angular';
 import { ProductPage } from './product.page';
 import { AddToCartComponent } from '../shared/add-to-cart/add-to-cart.component';
 import { SharedModule } from '../shared/shared.module';
+import { AddressPageModule } from '../address/address.module';
+import { AddressPage } from '../address/address.page';
 
 const routes: Routes = [
   {
@@ -31,9 +33,10 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     SharedModule,
+    AddressPageModule,
     RouterModule.forChild(routes)
   ],
   declarations: [ProductPage],
-  entryComponents: [AddToCartComponent]
+  entryComponents: [AddToCartComponent, AddressPage]
 })
 export class ProductPageModule { }

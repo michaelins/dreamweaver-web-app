@@ -1,13 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-
-import { AddressDetailPage } from './address-detail.page';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { AddressDisplayPipe } from 'src/app/shared/pipes/address-display.pipe';
+import { AddressDetailPage } from './address-detail.page';
 
 const routes: Routes = [
   {
@@ -25,6 +22,9 @@ const routes: Routes = [
     SharedModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AddressDetailPage, AddressDisplayPipe]
+  declarations: [AddressDetailPage],
+  exports: [
+    AddressDetailPage
+  ]
 })
 export class AddressDetailPageModule { }

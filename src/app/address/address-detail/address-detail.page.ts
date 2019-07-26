@@ -4,8 +4,9 @@ import { PickerColumnOption, PickerColumn } from '@ionic/core';
 import { from, fromEvent, Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
-import { AddressReqItem, AddressService } from '../address.service';
+import { AddressReqItem, AddressService, Address } from '../address.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-address-detail',
@@ -18,9 +19,11 @@ export class AddressDetailPage implements OnInit {
   addressReqObj: AddressReqItem;
   addressName: string;
   addressCode: string;
+  address: Address;
 
   constructor(
     private pickerCtrl: PickerController,
+    private route: ActivatedRoute,
     private addressService: AddressService
   ) { }
 
@@ -49,8 +52,41 @@ export class AddressDetailPage implements OnInit {
         validators: [Validators.maxLength(18)]
       }),
     });
-    this.form.patchValue({
-      isDefault: false
+
+
+    this.route.params.pipe(switchMap(params => {
+      if (params.addressId) {
+        console.log(params.addressId);
+        return this.addressService.getAddress(params.addressId);
+      } else {
+        throw new Error('no address id');
+      }
+    })).subscribe(resp => {
+      console.log(resp);
+      this.address = resp;
+      this.addressCode = resp.addressCode;
+      this.addressName = resp.addressName;
+      this.form.patchValue({
+        consignee: resp.consignee,
+        phoneNo: resp.phoneNo,
+        detailedAddress: resp.detailedAddress,
+        isDefault: resp.isDefault
+      });
+      if (resp.identificationName) {
+        this.form.patchValue({
+          identificationName: resp.identificationName
+        });
+      }
+      if (resp.identificationNumber) {
+        this.form.patchValue({
+          identificationNumber: resp.identificationNumber
+        });
+      }
+    }, error => {
+      console.log(error);
+      this.form.patchValue({
+        isDefault: false
+      });
     });
   }
 
@@ -58,7 +94,7 @@ export class AddressDetailPage implements OnInit {
     if (!this.form.valid || !this.addressCode) {
       return;
     }
-    const newAddress: AddressReqItem = {
+    const addressReq: AddressReqItem = {
       addressCode: this.addressCode,
       addressName: this.addressName,
       consignee: this.form.value.consignee,
@@ -66,18 +102,31 @@ export class AddressDetailPage implements OnInit {
       phoneNo: this.form.value.phoneNo
     };
     if (this.form.value.identificationName) {
-      newAddress.identificationName = this.form.value.identificationName;
+      addressReq.identificationName = this.form.value.identificationName;
     }
     if (this.form.value.identificationNumber) {
-      newAddress.identificationNumber = this.form.value.identificationNumber;
+      addressReq.identificationNumber = this.form.value.identificationNumber;
     }
     if (this.form.value.isDefault) {
-      newAddress.isDefault = this.form.value.isDefault;
+      addressReq.isDefault = this.form.value.isDefault;
     }
-    console.log(newAddress);
-    this.addressService.addAddress(newAddress).subscribe(resp => {
-      console.log(resp);
-    }, error => console.log);
+    if (this.address && this.address.addressId) {
+      addressReq.addressId = this.address.addressId;
+      this.addressService.modifyAddress(addressReq).subscribe(resp => {
+        console.log(resp);
+        this.navBack();
+      }, error => console.log);
+    } else {
+      this.addressService.addAddress(addressReq).subscribe(resp => {
+        console.log(resp);
+        this.navBack();
+      }, error => console.log);
+    }
+    console.log(addressReq);
+  }
+
+  navBack() {
+
   }
 
   onPickerSelected() {

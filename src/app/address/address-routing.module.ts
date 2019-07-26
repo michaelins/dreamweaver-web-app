@@ -7,6 +7,10 @@ const routes: Routes = [
         path: '',
         children: [
             {
+                path: 'detail/:addressId',
+                loadChildren: './address-detail/address-detail.module#AddressDetailPageModule'
+            },
+            {
                 path: 'detail',
                 loadChildren: './address-detail/address-detail.module#AddressDetailPageModule'
             },

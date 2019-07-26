@@ -2,23 +2,26 @@
   <ion-toolbar>
     <ion-title>地址管理</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button color="medium"></ion-back-button>
+      <ion-back-button color="medium" *ngIf="!isModal"></ion-back-button>
+      <ion-button color="medium" *ngIf="isModal" (click)="onDismissModal()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-buttons slot="primary">
+    <ion-buttons slot="primary" *ngIf="!isModal">
       <ion-button color="dark" size="small" [routerLink]="['/address','detail']">新增</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid class="ion-margin-top ion-padding" *ngFor="let i of [1,2,3,4,5]">
+  <ion-grid class="ion-margin-top ion-padding" *ngFor="let addr of addresses" (click)="onSelectAddress(addr)">
     <ion-row class="ion-padding">
       <ion-col>
         <ion-text color="dark">
-          <h5>谭艾艳</h5>
+          <h5>{{addr.consignee}}</h5>
         </ion-text>
         <ion-text color="dark" class="phone ion-margin-start">
-          <p>136****9532</p>
+          <p>{{addr.phoneNo | hidePhoneNumber}}</p>
         </ion-text>
         <!-- <ion-chip color="primary" outline="true">
           <ion-label>有身份证</ion-label>
@@ -29,11 +32,11 @@
     <ion-row class="ion-padding-start ion-padding-end">
       <ion-col>
         <ion-text color="dark">
-          <p>四川省成都市高新区新天府大道中段1号新会展中心廊桥166号</p>
+          <p>{{addr.addressName | addressDisplay}}{{addr.detailedAddress}}</p>
         </ion-text>
       </ion-col>
     </ion-row>
-    <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top">
+    <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top" *ngIf="!isModal">
       <ion-col>
         <div class="custom-radios">
           <div>
@@ -47,7 +50,7 @@
           </div>
         </div>
         <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1">设为默认</ion-text>
-        <div class="tool ion-margin-start">
+        <div class="tool ion-margin-start" [routerLink]="['/address','detail',addr.addressId]">
           <ion-icon name="create" color="medium"></ion-icon>
           <ion-text color="dark">编辑</ion-text>
         </div>
@@ -58,4 +61,11 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  <div class="ion-padding">
+    <ion-button expand="block" color="primary" class="ion-margin" (click)="onOpenNewAddressModal()">新建收货地址</ion-button>
+  </div>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="正在加载更多...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>
