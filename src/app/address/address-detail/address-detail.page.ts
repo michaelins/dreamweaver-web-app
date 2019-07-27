@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { PickerController, NavController, ModalController } from '@ionic/angular';
+import { PickerController, NavController, ModalController, AlertController } from '@ionic/angular';
 import { PickerColumnOption, PickerColumn } from '@ionic/core';
 import { from, fromEvent, Observable, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
@@ -27,6 +27,7 @@ export class AddressDetailPage implements OnInit {
 
   constructor(
     private pickerCtrl: PickerController,
+    private alertCtrl: AlertController,
     private modalCtrl: ModalController,
     private navCtrl: NavController,
     private route: ActivatedRoute,
@@ -55,7 +56,7 @@ export class AddressDetailPage implements OnInit {
       }),
       identificationNumber: new FormControl(null, {
         updateOn: 'change',
-        validators: [Validators.minLength(18), Validators.maxLength(18)]
+        validators: [Validators.maxLength(18)]
       }),
     });
 
@@ -131,15 +132,12 @@ export class AddressDetailPage implements OnInit {
     };
     if (this.form.value.identificationName) {
       addressReq.identificationName = this.form.value.identificationName;
-      this.address.identificationName = this.form.value.identificationName;
     }
     if (this.form.value.identificationNumber) {
       addressReq.identificationNumber = this.form.value.identificationNumber;
-      this.address.identificationNumber = this.form.value.identificationNumber;
     }
     if (this.form.value.isDefault) {
       addressReq.isDefault = this.form.value.isDefault;
-      this.address.isDefault = this.form.value.isDefault;
     }
 
     if (this.address && this.address.addressId) {
@@ -161,20 +159,34 @@ export class AddressDetailPage implements OnInit {
       this.addressService.modifyAddress(addressReq).subscribe(resp => {
         console.log(this.address);
         this.navBack(this.address);
-      }, error => console.log);
+      }, error => {
+        console.log(error);
+        if (error.status === 400) {
+          this.alertCtrl.create({
+            header: '信息校验失败',
+            message: '身份证验证失败，请输入正确的身份证信息',
+            buttons: ['确定']
+          }).then(alert => {
+            alert.present();
+          });
+        }
+      });
     } else {
-      let addedAddress: Address;
-      this.addressService.addAddress(addressReq).pipe(
-        tap(resp => {
-          addedAddress = resp;
-        }),
-        switchMap(resp => {
-          return this.addressService.fetchLatestAddresses();
-        })
-      ).subscribe(resp => {
+      this.addressService.addAddress(addressReq).subscribe(addedAddress => {
         console.log(addedAddress);
         this.navBack(addedAddress);
-      }, error => console.log);
+      }, error => {
+        console.log(error);
+        if (error.status === 400) {
+          this.alertCtrl.create({
+            header: '信息校验失败',
+            message: '身份证验证失败，请输入正确的身份证信息',
+            buttons: ['确定']
+          }).then(alert => {
+            alert.present();
+          });
+        }
+      });
     }
     console.log(addressReq);
   }
@@ -188,13 +200,15 @@ export class AddressDetailPage implements OnInit {
   }
 
   navBack(address: Address) {
-    if (this.isModal) {
-      this.modalCtrl.dismiss({
-        savedAddress: address
-      });
-    } else {
-      this.navCtrl.pop();
-    }
+    this.addressService.fetchLatestAddresses().subscribe(()=>{
+      if (this.isModal) {
+        this.modalCtrl.dismiss({
+          savedAddress: address
+        });
+      } else {
+        this.navCtrl.pop();
+      }
+    });
   }
 
   onPickerSelected() {

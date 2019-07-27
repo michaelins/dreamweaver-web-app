@@ -26,7 +26,8 @@
         <!-- <ion-chip color="primary" outline="true">
           <ion-label>有身份证</ion-label>
         </ion-chip> -->
-        <ion-text color="primary" class="id-positive">有身份证</ion-text>
+        <ion-text color="primary" class="id-positive" *ngIf="addr.addressStatus==='AUTHENTICATED'">有身份证</ion-text>
+        <ion-text color="medium" class="id-negative" *ngIf="addr.addressStatus!=='AUTHENTICATED'">无身份证</ion-text>
       </ion-col>
     </ion-row>
     <ion-row class="ion-padding-start ion-padding-end">
@@ -38,7 +39,7 @@
     </ion-row>
     <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top">
       <ion-col>
-        <div class="custom-radios">
+        <!-- <div class="custom-radios">
           <div>
             <input type="checkbox" id="selectall" name="color" class="primary">
             <label for="selectall">
@@ -48,8 +49,8 @@
               </span>
             </label>
           </div>
-        </div>
-        <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1">设为默认</ion-text>
+        </div>-->
+        <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1"></ion-text> 
         <div class="tool ion-margin-start" (click)="onOpenDetailAddress(addr.addressId)">
           <ion-icon name="create" color="medium"></ion-icon>
           <ion-text color="dark">编辑</ion-text>
@@ -64,8 +65,4 @@
   <div class="ion-padding">
     <ion-button expand="block" color="primary" class="ion-margin" (click)="onOpenDetailAddress()">新建收货地址</ion-button>
   </div>
-  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)" [disabled]="infiniteScrollDisabled">
-    <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="正在加载更多...">
-    </ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </ion-content>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { PickerColumn, PickerColumnOption } from '@ionic/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { delay, switchMap, map, tap } from 'rxjs/operators';
+import { delay, switchMap, map, tap, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 export interface AddressDictListItem {
@@ -66,15 +66,10 @@ export interface CollectionsOfAddress {
 })
 export class AddressService {
 
-    private latestAddressesSubject = new BehaviorSubject<CollectionsOfAddress>(null);
-    private addressPageSize = 10;
+    private latestAddressesSubject = new BehaviorSubject<Address[]>(null);
 
     get latestAddresses() {
         return this.latestAddressesSubject.asObservable();
-    }
-
-    get pageSize() {
-        return this.addressPageSize;
     }
 
     constructor(
@@ -86,11 +81,7 @@ export class AddressService {
     }
 
     modifyAddress(address: AddressReqItem) {
-        return this.http.put(`${environment.apiServer}/user/address`, address).pipe(
-            switchMap(resp => {
-                return this.fetchLatestAddresses();
-            })
-        );
+        return this.http.put(`${environment.apiServer}/user/address`, address);
     }
 
     deleteAddress(addressId: string) {
@@ -104,9 +95,12 @@ export class AddressService {
     getAddress(addressId: string) {
         return this.http.get<Address>(`${environment.apiServer}/user/address/model/${addressId}`);
     }
+    getDefaultAddress() {
+        return this.http.get<Address>(`${environment.apiServer}/user/address/default`);
+    }
 
     fetchLatestAddresses() {
-        return this.http.post<CollectionsOfAddress>(`${environment.apiServer}/user/address/1/${this.pageSize}`, null).pipe(
+        return this.http.get<Address[]>(`${environment.apiServer}/user/address/all`).pipe(
             tap(resp => {
                 this.latestAddressesSubject.next(resp);
             })

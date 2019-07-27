@@ -30,34 +30,14 @@ export class AddressPage implements OnInit {
 
   ngOnInit() {
     console.log(this.isModal, this.product);
-    this.addressService.latestAddresses.subscribe(collectionOfAddresses => {
-      if (collectionOfAddresses) {
-        this.collectionOfAddresses = collectionOfAddresses;
-        this.addresses = collectionOfAddresses.content;
+    this.addressService.latestAddresses.subscribe(addresses => {
+      if (addresses) {
+        console.log(addresses);
+        this.addresses = addresses;
         this.infiniteScrollDisabled = false;
       }
     });
     this.addressService.fetchLatestAddresses().subscribe();
-  }
-
-  loadData(event) {
-    console.log(event);
-    if (this.collectionOfAddresses.last) {
-      event.target.complete();
-      this.infiniteScrollDisabled = true;
-    } else if (this.collectionOfAddresses.number + 2 <= this.collectionOfAddresses.totalPages) {
-      this.addressService.getAddresses(
-        this.collectionOfAddresses.number + 2,
-        this.addressPageSize,
-      ).subscribe(resp => {
-        console.log(resp);
-        this.addresses.push(...resp.content);
-        this.collectionOfAddresses = resp;
-        event.target.complete();
-      }, error => {
-        console.log(error);
-      });
-    }
   }
 
   onDeleteAddress(addressId: string) {
