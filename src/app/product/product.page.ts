@@ -8,6 +8,7 @@ import { element } from '@angular/core/src/render3';
 import { AddToCartComponent } from '../shared/add-to-cart/add-to-cart.component';
 import { ShoppingCartService } from '../shopping-cart/shopping-cart.service';
 import { AddressPage } from '../address/address.page';
+import { AddressService, Address } from '../address/address.service';
 
 @Component({
   selector: 'app-product',
@@ -23,6 +24,7 @@ export class ProductPage implements OnInit {
   selectedWarehouse: Warehouse;
   selectedSpec: Specification;
   shoppingCartItemSize: number;
+  address: Address;
 
   sectionId = 1;
   scrollEvents = true;
@@ -36,6 +38,7 @@ export class ProductPage implements OnInit {
   constructor(
     private productService: ProductService,
     private shoppingCartService: ShoppingCartService,
+    private addressService: AddressService,
     private route: ActivatedRoute,
     private modalCtrl: ModalController
   ) { }
@@ -61,6 +64,9 @@ export class ProductPage implements OnInit {
       if (resp && resp.items && resp.items.length > 0) {
         this.shoppingCartItemSize = resp.items.length;
       }
+    });
+    this.addressService.getDefaultAddress().subscribe(resp => {
+      this.address = resp;
     });
   }
 
@@ -123,12 +129,9 @@ export class ProductPage implements OnInit {
       return modal.onDidDismiss();
     }).then(message => {
       console.log(message);
-      // if (message.data && message.data.selectedSpec) {
-      //   this.selectedSpec = message.data.selectedSpec;
-      // }
-      // if (message.data && message.data.selectedWarehouse) {
-      //   this.selectedWarehouse = message.data.selectedWarehouse;
-      // }
+      if (message.data && message.data.selectedAddress) {
+        this.address = message.data.selectedAddress;
+      }
     });
   }
 

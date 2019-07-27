@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { from } from 'rxjs';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { from, Observable, Subscription } from 'rxjs';
 import { AlertController, ModalController, NavController } from '@ionic/angular';
 import { switchMap } from 'rxjs/operators';
 import { AddressService, Address, CollectionsOfAddress } from './address.service';
@@ -11,11 +11,11 @@ import { AddressDetailPage } from './address-detail/address-detail.page';
   templateUrl: './address.page.html',
   styleUrls: ['./address.page.scss'],
 })
-export class AddressPage implements OnInit {
-
+export class AddressPage implements OnInit, OnDestroy {
   @Input() isModal: boolean;
   @Input() product: Product;
 
+  latestAddressesObs: Subscription;
   infiniteScrollDisabled = false;
   addresses: Address[];
   collectionOfAddresses: CollectionsOfAddress;
@@ -30,7 +30,7 @@ export class AddressPage implements OnInit {
 
   ngOnInit() {
     console.log(this.isModal, this.product);
-    this.addressService.latestAddresses.subscribe(addresses => {
+    this.latestAddressesObs = this.addressService.latestAddresses.subscribe(addresses => {
       if (addresses) {
         console.log(addresses);
         this.addresses = addresses;
@@ -38,6 +38,10 @@ export class AddressPage implements OnInit {
       }
     });
     this.addressService.fetchLatestAddresses().subscribe();
+  }
+
+  ngOnDestroy() {
+    this.latestAddressesObs.unsubscribe();
   }
 
   onDeleteAddress(addressId: string) {

@@ -70,9 +70,8 @@
           <ion-icon src="../../assets/icon/address.svg" color="primary" style="font-size: 14px"></ion-icon>
           <ion-label>
             <ion-text color="dark">
-              <p>
-                四川省成都市高新区新天府大道765号天府软件园A3
-              </p>
+              <p *ngIf="address">{{address.addressName|addressDisplay}}{{address.detailedAddress}}</p>
+              <p *ngIf="!address">请选择送货地址</p>
             </ion-text>
           </ion-label>
         </ion-item>
