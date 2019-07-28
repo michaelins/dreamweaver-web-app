@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>确认订单</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="notice-id">
+        <ion-text>
+          <p>提示认证身份证信息</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="address">
+        <ion-icon src="../../../assets/icon/address.svg" color="primary" class="ion-padding"></ion-icon>
+        <div class="address-wrapper ion-padding">
+          <div class="address-name">
+            <ion-text color="dark">
+              <h5>{{'谭艾艳'}}</h5>
+            </ion-text>
+            <ion-text color="dark" class="phone ion-margin-start">
+              <p>{{'13659869532' | hidePhoneNumber}}</p>
+            </ion-text>
+            <ion-text color="primary" class="id-positive">有身份证</ion-text>
+            <!-- <ion-text color="primary" class="id-positive" *ngIf="addr.addressStatus==='AUTHENTICATED'">有身份证</ion-text>
+            <ion-text color="medium" class="id-negative" *ngIf="addr.addressStatus!=='AUTHENTICATED'">无身份证</ion-text> -->
+          </div>
+          <div>
+            <ion-text color="dark">
+              <p>四川省成都市高新区新天府大道中段1号新会展中心3号设置上的的的的</p>
+              <!-- <p>{{addr.addressName | addressDisplay}}{{addr.detailedAddress}}</p> -->
+            </ion-text>
+          </div>
+        </div>
+        <ion-icon name="arrow-forward" color="primary" class="ion-padding"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="total" size=8>
+          <ion-text color="primary">合计：{{419 | currency: 'CNY':'symbol-narrow'}}</ion-text>
+        </ion-col>
+        <ion-col class="purchase" size=4>
+          <ion-text color="light">提交订单</ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>
