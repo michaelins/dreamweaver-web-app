@@ -26,17 +26,26 @@ h5,
 h6 {
   margin: 0;
   font-weight: normal;
+  line-height: 100%;
   .deleted {
     text-decoration: line-through;
   }
 }
 
+h5 {
+  font-size: 18px;
+}
+h6 {
+  font-size: 16px;
+}
+
 p {
-  &.detail-title {
-    border-left: 5px solid var(--ion-color-primary);
-  }
   margin: 0;
   font-size: 14px;
+}
+
+.detail-title {
+  border-left: 5px solid var(--ion-color-primary);
 }
 
 .sc-ion-input-ios-h,
@@ -71,6 +80,10 @@ ul {
 .chosen {
   background-color: var(--ion-color-primary);
   color: #fff;
+}
+
+.light-border-bottom {
+  border-bottom: 1px solid var(--ion-color-light);
 }
 
 // custom radios

@@ -1,9 +1,21 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>order-pay</ion-title>
+    <ion-title>支付订单</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <div class="pay">
+    <ion-icon name="today" color="primary"></ion-icon>
+    <ion-text>
+      <h1 style="margin-bottom: 20px">待支付</h1>
+    </ion-text>
+    <ion-text>
+      <h5 style="margin-bottom: 20px">订单金额：￥126.00</h5>
+    </ion-text>
+    <ion-button color="primary" fill="outline" class="rounded" [routerLink]="['/orders/success']">微信支付</ion-button>
+  </div>
 </ion-content>
