@@ -1,41 +1,45 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>地址管理</ion-title>
+    <ion-title>{{isModal?'选择地址':'地址管理'}}</ion-title>
     <ion-buttons slot="start">
-      <ion-back-button color="medium"></ion-back-button>
+      <ion-back-button color="medium" *ngIf="!isModal"></ion-back-button>
+      <ion-button color="medium" *ngIf="isModal" (click)="onDismissModal()">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
     </ion-buttons>
-    <ion-buttons slot="primary">
+    <ion-buttons slot="primary" *ngIf="!isModal">
       <ion-button color="dark" size="small" [routerLink]="['/address','detail']">新增</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-grid class="ion-margin-top ion-padding" *ngFor="let i of [1,2,3,4,5]">
+  <ion-grid class="ion-margin-top ion-padding" *ngFor="let addr of addresses" (click)="onSelectAddress(addr)">
     <ion-row class="ion-padding">
       <ion-col>
         <ion-text color="dark">
-          <h5>谭艾艳</h5>
+          <h5>{{addr.consignee}}</h5>
         </ion-text>
         <ion-text color="dark" class="phone ion-margin-start">
-          <p>136****9532</p>
+          <p>{{addr.phoneNo | hidePhoneNumber}}</p>
         </ion-text>
         <!-- <ion-chip color="primary" outline="true">
           <ion-label>有身份证</ion-label>
         </ion-chip> -->
-        <ion-text color="primary" class="id-positive">有身份证</ion-text>
+        <ion-text color="primary" class="id-positive" *ngIf="addr.addressStatus==='AUTHENTICATED'">有身份证</ion-text>
+        <ion-text color="medium" class="id-negative" *ngIf="addr.addressStatus!=='AUTHENTICATED'">无身份证</ion-text>
       </ion-col>
     </ion-row>
     <ion-row class="ion-padding-start ion-padding-end">
       <ion-col>
         <ion-text color="dark">
-          <p>四川省成都市高新区新天府大道中段1号新会展中心廊桥166号</p>
+          <p>{{addr.addressName | addressDisplay}}{{addr.detailedAddress}}</p>
         </ion-text>
       </ion-col>
     </ion-row>
     <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top">
       <ion-col>
-        <div class="custom-radios">
+        <!-- <div class="custom-radios">
           <div>
             <input type="checkbox" id="selectall" name="color" class="primary">
             <label for="selectall">
@@ -45,17 +49,20 @@
               </span>
             </label>
           </div>
-        </div>
-        <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1">设为默认</ion-text>
-        <div class="tool ion-margin-start">
+        </div>-->
+        <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1"></ion-text> 
+        <div class="tool ion-margin-start" (click)="onOpenDetailAddress(addr.addressId)">
           <ion-icon name="create" color="medium"></ion-icon>
           <ion-text color="dark">编辑</ion-text>
         </div>
-        <div class="tool ion-margin-start" (click)="onDeleteAddress()">
+        <div class="tool ion-margin-start" (click)="onDeleteAddress(addr.addressId)" *ngIf="!isModal">
           <ion-icon name="trash" color="medium"></ion-icon>
           <ion-text color="dark">删除</ion-text>
         </div>
       </ion-col>
     </ion-row>
   </ion-grid>
+  <div class="ion-padding">
+    <ion-button expand="block" color="primary" class="ion-margin" (click)="onOpenDetailAddress()">新建收货地址</ion-button>
+  </div>
 </ion-content>

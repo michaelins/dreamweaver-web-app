@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertController, NavController } from '@ionic/angular';
+import { from } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { OrderService, CreateOrderReq, CreateOrderReqItem } from '../orders/order.service';
 import { UiStateService } from '../shared/ui-state.service';
-import { Product } from '../home/home.service';
-import { ShoppingCartService, ShoppingCartItem, ShoppingCart, ShoppingCartItemRef } from './shopping-cart.service';
-import { AuthService } from '../auth/auth.service';
-import { switchMap, take } from 'rxjs/operators';
-import { of, from } from 'rxjs';
-import { AlertController } from '@ionic/angular';
+import { ShoppingCart, ShoppingCartItem, ShoppingCartItemRef, ShoppingCartService } from './shopping-cart.service';
 
 @Component({
   selector: 'app-shopping-cart',
@@ -22,8 +21,9 @@ export class ShoppingCartPage implements OnInit {
   constructor(
     private uiStateService: UiStateService,
     private shoppingCartService: ShoppingCartService,
-    private authService: AuthService,
-    private alertCtrl: AlertController
+    private orderService: OrderService,
+    private alertCtrl: AlertController,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
@@ -120,6 +120,14 @@ export class ShoppingCartPage implements OnInit {
     });
     this.price = price;
     this.quantity = quantity;
+  }
+
+  onCreateOrder() {
+    if (this.quantity === 0) {
+      return;
+    } else {
+      this.navCtrl.navigateForward(['/orders/confirm']);
+    }
   }
 
   onDeleteItems() {

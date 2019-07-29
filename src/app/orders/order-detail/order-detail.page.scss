@@ -1,0 +1,131 @@
+ion-content {
+  --background: #f2f2f2;
+}
+
+ion-grid {
+  background: #ffffff;
+}
+
+ion-card {
+  margin: -20px 20px 20px 20px;
+  ion-card-content {
+    padding: var(--ion-padding);
+    background: #ffffff;
+  }
+}
+
+ion-list {
+  margin: 0;
+}
+ion-item {
+  --padding-start: 0px;
+}
+
+ion-footer {
+  ion-toolbar {
+    --padding-top: 0px;
+    --padding-bottom: 0px;
+    --padding-end: 0px;
+    --padding-start: 0px;
+  }
+  ion-col {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.total {
+      padding: 0 0 0 20px;
+      justify-content: flex-start;
+      background: #ffffff;
+    }
+    &.purchase {
+      background: var(--ion-color-primary);
+    }
+  }
+}
+
+.order-state {
+  min-height: 80px;
+  background: var(--ion-color-primary);
+  color: var(--ion-color-light);
+  padding: 20px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  font-size: 18px;
+}
+
+.order-address {
+  background: #ffffff;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  .address-wrapper {
+    flex-grow: 1;
+  }
+  ion-icon {
+    font-size: 32px;
+  }
+  .address-name {
+    h6 {
+      font-size: 16px;
+    }
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    .phone {
+      flex-grow: 1;
+      h5 {
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+.product {
+  .product-image {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    img.thumbnail {
+      margin: 0;
+      width: 108px;
+      height: 108px;
+    }
+  }
+  .product-block {
+    font-size: 14px;
+    min-height: 132px;
+    .product-price-amount-wrapper {
+      display: flex;
+      align-items: stretch;
+      justify-content: flex-start;
+      .product-price {
+        font-size: 16px;
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+      .product-amount {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        &.title {
+          justify-content: flex-start;
+        }
+        ion-icon {
+          font-size: 20px;
+        }
+        ion-input {
+          --background: var(--ion-color-light);
+          --padding-top: 5px;
+          --padding-bottom: 5px;
+          --padding-start: 5px;
+          --padding-end: 5px;
+          border-radius: 5px;
+        }
+      }
+    }
+  }
+}

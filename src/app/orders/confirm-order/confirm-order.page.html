@@ -1,0 +1,139 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>确认订单</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid *ngIf="address">
+    <ion-row *ngIf="address.addressStatus!=='AUTHENTICATED'">
+      <ion-col class="notice-id">
+        <ion-text>
+          <p>提示认证身份证信息</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="address">
+      <ion-col class="address" (click)="onSelectAddress()">
+        <ion-icon src="../../../assets/icon/address.svg" color="primary"
+          class="ion-padding-start ion-margin-horizontal"></ion-icon>
+        <div class="address-wrapper ion-padding">
+          <div class="address-name ion-margin-bottom">
+            <ion-text color="dark">
+              <h5>{{address.consignee}}</h5>
+            </ion-text>
+            <ion-text color="dark" class="phone ion-margin-start">
+              <p>{{address.phoneNo | hidePhoneNumber}}</p>
+            </ion-text>
+            <ion-text color="primary" class="id-positive" *ngIf="address.addressStatus==='AUTHENTICATED'">有身份证
+            </ion-text>
+            <ion-text color="medium" class="id-negative" *ngIf="address.addressStatus!=='AUTHENTICATED'">无身份证</ion-text>
+          </div>
+          <div>
+            <ion-text color="dark">
+              <p>{{address.addressName | addressDisplay}}{{address.detailedAddress}}</p>
+            </ion-text>
+          </div>
+        </div>
+        <ion-icon name="arrow-forward" color="primary" class="ion-padding-end ion-margin-horizontal"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="ion-margin-top ion-padding-horizontal sending-warehouse">
+    <ion-row>
+      <ion-col class="ion-margin ion-padding-vertical">
+        <ion-text>
+          <h6 class="ion-padding-bottom">订单-1 宁波仓发货</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="cart">
+    <ion-row>
+      <ion-col class="ion-padding-horizontal">
+        <ion-list class="ion-padding-horizontal ion-padding-bottom">
+          <ion-item class="product" detail="false" *ngFor="let item of cart.items; index as i">
+            <div slot="start" class="ion-margin-end product-image">
+              <img class="thumbnail" [src]="item.goodsImg+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
+            </div>
+            <ion-grid>
+              <ion-row>
+                <ion-col class="ion-padding-top ion-padding-bottom product-block">
+                  <div class="box-2lines-ellipsis">
+                    <div>
+                      <article>{{item.goodsName}}</article>
+                    </div>
+                  </div>
+                  <div class="ion-padding-top ion-padding-bottom">
+                    <ion-text color="medium">
+                      <p>{{item.goodsSpecificationDesc}}/{{item.goodsWarehouseDesc}}</p>
+                    </ion-text>
+                  </div>
+                  <div class="product-price-amount-wrapper">
+                    <div class="product-price">
+                      <ion-text color="primary">
+                        <h5>{{item.goodsPrice | currency: 'CNY':'symbol-narrow'}}</h5>
+                      </ion-text>
+                    </div>
+                    <div class="product-amount">
+                      <ion-text>
+                        <p>x{{item.number}}</p>
+                      </ion-text>
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="ion-margin-top ion-padding-horizontal total">
+    <ion-row class="ion-padding-vertical ion-margin-horizontal">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h6>商品总额</h6>
+        </ion-text>
+      </ion-col>
+      <ion-col class="ion-padding-vertical" text-right>
+        <ion-text>
+          <h6>{{price | currency: 'CNY':'symbol-narrow'}}</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-padding-vertical ion-margin-horizontal">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h6>运费</h6>
+        </ion-text>
+      </ion-col>
+      <ion-col class="ion-padding-vertical" text-right>
+        <ion-text>
+          <h6>{{0 | currency: 'CNY':'symbol-narrow'}}</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="total" size=8>
+          <ion-text color="primary">合计：{{price | currency: 'CNY':'symbol-narrow'}}</ion-text>
+        </ion-col>
+        <ion-col class="purchase" size=4 (click)="onSubmit()">
+          <ion-text color="light">提交订单</ion-text>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

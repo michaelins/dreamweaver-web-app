@@ -28,7 +28,7 @@
           </ion-label>
         </ion-item>
         <ion-card>
-          <ion-item detail lines="full">
+          <ion-item detail lines="full" [routerLink]="['/orders']">
             <ion-label>
               <h3>我的订单</h3>
             </ion-label>
@@ -38,28 +38,28 @@
             <ion-grid>
               <ion-row class="ion-padding">
                 <ion-col size=3>
-                  <ion-tab-button>
+                  <ion-tab-button [routerLink]="['/orders']">
                     <ion-icon src="../../assets/icon/wallet.svg" color="primary"></ion-icon>
                     <ion-label>待付款</ion-label>
                     <!-- <ion-badge>6</ion-badge> -->
                   </ion-tab-button>
                 </ion-col>
                 <ion-col size=3>
-                  <ion-tab-button>
+                  <ion-tab-button [routerLink]="['/orders']">
                     <ion-icon src="../../assets/icon/shipping.svg" color="primary"></ion-icon>
                     <ion-label>待发货</ion-label>
                     <ion-badge>6</ion-badge>
                   </ion-tab-button>
                 </ion-col>
                 <ion-col size=3>
-                  <ion-tab-button>
+                  <ion-tab-button [routerLink]="['/orders']">
                     <ion-icon src="../../assets/icon/receiving.svg" color="primary"></ion-icon>
                     <ion-label>待收货</ion-label>
                     <!-- <ion-badge>6</ion-badge> -->
                   </ion-tab-button>
                 </ion-col>
                 <ion-col size=3>
-                  <ion-tab-button>
+                  <ion-tab-button [routerLink]="['/orders']">
                     <ion-icon src="../../assets/icon/done.svg" color="primary"></ion-icon>
                     <ion-label>已完成</ion-label>
                     <!-- <ion-badge>6</ion-badge> -->

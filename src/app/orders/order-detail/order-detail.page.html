@@ -1,0 +1,163 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>订单详情</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="order-state">
+    <ion-icon name="time" class="ion-margin-end"></ion-icon>
+    <ion-text>
+      <h6>已付款，等待商家发货</h6>
+    </ion-text>
+  </div>
+  <ion-card>
+    <ion-card-content class="order-address">
+      <ion-icon src="../../../assets/icon/address.svg" color="primary" class="ion-padding-start">
+      </ion-icon>
+      <div class="address-wrapper ion-padding">
+        <div class="address-name ion-margin-bottom">
+          <ion-text color="dark">
+            <h6>{{'谭艾艳'}}</h6>
+          </ion-text>
+          <ion-text color="dark" class="phone ion-margin-start">
+            <h6>{{'13659869532' | hidePhoneNumber}}</h6>
+          </ion-text>
+        </div>
+        <div>
+          <ion-text color="dark">
+            <p>四川省成都市高新区新天府大道中段1号新会展中心3号设置上的的的的</p>
+            <!-- <p>{{addr.addressName | addressDisplay}}{{addr.detailedAddress}}</p> -->
+          </ion-text>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-grid class="ion-margin-top ion-padding-horizontal total">
+    <ion-row class="ion-padding-vertical ion-margin-horizontal">
+      <ion-col>
+        <ion-list>
+          <ion-item class="product" detail="false" *ngFor="let item of [1,2,3]; index as i">
+            <div slot="start" class="ion-margin-end product-image">
+              <img class="thumbnail"
+                [src]="'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/c6a8baeb0c004a4f8734d513dc5a01c0.jpg'+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
+            </div>
+            <ion-grid>
+              <ion-row>
+                <ion-col class="ion-padding-top ion-padding-bottom product-block">
+                  <div class="box-2lines-ellipsis">
+                    <div>
+                      <article>{{item.goodsName}}wefwef</article>
+                    </div>
+                  </div>
+                  <div class="ion-padding-top ion-padding-bottom">
+                    <ion-text color="medium">
+                      <p>{{item.goodsSpecificationDesc}}wefwef/wefwef{{item.goodsWarehouseDesc}}</p>
+                    </ion-text>
+                  </div>
+                  <div class="product-price-amount-wrapper">
+                    <div class="product-price">
+                      <ion-text color="primary">
+                        <h5>{{144 | currency: 'CNY':'symbol-narrow'}}</h5>
+                      </ion-text>
+                    </div>
+                    <div class="product-amount">
+                      <ion-text>
+                        <p>x1</p>
+                      </ion-text>
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-horizontal">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h6>商品总额</h6>
+        </ion-text>
+      </ion-col>
+      <ion-col class="ion-padding-vertical" text-right>
+        <ion-text>
+          <h6>{{144 | currency: 'CNY':'symbol-narrow'}}</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-horizontal">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h6>运费</h6>
+        </ion-text>
+      </ion-col>
+      <ion-col class="ion-padding-vertical" text-right>
+        <ion-text>
+          <h6>{{144 | currency: 'CNY':'symbol-narrow'}}</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-horizontal ion-padding-bottom">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h6>需付款</h6>
+        </ion-text>
+      </ion-col>
+      <ion-col class="ion-padding-vertical" text-right>
+        <ion-text>
+          <h6>{{144 | currency: 'CNY':'symbol-narrow'}}</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
+  <ion-grid class="ion-margin-top ion-padding-horizontal total">
+    <ion-row class="ion-padding-vertical ion-margin-horizontal">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h5 class="detail-title ion-padding-start">订单详情</h5>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-horizontal">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h6>订单编号：4568725698456</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-horizontal">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h6>下单时间：2019-03-23 15:40:56</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-horizontal ion-padding-bottom">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h6>支付方式：微信支付</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="4" offset="8">
+          <ion-button class="rounded" fill="outline" color="primary" size="small">申请退款</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-footer>

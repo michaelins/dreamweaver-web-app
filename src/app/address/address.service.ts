@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { PickerColumn, PickerColumnOption } from '@ionic/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { delay, switchMap, map } from 'rxjs/operators';
+import { Observable, of, BehaviorSubject } from 'rxjs';
+import { delay, switchMap, map, tap, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 export interface AddressDictListItem {
@@ -18,16 +18,117 @@ export interface AddressDictListItem {
     updateTime: string;
 }
 
+export interface AddressReqItem {
+    addressId?: string;
+    addressCode: string;
+    addressName: string;
+    consignee: string;
+    detailedAddress: string;
+    identificationName?: string;
+    identificationNumber?: string;
+    isDefault?: string;
+    phoneNo: string;
+}
+
+export interface Address {
+    addressId: string;
+    addressName: string;
+    addressCode?: string;
+    addressStatus: string;
+    consignee: string;
+    detailedAddress: string;
+    phoneNo: string;
+    identificationName?: string;
+    identificationNumber: string;
+    id: number;
+    isDefault: boolean;
+    label: any;
+    userId: string;
+    zipCode: string;
+    certificationId?: any;
+    createTime: string;
+    updateTime: string;
+}
+
+export interface CollectionsOfAddress {
+    content?: Address[];
+    last?: boolean;
+    totalElements?: number;
+    totalPages?: number;
+    number?: number;
+    size?: number;
+    first?: boolean;
+    numberOfElements?: number;
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class AddressService {
+
+    private latestAddressesSubject = new BehaviorSubject<Address[]>(null);
+
+    get latestAddresses() {
+        return this.latestAddressesSubject.asObservable();
+    }
+
     constructor(
         private http: HttpClient
     ) { }
 
+    addAddress(address: AddressReqItem) {
+        return this.http.post<Address>(`${environment.apiServer}/user/address`, address);
+    }
+
+    modifyAddress(address: AddressReqItem) {
+        return this.http.put(`${environment.apiServer}/user/address`, address);
+    }
+
+    deleteAddress(addressId: string) {
+        return this.http.delete(`${environment.apiServer}/user/address/${addressId}`).pipe(
+            switchMap(resp => {
+                return this.fetchLatestAddresses();
+            })
+        );
+    }
+
+    getAddress(addressId: string) {
+        return this.http.get<Address>(`${environment.apiServer}/user/address/model/${addressId}`);
+    }
+    getDefaultAddress() {
+        return this.http.get<Address>(`${environment.apiServer}/user/address/default`);
+    }
+
+    fetchLatestAddresses() {
+        return this.http.get<Address[]>(`${environment.apiServer}/user/address/all`).pipe(
+            tap(resp => {
+                this.latestAddressesSubject.next(resp);
+            })
+        );
+    }
+
+    getAddresses(pageNum: number, pageSize: number) {
+        return this.http.post<CollectionsOfAddress>(`${environment.apiServer}/user/address/${pageNum}/${pageSize}`, null);
+    }
+
     getAddressDictList(dictTypeCode: string, parentDictCode: string) {
         return this.http.get<AddressDictListItem[]>(`${environment.apiServer}/dictionary/cache/${dictTypeCode}/${parentDictCode}`);
+    }
+
+    getAddressCode(addressCode: string): { provinceCode: string, cityCode: string, districtCode: string } {
+        if (!addressCode) {
+            return { provinceCode: null, cityCode: null, districtCode: null };
+        }
+        const items = addressCode.split('||');
+        if (items && items.length > 3) {
+            return {
+                provinceCode: (items[1] === 'null' ? null : items[1]),
+                cityCode: (items[2] === 'null' ? null : items[2]),
+                districtCode: (items[3] === 'null' ? null : items[3])
+            };
+        } else {
+            return { provinceCode: null, cityCode: null, districtCode: null };
+        }
     }
 
     generateColumns(provinceCode: string, cityCode: string, districtCode: string): Observable<PickerColumn[]> {
@@ -55,10 +156,13 @@ export class AddressService {
                     selectedIndex: provinceIndex,
                     options: provinces
                 });
-                console.log('province', provinces, provinceIndex, provinceCode);
+                // console.log('province', provinces, provinceIndex, provinceCode);
                 return this.getAddressDictList('city', provinceCode);
             }),
             map(cities => {
+                if (!cities) {
+                    return null;
+                }
                 return cities.map(item => {
                     return {
                         text: item.dictName,
@@ -67,6 +171,10 @@ export class AddressService {
                 });
             }),
             switchMap(cities => {
+
+                if (!cities) {
+                    return of(null);
+                }
 
                 let cityIndex = 0;
                 if (!cityCode) {
@@ -82,10 +190,13 @@ export class AddressService {
                     selectedIndex: cityIndex,
                     options: cities
                 });
-                console.log('city', cities, cityIndex, cityCode);
+                // console.log('city', cities, cityIndex, cityCode);
                 return this.getAddressDictList('district', cityCode);
             }),
             map(districts => {
+                if (!districts) {
+                    return null;
+                }
                 return districts.map(item => {
                     return {
                         text: item.dictName,
@@ -94,6 +205,10 @@ export class AddressService {
                 });
             }),
             switchMap(districts => {
+
+                if (!districts) {
+                    return of(columns);
+                }
 
                 let districtIndex = 0;
                 if (!districtCode) {
@@ -109,7 +224,7 @@ export class AddressService {
                     selectedIndex: districtIndex,
                     options: districts
                 });
-                console.log('district', districts, districtIndex, districtCode);
+                // console.log('district', districts, districtIndex, districtCode);
                 return of(columns);
             })
         );

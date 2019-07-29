@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>我的订单</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ul>
+    <li class="active"><a>全部</a></li>
+    <li><a>待付款</a></li>
+    <li><a>待发货</a></li>
+    <li><a>待收货</a></li>
+    <li><a>已完成</a></li>
+  </ul>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-item lines="full">
+      <ion-label>
+        <h6>订单号：4568725698456</h6>
+      </ion-label>
+      <ion-text slot="end" text-right>
+        <p>待付款</p>
+      </ion-text>
+    </ion-item>
+    <ion-card-content>
+      <ion-list>
+        <ion-item class="product" detail="false" *ngFor="let item of [1,2,3]; index as i">
+          <div slot="start" class="ion-margin-end product-image">
+            <img class="thumbnail"
+              [src]="'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/c6a8baeb0c004a4f8734d513dc5a01c0.jpg'+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
+          </div>
+          <ion-grid>
+            <ion-row>
+              <ion-col class="ion-padding-top ion-padding-bottom product-block">
+                <div class="box-2lines-ellipsis">
+                  <div>
+                    <article>{{item.goodsName}}wefwef</article>
+                  </div>
+                </div>
+                <div class="ion-padding-top ion-padding-bottom">
+                  <ion-text color="medium">
+                    <p>{{item.goodsSpecificationDesc}}wefwef/wefwef{{item.goodsWarehouseDesc}}</p>
+                  </ion-text>
+                </div>
+                <div class="product-price-amount-wrapper">
+                  <div class="product-price">
+                    <ion-text color="primary">
+                      <h5>{{144 | currency: 'CNY':'symbol-narrow'}}</h5>
+                    </ion-text>
+                  </div>
+                  <div class="product-amount">
+                    <ion-text>
+                      <p>x1</p>
+                    </ion-text>
+                  </div>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+    <ion-grid text-right style="border-top: 1px solid var(--ion-color-light)">
+      <ion-row>
+        <ion-col class="ion-padding-horizontal ion-padding-top">
+          <ion-text>
+            <p>共1件商品 合计￥399.00</p>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-padding">
+          <ion-button color="medium" fill="outline" class="rounded" size="small">查看物流</ion-button>
+          <ion-button color="primary" fill="outline" class="rounded ion-margin-start" size="small">确认收货</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-card>
+</ion-content>

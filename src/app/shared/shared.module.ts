@@ -1,16 +1,19 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { LoginComponent } from './login/login.component';
-import { IonicPropertyDirective } from './directives/ionic-property.directive';
 import { AddToCartComponent } from './add-to-cart/add-to-cart.component';
-import { OssService } from './oss.service';
+import { IonicPropertyDirective } from './directives/ionic-property.directive';
+import { LoginComponent } from './login/login.component';
+import { AddressDisplayPipe } from './pipes/address-display.pipe';
+import { HidePhoneNumberPipe } from './pipes/hide-phone-number.pipe';
 
 @NgModule({
   declarations: [
     LoginComponent,
     AddToCartComponent,
-    IonicPropertyDirective
+    IonicPropertyDirective,
+    AddressDisplayPipe,
+    HidePhoneNumberPipe
   ],
   imports: [
     CommonModule,
@@ -19,7 +22,9 @@ import { OssService } from './oss.service';
   exports: [
     LoginComponent,
     AddToCartComponent,
-    IonicPropertyDirective
+    IonicPropertyDirective,
+    AddressDisplayPipe,
+    HidePhoneNumberPipe
   ]
 })
 export class SharedModule { }

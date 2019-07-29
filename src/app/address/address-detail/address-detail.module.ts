@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-
+import { SharedModule } from 'src/app/shared/shared.module';
 import { AddressDetailPage } from './address-detail.page';
 
 const routes: Routes = [
@@ -18,9 +17,14 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
+    SharedModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [AddressDetailPage]
+  declarations: [AddressDetailPage],
+  exports: [
+    AddressDetailPage
+  ]
 })
-export class AddressDetailPageModule {}
+export class AddressDetailPageModule { }

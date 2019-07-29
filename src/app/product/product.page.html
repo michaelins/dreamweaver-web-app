@@ -63,16 +63,15 @@
     </ion-row>
     <ion-row>
       <ion-col class="ion-padding-start ion-padding-end">
-        <ion-item lines="full" detail>
+        <ion-item lines="full" detail (click)="onSelectAddress()">
           <ion-text color="medium" slot="start">
             <p>送至</p>
           </ion-text>
           <ion-icon src="../../assets/icon/address.svg" color="primary" style="font-size: 14px"></ion-icon>
           <ion-label>
             <ion-text color="dark">
-              <p>
-                四川省成都市高新区新天府大道765号天府软件园A3
-              </p>
+              <p *ngIf="address">{{address.addressName|addressDisplay}}{{address.detailedAddress}}</p>
+              <p *ngIf="!address">请选择送货地址</p>
             </ion-text>
           </ion-label>
         </ion-item>
@@ -170,7 +169,7 @@
                 <ion-text color="light">加入购物车</ion-text>
               </ion-col>
               <ion-col class="buynow" size=6>
-                <ion-text color="light">立即购买</ion-text>
+                <ion-text color="light" [routerLink]="['/orders','confirm']">立即购买</ion-text>
               </ion-col>
             </ion-row>
           </ion-grid>
