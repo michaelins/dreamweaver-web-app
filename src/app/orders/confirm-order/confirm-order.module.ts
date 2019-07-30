@@ -1,30 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-
 import { IonicModule } from '@ionic/angular';
-
+import { AddressPageModule } from '../../address/address.module';
+import { SharedModule } from '../../shared/shared.module';
+import { ConfirmOrderRoutingModule } from './confirm-order-routing.module';
 import { ConfirmOrderPage } from './confirm-order.page';
-import { SharedModule } from 'src/app/shared/shared.module';
-import { AddressPageModule } from 'src/app/address/address.module';
-import { AddressPage } from 'src/app/address/address.page';
-
-const routes: Routes = [
-  {
-    path: '',
-    children: [
-      {
-        path: '',
-        component: ConfirmOrderPage
-      },
-      {
-        path: '',
-        redirectTo: '/tabs/home'
-      }
-    ]
-  }
-];
 
 @NgModule({
   imports: [
@@ -32,9 +13,9 @@ const routes: Routes = [
     FormsModule,
     IonicModule,
     SharedModule,
-    RouterModule.forChild(routes)
+    ConfirmOrderRoutingModule,
+    AddressPageModule,
   ],
-  declarations: [ConfirmOrderPage],
-  entryComponents: []
+  declarations: [ConfirmOrderPage]
 })
 export class ConfirmOrderPageModule { }

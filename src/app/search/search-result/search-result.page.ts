@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService, CollectionOfProduct, Product } from 'src/app/product/product.service';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
+import { CollectionOfProduct, Product, ProductService } from '../../product/product.service';
 
 @Component({
   selector: 'app-search-result',

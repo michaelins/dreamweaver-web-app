@@ -1,12 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { PickerController, NavController, ModalController, AlertController } from '@ionic/angular';
-import { PickerColumnOption, PickerColumn } from '@ionic/core';
-import { from, fromEvent, Observable, of } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
-import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
-import { AddressReqItem, AddressService, Address } from '../address.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { AlertController, ModalController, NavController, PickerController } from '@ionic/angular';
+import { from, fromEvent, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { Address, AddressReqItem, AddressService } from '../address.service';
 
 @Component({
   selector: 'app-address-detail',
@@ -163,8 +161,8 @@ export class AddressDetailPage implements OnInit {
         console.log(error);
         if (error.status === 400) {
           this.alertCtrl.create({
-            header: '信息校验失败',
-            message: '身份证验证失败，请输入正确的身份证信息',
+            header: '修改地址失败',
+            message: error.error.message,
             buttons: ['确定']
           }).then(alert => {
             alert.present();
@@ -179,8 +177,8 @@ export class AddressDetailPage implements OnInit {
         console.log(error);
         if (error.status === 400) {
           this.alertCtrl.create({
-            header: '信息校验失败',
-            message: '身份证验证失败，请输入正确的身份证信息',
+            header: '新建地址失败',
+            message: error.error.message,
             buttons: ['确定']
           }).then(alert => {
             alert.present();
@@ -200,7 +198,7 @@ export class AddressDetailPage implements OnInit {
   }
 
   navBack(address: Address) {
-    this.addressService.fetchLatestAddresses().subscribe(()=>{
+    this.addressService.fetchLatestAddresses().subscribe(() => {
       if (this.isModal) {
         this.modalCtrl.dismiss({
           savedAddress: address

@@ -4,7 +4,7 @@ import { BehaviorSubject, from } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 import { User } from './user.model';
 import { Plugins } from '@capacitor/core';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
 
 export interface SmsSendAuthCodeRsp {
     authKey: string; // 发送验证码短信成功后返回，验证时需要传递到通知服务系统 ,

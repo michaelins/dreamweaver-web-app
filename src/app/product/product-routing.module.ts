@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SearchPage } from './search.page';
+import { ProductPage } from './product.page';
 
 const routes: Routes = [
     {
-        path: 'result',
-        loadChildren: './search-result/search-result.module#SearchResultPageModule'
+        path: ':productId',
+        component: ProductPage
     },
     {
         path: '',
-        component: SearchPage
+        redirectTo: '/tabs/home'
     }
 ];
 
@@ -17,4 +17,4 @@ const routes: Routes = [
     imports: [RouterModule.forChild(routes)],
     exports: [RouterModule]
 })
-export class SearchRoutingModule { }
+export class ProductRoutingModule { }

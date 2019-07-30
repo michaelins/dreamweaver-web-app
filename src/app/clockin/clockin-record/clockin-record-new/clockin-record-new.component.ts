@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController, LoadingController } from '@ionic/angular';
+import { LoadingController, ModalController } from '@ionic/angular';
 import { from } from 'rxjs';
 import { concatMap, map, switchMap, toArray } from 'rxjs/operators';
-import { OssService } from 'src/app/shared/oss.service';
+import { OssService } from '../../../shared/oss.service';
 import { ClockinRecordService } from '../clockin-record.service';
 
 @Component({

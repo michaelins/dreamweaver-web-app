@@ -1,13 +1,12 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-
-import { AddressPage } from './address.page';
-import { AddressRoutingModule } from './address-routing.module';
 import { SharedModule } from '../shared/shared.module';
-import { AddressDetailPage } from './address-detail/address-detail.page';
 import { AddressDetailPageModule } from './address-detail/address-detail.module';
+import { AddressRoutingModule } from './address-routing.module';
+import { AddressPage } from './address.page';
+
 
 @NgModule({
   imports: [
@@ -20,6 +19,6 @@ import { AddressDetailPageModule } from './address-detail/address-detail.module'
   ],
   declarations: [AddressPage],
   exports: [AddressPage],
-  entryComponents: [AddressDetailPage]
+  entryComponents: [AddressPage]
 })
 export class AddressPageModule { }

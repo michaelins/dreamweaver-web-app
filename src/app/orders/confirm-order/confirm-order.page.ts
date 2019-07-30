@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { OrderService, CreateOrderReq, CreateOrderReqItem } from '../order.service';
-import { Address, AddressService } from 'src/app/address/address.service';
-import { ShoppingCartService, ShoppingCart } from 'src/app/shopping-cart/shopping-cart.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ModalController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { NavController, ModalController } from '@ionic/angular';
-import { AddressPage } from 'src/app/address/address.page';
+import { AddressPage } from '../../address/address.page';
+import { Address, AddressService } from '../../address/address.service';
+import { ShoppingCart, ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
+import { CreateOrderReq, CreateOrderReqItem, OrderService } from '../order.service';
 
 @Component({
   selector: 'app-confirm-order',

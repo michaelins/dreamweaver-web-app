@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
+
 export interface CreateOrderReqItem {
     amount: number;
     discountSeq?: string;
