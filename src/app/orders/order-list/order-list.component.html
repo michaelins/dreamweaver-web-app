@@ -1,0 +1,68 @@
+<ion-card *ngFor="let order of orders">
+  <ion-item lines="full">
+    <ion-label>
+      <h6>订单号：{{order.orderId}}</h6>
+    </ion-label>
+    <ion-text slot="end" color="primary" text-right>
+      <p>{{OrderStatus[order.orderStatus]}}</p>
+    </ion-text>
+  </ion-item>
+  <ion-card-content>
+    <ion-list>
+      <ion-item class="product" [lines]="isLast?'none':'full'" detail="false"
+        *ngFor="let item of order.items; index as i; last as isLast">
+        <div slot="start" class="ion-margin-end product-image">
+          <img class="thumbnail" [src]="item.headImg+'?x-oss-process=image/resize,m_fill,h_68,w_68'">
+        </div>
+        <ion-grid>
+          <ion-row>
+            <ion-col class="ion-padding-top ion-padding-bottom product-block">
+              <div class="product-title box-2lines-ellipsis">
+                <div>
+                  <article>{{item.title}}</article>
+                </div>
+              </div>
+              <div class="product-info">
+              </div>
+              <div class="product-price-amount-wrapper">
+                <div class="product-price">
+                  <ion-text color="primary">
+                    <h5>{{item.price | currency: 'CNY':'symbol-narrow'}}</h5>
+                  </ion-text>
+                </div>
+                <div class="product-amount">
+                  <ion-text>
+                    <p>x{{item.num}}</p>
+                  </ion-text>
+                </div>
+              </div>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+  <ion-grid text-right style="border-top: 1px solid var(--ion-color-light)">
+    <ion-row>
+      <ion-col class="ion-padding-horizontal ion-padding-top">
+        <ion-text>
+          <p>共 {{order.goodsNum}} 件商品
+            合计{{order.amountPayable | currency: 'CNY':'symbol-narrow'}}</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding">
+        <ion-button color="medium" fill="outline" class="rounded" size="small"
+          *ngIf="showOrderSecondaryButton(OrderStatus[order.orderStatus])"
+          (click)="onOrderSecondaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
+          {{getOrderSecondaryButtonText(OrderStatus[order.orderStatus])}}
+        </ion-button>
+        <ion-button color="primary" fill="outline" class="rounded ion-margin-start" size="small"
+          *ngIf="showOrderPrimaryButton(OrderStatus[order.orderStatus])"
+          (click)="onOrderPrimaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
+          {{getOrderPrimaryButtonText(OrderStatus[order.orderStatus])}}</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-card>

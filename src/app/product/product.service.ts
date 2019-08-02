@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Category } from '../categories/categories.service';
+import { EqualObject, SortObject } from '../shared/interfaces/common-interfaces';
 
 export interface Product {
     status: string;
@@ -87,15 +88,6 @@ export interface Album {
     id: number;
     createTime: string;
     updateTime: string;
-}
-
-export interface EqualObject {
-    eqObj: any;
-    field: string;
-}
-export interface SortObject {
-    direction: number;
-    field: string;
 }
 
 @Injectable({
