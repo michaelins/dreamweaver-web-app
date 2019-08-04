@@ -1,14 +1,12 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { IonContent, IonGrid, ModalController } from '@ionic/angular';
-import { of, Observable, Subject, Subscription } from 'rxjs';
-import { take, switchMap } from 'rxjs/operators';
-import { ProductService, Product, Warehouse, Specification } from './product.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { element } from '@angular/core/src/render3';
+import { IonContent, ModalController } from '@ionic/angular';
+import { switchMap } from 'rxjs/operators';
+import { AddressPage } from '../address/address.page';
+import { Address, AddressService } from '../address/address.service';
 import { AddToCartComponent } from '../shared/add-to-cart/add-to-cart.component';
 import { ShoppingCartService } from '../shopping-cart/shopping-cart.service';
-import { AddressPage } from '../address/address.page';
-import { AddressService, Address } from '../address/address.service';
+import { Product, ProductService, Specification, Warehouse } from './product.service';
 
 @Component({
   selector: 'app-product',

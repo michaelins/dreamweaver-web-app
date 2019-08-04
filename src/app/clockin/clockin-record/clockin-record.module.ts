@@ -1,13 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-
-import { ClockinRecordPage } from './clockin-record.page';
+import { SharedModule } from '../../shared/shared.module';
 import { ClockinRecordNewComponent } from './clockin-record-new/clockin-record-new.component';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { ClockinRecordPage } from './clockin-record.page';
 
 const routes: Routes = [
   {

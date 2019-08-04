@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Plugins, CameraResultType, Capacitor, CameraSource } from '@capacitor/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment.prod';
+import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { ClockinRecordNewComponent } from './clockin-record-new/clockin-record-new.component';
 import { from } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { Record, CollectionOfRecord, ClockinRecordService } from './clockin-record.service';
+import { ClockinRecordNewComponent } from './clockin-record-new/clockin-record-new.component';
+import { ClockinRecordService, CollectionOfRecord, Record } from './clockin-record.service';
 
 @Component({
   selector: 'app-clockin-record',

@@ -30,6 +30,7 @@
     "ion2-calendar": "^3.0.0-rc.0",
     "moment": "^2.24.0",
     "rxjs": "~6.5.1",
+    "ts-enum-util": "^4.0.1",
     "tslib": "^1.9.0",
     "zone.js": "~0.8.29"
   },

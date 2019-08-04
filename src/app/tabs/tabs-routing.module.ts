@@ -14,12 +14,7 @@ const routes: Routes = [
             },
             {
                 path: 'categories',
-                children: [
-                    {
-                        path: '',
-                        loadChildren: '../categories/categories.module#CategoriesPageModule'
-                    }
-                ]
+                loadChildren: '../categories/categories.module#CategoriesPageModule'
             },
             {
                 path: 'cart',

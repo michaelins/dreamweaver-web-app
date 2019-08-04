@@ -1,9 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { LoginComponent } from '../shared/login/login.component';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { environment } from '../../environments/environment';
+import { LoginComponent } from '../shared/login/login.component';
 
 export interface Banner {
   ossPath: string;

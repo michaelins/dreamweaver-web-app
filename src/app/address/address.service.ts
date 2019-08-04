@@ -1,9 +1,9 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { PickerColumn, PickerColumnOption } from '@ionic/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { delay, switchMap, map, tap, catchError } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 export interface AddressDictListItem {
     status: string;

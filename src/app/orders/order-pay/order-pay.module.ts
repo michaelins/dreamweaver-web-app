@@ -1,10 +1,8 @@
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-
+import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-
 import { OrderPayPage } from './order-pay.page';
 
 const routes: Routes = [
@@ -21,6 +19,7 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes)
   ],
-  declarations: [OrderPayPage]
+  declarations: [OrderPayPage],
+  providers: [CurrencyPipe]
 })
-export class OrderPayPageModule {}
+export class OrderPayPageModule { }

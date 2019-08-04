@@ -8,6 +8,40 @@
 </ion-header>
 
 <ion-content>
+    <ion-grid *ngIf="!address">
+        <ion-row>
+          <ion-col class="notice-id">
+            <ion-text>
+              <p>未选择收货地址</p>
+            </ion-text>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="address" (click)="onSelectAddress()">
+            <ion-icon src="../../../assets/icon/address.svg" color="primary"
+              class="ion-padding-start ion-margin-horizontal"></ion-icon>
+            <div class="address-wrapper ion-padding">
+              <div class="address-name ion-margin-bottom">
+                <ion-text color="dark">
+                  <h5>请选择收货地址</h5>
+                </ion-text>
+                <ion-text color="dark" class="phone ion-margin-start">
+                  <p></p>
+                </ion-text>
+                <!-- <ion-text color="primary" class="id-positive" *ngIf="address.addressStatus==='AUTHENTICATED'">有身份证
+                </ion-text>
+                <ion-text color="medium" class="id-negative" *ngIf="address.addressStatus!=='AUTHENTICATED'">无身份证</ion-text> -->
+              </div>
+              <div>
+                <ion-text color="dark">
+                  <p>选择收货地址后下单</p>
+                </ion-text>
+              </div>
+            </div>
+            <ion-icon name="arrow-forward" color="primary" class="ion-padding-end ion-margin-horizontal"></ion-icon>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
   <ion-grid *ngIf="address">
     <ion-row *ngIf="address.addressStatus!=='AUTHENTICATED'">
       <ion-col class="notice-id">

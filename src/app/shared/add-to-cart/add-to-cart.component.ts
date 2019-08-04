@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { Product, Specification, Warehouse } from 'src/app/product/product.service';
-import { ShoppingCartService } from 'src/app/shopping-cart/shopping-cart.service';
+import { Product, Specification, Warehouse } from '../../product/product.service';
+import { ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
 
 @Component({
   selector: 'app-add-to-cart',

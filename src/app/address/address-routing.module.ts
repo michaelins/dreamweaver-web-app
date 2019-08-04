@@ -4,21 +4,15 @@ import { AddressPage } from './address.page';
 
 const routes: Routes = [
     {
+        path: 'detail',
+        loadChildren: './address-detail/address-detail.module#AddressDetailPageModule'
+    }, {
+        path: 'detail/:addressId',
+        loadChildren: './address-detail/address-detail.module#AddressDetailPageModule'
+    },
+    {
         path: '',
-        children: [
-            {
-                path: 'detail/:addressId',
-                loadChildren: './address-detail/address-detail.module#AddressDetailPageModule'
-            },
-            {
-                path: 'detail',
-                loadChildren: './address-detail/address-detail.module#AddressDetailPageModule'
-            },
-            {
-                path: '',
-                component: AddressPage
-            }
-        ]
+        component: AddressPage
     }
 ];
 

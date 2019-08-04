@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { OrderService, Order } from '../order.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-success',
@@ -7,9 +10,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrderSuccessPage implements OnInit {
 
-  constructor() { }
+  order: Order;
+
+  constructor(
+    private route: ActivatedRoute,
+    private orderService: OrderService
+  ) { }
 
   ngOnInit() {
+    this.route.params.pipe(switchMap(params => {
+      if (params.orderId) {
+        console.log(params.orderId);
+        return this.orderService.getOrder(params.orderId);
+      }
+    })).subscribe(resp => {
+      this.order = resp;
+      console.log(resp);
+    });
   }
 
 }
