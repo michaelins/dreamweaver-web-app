@@ -14,8 +14,9 @@
       <h1 style="margin-bottom: 20px">待支付</h1>
     </ion-text>
     <ion-text>
-      <h5 style="margin-bottom: 20px">订单金额：￥126.00</h5>
+      <h5 *ngIf="order" style="margin-bottom: 20px">订单金额：{{order.actuallyPaid | currency: 'CNY':'symbol-narrow'}}</h5>
     </ion-text>
-    <ion-button color="primary" fill="outline" class="rounded" [routerLink]="['/orders/success']">微信支付</ion-button>
+    <ion-button color="primary" fill="outline" class="rounded" (click)="payOrder()">微信支付
+    </ion-button>
   </div>
 </ion-content>

@@ -63,8 +63,18 @@ ion-footer {
   .address-wrapper {
     flex-grow: 1;
   }
-  ion-icon {
-    font-size: 32px;
+  .address-icon {
+    background: var(--ion-color-secondary);
+    &.medium {
+      background: var(--ion-color-medium);
+    }
+    border-radius: 16px;
+    padding: 5px;
+    width: 32px;
+    height: 32px;
+    ion-icon {
+      font-size: 22px;
+    }
   }
   .address-name {
     h6 {

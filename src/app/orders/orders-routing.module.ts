@@ -8,7 +8,7 @@ const routes: Routes = [
         loadChildren: './confirm-order/confirm-order.module#ConfirmOrderPageModule'
     },
     {
-        path: 'success',
+        path: 'success/:orderId',
         loadChildren: './order-success/order-success.module#OrderSuccessPageModule'
     },
     {

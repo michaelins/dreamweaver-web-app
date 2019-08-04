@@ -90,27 +90,39 @@ export class OrdersPage implements OnInit {
   onRefreshHeight() {
     console.log('updateAutoHeight');
     console.log(this.elRef.nativeElement.querySelector('.swiper-wrapper'));
-    this.renderer.removeStyle(this.elRef.nativeElement.querySelector('.swiper-wrapper'), 'height');
+    // this.renderer.removeStyle(this.elRef.nativeElement.querySelector('.swiper-wrapper'), 'height');
     setTimeout(() => {
       this.slides.updateAutoHeight();
-    }, 200);
+    }, 100);
   }
 
   doRefresh(event?) {
     console.log('doRefresh', this.activeSlideId);
-    this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(this.activeSlideId), this.sortObjs).subscribe(resp => {
-      // console.log(resp);
-      // this.orders = resp.content;
-      // this.collectionOfOrders = resp;
-      this.setOrdersFromResonse(this.activeSlideId, resp);
-      this.onRefreshHeight();
-    }, error => {
-      console.log(error);
-    }, () => {
-      if (event) {
-        event.target.complete();
-      }
-    });
+    for (let index = 0; index < 5; index++) {
+      this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(index), this.sortObjs).subscribe(resp => {
+        this.setOrdersFromResonse(index, resp);
+        this.onRefreshHeight();
+      }, error => {
+        console.log(error);
+      }, () => {
+        if (event) {
+          event.target.complete();
+        }
+      });
+    }
+    // this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(this.activeSlideId), this.sortObjs).subscribe(resp => {
+    //   // console.log(resp);
+    //   // this.orders = resp.content;
+    //   // this.collectionOfOrders = resp;
+    //   this.setOrdersFromResonse(this.activeSlideId, resp);
+    //   this.onRefreshHeight();
+    // }, error => {
+    //   console.log(error);
+    // }, () => {
+    //   if (event) {
+    //     event.target.complete();
+    //   }
+    // });
   }
 
   onNavTab(id: number) {
@@ -141,7 +153,7 @@ export class OrdersPage implements OnInit {
         equalObjsToPay[0].eqObj = $enum(OrderStatus).indexOfKey('TO_PAY');
         break;
       case 2:
-        equalObjsToPay[0].eqObj = $enum(OrderStatus).indexOfKey('UNSHIPPED');
+        equalObjsToPay[0].eqObj = $enum(OrderStatus).indexOfKey('PAID');
         break;
       case 3:
         equalObjsToPay[0].eqObj = $enum(OrderStatus).indexOfKey('SHIPPED');
