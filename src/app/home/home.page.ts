@@ -41,7 +41,6 @@ export class HomePage implements OnInit {
   pageX: number;
   pageY: number;
   refresherAnimationTimer: any;
-
   bodyTouchMoveEventSubscription: Subscription;
 
   constructor(

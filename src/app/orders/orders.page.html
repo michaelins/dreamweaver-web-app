@@ -14,7 +14,8 @@
   </ul>
 </ion-header>
 
-<ion-content #scrollable>
+<ion-content #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents" (touchstart)="onTouchStart($event)"
+(touchmove)="onTouchMove($event)" (touchend)="onTouchEnd($event)">
   <ion-refresher pullFactor="0.5" closeDuration="200ms" snapbackDuration="50ms" pullMax="400"
     (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
