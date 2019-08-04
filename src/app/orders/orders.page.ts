@@ -1,6 +1,6 @@
 import { Component, OnChanges, OnInit, SimpleChanges, ViewChild, DoCheck, ElementRef, Renderer2 } from '@angular/core';
 import { AlertController, IonSlides, NavController, IonContent } from '@ionic/angular';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable, of, Subscription, fromEvent } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { EqualObject, SortObject } from '../shared/interfaces/common-interfaces';
 import { CollectionOfOrders, Order, OrderService, OrderStatus } from './order.service';
@@ -15,6 +15,17 @@ export class OrdersPage implements OnInit {
 
   @ViewChild('slides') slides: IonSlides;
   @ViewChild('scrollable') scrollable: IonContent;
+
+  refresherPullProgress = 0;
+  isRefresherInProgress: boolean;
+  scrollEvents = true;
+  scrollTop: number;
+  scrollHeight: number;
+  offsetHeight: number;
+  pageX: number;
+  pageY: number;
+  refresherAnimationTimer: any;
+  bodyTouchMoveEventSubscription: Subscription;
 
   activeSlideId = 0;
   slideOpts = {
@@ -62,6 +73,71 @@ export class OrdersPage implements OnInit {
         console.log(error);
       });
     }
+  }
+
+  ionViewWillEnter() {
+    this.scrollEvents = true;
+    this.bodyTouchMoveEventSubscription = fromEvent<TouchEvent>(document.body, 'touchmove', { passive: false }).subscribe(e => {
+      const bottomFaVal = this.scrollHeight - this.offsetHeight;
+      if (this.scrollTop === 0) {
+        if (e.touches[0].clientY > this.pageY) {
+          e.preventDefault();
+        } else {
+          e.stopPropagation();
+        }
+      } else if (this.scrollTop === bottomFaVal) {
+        if (e.touches[0].clientY < this.pageY) {
+          e.preventDefault();
+        } else {
+          e.stopPropagation();
+        }
+      } else if (this.scrollTop > 0 && this.scrollTop < bottomFaVal) {
+        e.stopPropagation();
+      } else {
+        e.preventDefault();
+      }
+    });
+  }
+
+  ionViewWillLeave() {
+    this.scrollEvents = false;
+    this.bodyTouchMoveEventSubscription.unsubscribe();
+    console.log('ionViewWillLeave');
+  }
+
+  onTouchEnd(event: TouchEvent) {
+    if (this.refresherAnimationTimer) {
+      clearTimeout(this.refresherAnimationTimer);
+    }
+    this.refresherAnimationTimer = setTimeout(() => {
+      if (this.refresherPullProgress > 0 && this.refresherPullProgress < 1) {
+        this.isRefresherInProgress = false;
+        this.refresherPullProgress = 0;
+      }
+    }, 280);
+  }
+
+  onTouchMove(event: TouchEvent) {
+    if (this.isRefresherInProgress) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    this.scrollable.getScrollElement().then(el => {
+      this.scrollTop = el.scrollTop;
+      this.scrollHeight = el.scrollHeight;
+      this.offsetHeight = el.offsetHeight;
+    });
+  }
+
+  onTouchStart(event: TouchEvent) {
+    if (this.isRefresherInProgress) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    this.scrollable.getScrollElement().then(el => {
+      this.pageX = event.touches[0].pageX;
+      this.pageY = event.touches[0].pageY;
+    });
   }
 
   loadData(event) {
