@@ -15,12 +15,71 @@
 </ion-header>
 
 <ion-content #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents" (touchstart)="onTouchStart($event)"
-(touchmove)="onTouchMove($event)" (touchend)="onTouchEnd($event)">
+  (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd($event)">
   <ion-refresher pullFactor="0.5" closeDuration="200ms" snapbackDuration="50ms" pullMax="400"
     (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
   </ion-refresher>
-  <ion-slides #slides [options]="slideOpts" (ionSlideWillChange)="onIonSlideWillChange($event)">
+
+
+  <ion-grid *ngIf="!orders || !ordersToPay || !ordersUnshipped || !ordersShipped || ! ordersDone">
+    <ion-row>
+      <ion-col>
+        <ion-card *ngFor="let order of [1,2,3,4,5]">
+          <ion-item lines="none">
+            <ion-label>
+              <h6>
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </h6>
+            </ion-label>
+            <ion-text slot="end" color="primary" text-right>
+              <p>
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </p>
+            </ion-text>
+          </ion-item>
+          <ion-card-content>
+            <ion-list>
+              <ion-item class="product" lines="none" detail="false">
+                <div slot="start" class="ion-margin-end product-image">
+                  <ion-skeleton-text animated style="height: 68px; width:68px;"></ion-skeleton-text>
+                </div>
+                <ion-label>
+                  <ion-text>
+                    <h5>
+                      <ion-skeleton-text animated style="height: 27px"></ion-skeleton-text>
+                    </h5>
+                    <p>
+                      <ion-skeleton-text animated style="height: 14px; margin-top: 10px"></ion-skeleton-text>
+                    </p>
+                  </ion-text>
+                </ion-label>
+              </ion-item>
+            </ion-list>
+            <ion-grid text-right>
+              <ion-row>
+                <ion-col class="ion-padding-horizontal ion-padding-top">
+                  <ion-text>
+                    <p>
+                      <ion-skeleton-text animated></ion-skeleton-text>
+                    </p>
+                  </ion-text>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="ion-padding">
+                  <ion-skeleton-text animated width="60px"></ion-skeleton-text>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-slides *ngIf="orders && ordersToPay && ordersUnshipped && ordersShipped && ordersDone" #slides
+    [options]="slideOpts" (ionSlideWillChange)="onIonSlideWillChange($event)">
     <ion-slide>
       <app-order-list [orders]="orders"></app-order-list>
     </ion-slide>

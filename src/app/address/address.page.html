@@ -14,55 +14,94 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid class="ion-margin-top ion-padding" *ngFor="let addr of addresses" (click)="onSelectAddress(addr)">
-    <ion-row class="ion-padding">
-      <ion-col>
-        <ion-text color="dark">
-          <h5>{{addr.consignee}}</h5>
-        </ion-text>
-        <ion-text color="dark" class="phone ion-margin-start">
-          <p>{{addr.phoneNo | hidePhoneNumber}}</p>
-        </ion-text>
-        <!-- <ion-chip color="primary" outline="true">
-          <ion-label>有身份证</ion-label>
-        </ion-chip> -->
-        <ion-text color="primary" class="id-positive" *ngIf="addr.addressStatus==='AUTHENTICATED'">有身份证</ion-text>
-        <ion-text color="medium" class="id-negative" *ngIf="addr.addressStatus!=='AUTHENTICATED'">无身份证</ion-text>
-      </ion-col>
-    </ion-row>
-    <ion-row class="ion-padding-start ion-padding-end">
-      <ion-col>
-        <ion-text color="dark">
-          <p>{{addr.addressName | addressDisplay}}{{addr.detailedAddress}}</p>
-        </ion-text>
-      </ion-col>
-    </ion-row>
-    <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top">
-      <ion-col>
-        <!-- <div class="custom-radios">
-          <div>
-            <input type="checkbox" id="selectall" name="color" class="primary">
-            <label for="selectall">
-              <span>
-                <div></div>
-                <img src="../../assets/icon/check-icn.svg" alt="Checked Icon" />
-              </span>
-            </label>
+  <ng-container *ngIf="!addresses">
+    <ion-grid class="ion-margin-top ion-padding" *ngFor="let addr of [1,2,3,4,5,6,7,8,9,10]">
+      <ion-row class="ion-padding">
+        <ion-col>
+          <ion-text color="dark" class="phone">
+            <h5>
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </h5>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-start ion-padding-end">
+        <ion-col>
+          <ion-text color="dark" class="phone">
+            <p>
+              <ion-skeleton-text animated width="100%"></ion-skeleton-text>
+            </p>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top">
+        <ion-col>
+          <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1"></ion-text>
+          <div class="tool ion-margin-start">
+            <ion-text color="dark">
+              <ion-skeleton-text animated width="40px"></ion-skeleton-text>
+            </ion-text>
           </div>
-        </div>-->
-        <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1"></ion-text> 
-        <div class="tool ion-margin-start" (click)="onOpenDetailAddress(addr.addressId)">
-          <ion-icon name="create" color="medium"></ion-icon>
-          <ion-text color="dark">编辑</ion-text>
-        </div>
-        <div class="tool ion-margin-start" (click)="onDeleteAddress(addr.addressId)" *ngIf="!isModal">
-          <ion-icon name="trash" color="medium"></ion-icon>
-          <ion-text color="dark">删除</ion-text>
-        </div>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <div class="ion-padding">
+          <div class="tool ion-margin-start">
+            <ion-text color="dark">
+              <ion-skeleton-text animated width="40px"></ion-skeleton-text>
+            </ion-text>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+  <ng-container *ngIf="addresses">
+    <ion-grid class="ion-margin-top ion-padding" *ngFor="let addr of addresses" (click)="onSelectAddress(addr)">
+      <ion-row class="ion-padding">
+        <ion-col>
+          <ion-text color="dark">
+            <h5>{{addr.consignee}}</h5>
+          </ion-text>
+          <ion-text color="dark" class="phone ion-margin-start">
+            <p>{{addr.phoneNo | hidePhoneNumber}}</p>
+          </ion-text>
+          <!-- <ion-chip color="primary" outline="true">
+                <ion-label>有身份证</ion-label>
+              </ion-chip> -->
+          <ion-text color="primary" class="id-positive" *ngIf="addr.addressStatus==='AUTHENTICATED'">有身份证</ion-text>
+          <ion-text color="medium" class="id-negative" *ngIf="addr.addressStatus!=='AUTHENTICATED'">无身份证</ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-padding-start ion-padding-end">
+        <ion-col>
+          <ion-text color="dark">
+            <p>{{addr.addressName | addressDisplay}}{{addr.detailedAddress}}</p>
+          </ion-text>
+        </ion-col>
+      </ion-row>
+      <ion-row class="tools ion-margin-start ion-margin-end ion-margin-top ion-padding-top">
+        <ion-col>
+          <!-- <div class="custom-radios">
+                <div>
+                  <input type="checkbox" id="selectall" name="color" class="primary">
+                  <label for="selectall">
+                    <span>
+                      <div></div>
+                      <img src="../../assets/icon/check-icn.svg" alt="Checked Icon" />
+                    </span>
+                  </label>
+                </div>
+              </div>-->
+          <ion-text color="dark" class="ion-margin-start" style="flex-grow: 1"></ion-text>
+          <div class="tool ion-margin-start" (click)="onOpenDetailAddress(addr.addressId)">
+            <ion-icon name="create" color="medium"></ion-icon>
+            <ion-text color="dark">编辑</ion-text>
+          </div>
+          <div class="tool ion-margin-start" (click)="onDeleteAddress(addr.addressId)" *ngIf="!isModal">
+            <ion-icon name="trash" color="medium"></ion-icon>
+            <ion-text color="dark">删除</ion-text>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+  <div class="ion-padding" *ngIf="addresses">
     <ion-button expand="block" color="primary" class="ion-margin" (click)="onOpenDetailAddress()">新建收货地址</ion-button>
   </div>
 </ion-content>

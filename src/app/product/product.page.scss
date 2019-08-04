@@ -6,6 +6,9 @@ ion-grid {
 }
 h5 {
   line-height: 1.5;
+  ion-skeleton-text{
+    line-height: 27px;
+  }
   .deleted {
     color: var(--ion-color-medium);
   }
