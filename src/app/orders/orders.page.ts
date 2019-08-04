@@ -62,17 +62,7 @@ export class OrdersPage implements OnInit {
     private renderer: Renderer2
   ) { }
 
-
-
   ngOnInit() {
-    for (let index = 0; index < 5; index++) {
-      this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(index), this.sortObjs).subscribe(resp => {
-        this.setOrdersFromResonse(index, resp);
-        this.onRefreshHeight();
-      }, error => {
-        console.log(error);
-      });
-    }
   }
 
   ionViewWillEnter() {
@@ -97,6 +87,17 @@ export class OrdersPage implements OnInit {
         e.preventDefault();
       }
     });
+  }
+
+  ionViewDidEnter() {
+    for (let index = 0; index < 5; index++) {
+      this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(index), this.sortObjs).subscribe(resp => {
+        this.setOrdersFromResonse(index, resp);
+        this.onRefreshHeight();
+      }, error => {
+        console.log(error);
+      });
+    }
   }
 
   ionViewWillLeave() {

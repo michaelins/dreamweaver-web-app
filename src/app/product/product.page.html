@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-back-button color="medium"></ion-back-button>
+      <ion-back-button color="medium" defaultHref="/tabs/home"></ion-back-button>
     </ion-buttons>
     <ion-title class="product-nav">
       <ul>
@@ -134,8 +134,111 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+
+  <!-- skeleton start-->
+  <ion-grid *ngIf="!product">
+    <ion-row>
+      <ion-col>
+        <ion-skeleton-text style="height: 100vw"></ion-skeleton-text>
+        <!-- <ion-slides pager="true" [options]="slideOpts">
+          <ion-slide *ngFor="let slide of product.albumsForBanner">
+            <img [src]="slide.ossPath+'?x-oss-process=image/resize,m_fill,h_480,w_480'">
+          </ion-slide>
+        </ion-slides> -->
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-top ion-padding-start ion-padding-end">
+        <ion-text color="primary">
+          <h5>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h5>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-top ion-padding-start ion-padding-end">
+        <ion-text color="dark">
+          <h5>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </h5>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding">
+        <ion-text color="medium">
+          <p>
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-grid *ngIf="!product" class="ion-margin-top">
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-item lines="full">
+          <ion-label>
+            <ion-text color="dark">
+              <p>
+                <ion-skeleton-text animated width="100%"></ion-skeleton-text>
+              </p>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-item lines="full">
+          <ion-label>
+            <ion-text color="dark">
+              <p>
+                <ion-skeleton-text animated width="100%"></ion-skeleton-text>
+              </p>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-item lines="full">
+          <ion-label>
+            <ion-text color="dark">
+              <p>
+                <ion-skeleton-text animated width="100%"></ion-skeleton-text>
+              </p>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding-start ion-padding-end">
+        <ion-item lines="full">
+          <ion-label>
+            <ion-text color="dark">
+              <p>
+                <ion-skeleton-text animated width="100%"></ion-skeleton-text>
+              </p>
+            </ion-text>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="ion-padding">
+        <ion-skeleton-text style="height: 100vw"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <!-- skeleton end -->
+
   <div #detail></div>
-  <ion-grid *ngIf="product" class="ion-margin-top">
+  <ion-grid class="ion-margin-top">
     <ion-row>
       <ion-col class="ion-padding">
         <ion-text color="dark">
@@ -143,11 +246,18 @@
         </ion-text>
       </ion-col>
     </ion-row>
-    <ion-row>
+    <ion-row *ngIf="product">
       <ion-col>
         <ion-img *ngFor="let image of product.albumsForContent" [src]="image.ossPath"></ion-img>
       </ion-col>
     </ion-row>
+    <!-- skeleton start -->
+    <ion-row *ngIf="!product">
+      <ion-col>
+        <ion-skeleton-text style="height: 100vw"></ion-skeleton-text>
+      </ion-col>
+    </ion-row>
+    <!-- skeleton end -->
   </ion-grid>
 </ion-content>
 

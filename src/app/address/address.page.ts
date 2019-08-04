@@ -16,8 +16,8 @@ export class AddressPage implements OnInit, OnDestroy {
   @Input() product: Product;
 
   latestAddressesObs: Subscription;
-  infiniteScrollDisabled = false;
   addresses: Address[];
+  addressesCache: Address[];
   collectionOfAddresses: CollectionsOfAddress;
   addressPageSize = 10;
 
@@ -33,11 +33,14 @@ export class AddressPage implements OnInit, OnDestroy {
     this.latestAddressesObs = this.addressService.latestAddresses.subscribe(addresses => {
       if (addresses) {
         console.log(addresses);
-        this.addresses = addresses;
-        this.infiniteScrollDisabled = false;
+        this.addressesCache = addresses;
       }
     });
     this.addressService.fetchLatestAddresses().subscribe();
+  }
+
+  ionViewDidEnter() {
+    this.addresses = this.addressesCache;
   }
 
   ngOnDestroy() {

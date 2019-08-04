@@ -42,6 +42,17 @@ export class ProductPage implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  ionViewWillEnter() {
+    this.scrollEvents = true;
+  }
+
+  ionViewWillLeave() {
+    this.scrollEvents = false;
+  }
+
+  ionViewDidEnter() {
     this.route.params.pipe(switchMap(params => {
       if (params.productId) {
         console.log(params.productId);
@@ -66,14 +77,6 @@ export class ProductPage implements OnInit {
     this.addressService.getDefaultAddress().subscribe(resp => {
       this.address = resp;
     });
-  }
-
-  ionViewWillEnter() {
-    this.scrollEvents = true;
-  }
-
-  ionViewWillLeave() {
-    this.scrollEvents = false;
   }
 
   onClickWarehouse(warehouse: Warehouse) {
