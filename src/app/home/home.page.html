@@ -10,11 +10,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents" (touchstart)="onTouchStart($event)"
-  (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd($event)">
-
+<!-- <ion-content #scrollable forceOverscroll="false" [scrollEvents]="scrollEvents" (touchstart)="onTouchStart($event)"
+  (touchmove)="onTouchMove($event)" (touchend)="onTouchEnd($event)"> -->
+<ion-content>
   <ion-refresher pullFactor="0.5" closeDuration="200ms" snapbackDuration="50ms" pullMax="400"
-    (ionStart)="onRefreshStart($event)" (ionPull)="onRefreshPull($event)" (ionRefresh)="doRefresh($event)">
+    (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
   </ion-refresher>
 

@@ -12,8 +12,8 @@ import { fromEvent, Subscription } from 'rxjs';
 })
 export class HomePage implements OnInit {
 
-  @ViewChild('scrollable') scrollable: IonContent;
-  @ViewChild('searchbar') searchbar: ElementRef;
+  // @ViewChild('scrollable') scrollable: IonContent;
+  // @ViewChild('searchbar') searchbar: ElementRef;
 
   banners: Banner[] = [];
   products: Product[];
@@ -32,16 +32,16 @@ export class HomePage implements OnInit {
   //   value: 'rgba(var(--ion-color-primary-rgb), 0)'
   // }];
   // toolBarOpacity = 1;
-  refresherPullProgress = 0;
-  isRefresherInProgress: boolean;
-  scrollEvents = true;
-  scrollTop: number;
-  scrollHeight: number;
-  offsetHeight: number;
-  pageX: number;
-  pageY: number;
-  refresherAnimationTimer: any;
-  bodyTouchMoveEventSubscription: Subscription;
+  // refresherPullProgress = 0;
+  // isRefresherInProgress: boolean;
+  // scrollEvents = true;
+  // scrollTop: number;
+  // scrollHeight: number;
+  // offsetHeight: number;
+  // pageX: number;
+  // pageY: number;
+  // refresherAnimationTimer: any;
+  // bodyTouchMoveEventSubscription: Subscription;
 
   constructor(
     private uiStateService: UiStateService,
@@ -67,33 +67,33 @@ export class HomePage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.scrollEvents = true;
-    this.bodyTouchMoveEventSubscription = fromEvent<TouchEvent>(document.body, 'touchmove', { passive: false }).subscribe(e => {
-      const bottomFaVal = this.scrollHeight - this.offsetHeight;
-      if (this.scrollTop === 0) {
-        if (e.touches[0].clientY > this.pageY) {
-          e.preventDefault();
-        } else {
-          e.stopPropagation();
-        }
-      } else if (this.scrollTop === bottomFaVal) {
-        if (e.touches[0].clientY < this.pageY) {
-          e.preventDefault();
-        } else {
-          e.stopPropagation();
-        }
-      } else if (this.scrollTop > 0 && this.scrollTop < bottomFaVal) {
-        e.stopPropagation();
-      } else {
-        e.preventDefault();
-      }
-    });
+    // this.scrollEvents = true;
+    // this.bodyTouchMoveEventSubscription = fromEvent<TouchEvent>(document.body, 'touchmove', { passive: false }).subscribe(e => {
+    //   const bottomFaVal = this.scrollHeight - this.offsetHeight;
+    //   if (this.scrollTop === 0) {
+    //     if (e.touches[0].clientY > this.pageY) {
+    //       e.preventDefault();
+    //     } else {
+    //       e.stopPropagation();
+    //     }
+    //   } else if (this.scrollTop === bottomFaVal) {
+    //     if (e.touches[0].clientY < this.pageY) {
+    //       e.preventDefault();
+    //     } else {
+    //       e.stopPropagation();
+    //     }
+    //   } else if (this.scrollTop > 0 && this.scrollTop < bottomFaVal) {
+    //     e.stopPropagation();
+    //   } else {
+    //     e.preventDefault();
+    //   }
+    // });
     this.uiStateService.setTabBarHidden(false);
   }
 
   ionViewWillLeave() {
-    this.scrollEvents = false;
-    this.bodyTouchMoveEventSubscription.unsubscribe();
+    // this.scrollEvents = false;
+    // this.bodyTouchMoveEventSubscription.unsubscribe();
     this.uiStateService.setTabBarHidden(true);
     console.log('ionViewWillLeave');
   }
@@ -164,11 +164,11 @@ export class HomePage implements OnInit {
     }, 400);
   }
 
-  onRefreshStart(event: CustomEvent) {
+  // onRefreshStart(event: CustomEvent) {
     // this.isRefresherInProgress = true;
-  }
+  // }
 
-  onRefreshPull(event) {
+  // onRefreshPull(event) {
     // const progress: Promise<number> = event.target.getProgress();
     // progress.then(num => {
     //   this.refresherPullProgress = num;
@@ -180,46 +180,45 @@ export class HomePage implements OnInit {
     //   }
     //   this.toolBarOpacity = ratio;
     // });
-  }
+  // }
 
   onSearch() {
-    alert('fuck');
   }
 
-  onTouchEnd(event: TouchEvent) {
-    if (this.refresherAnimationTimer) {
-      clearTimeout(this.refresherAnimationTimer);
-    }
-    this.refresherAnimationTimer = setTimeout(() => {
-      if (this.refresherPullProgress > 0 && this.refresherPullProgress < 1) {
-        this.isRefresherInProgress = false;
-        this.refresherPullProgress = 0;
-      }
-    }, 280);
-  }
+  // onTouchEnd(event: TouchEvent) {
+  //   if (this.refresherAnimationTimer) {
+  //     clearTimeout(this.refresherAnimationTimer);
+  //   }
+  //   this.refresherAnimationTimer = setTimeout(() => {
+  //     if (this.refresherPullProgress > 0 && this.refresherPullProgress < 1) {
+  //       this.isRefresherInProgress = false;
+  //       this.refresherPullProgress = 0;
+  //     }
+  //   }, 280);
+  // }
 
-  onTouchMove(event: TouchEvent) {
-    if (this.isRefresherInProgress) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-    this.scrollable.getScrollElement().then(el => {
-      this.scrollTop = el.scrollTop;
-      this.scrollHeight = el.scrollHeight;
-      this.offsetHeight = el.offsetHeight;
-    });
-  }
+  // onTouchMove(event: TouchEvent) {
+  //   if (this.isRefresherInProgress) {
+  //     event.stopPropagation();
+  //     event.preventDefault();
+  //   }
+  //   this.scrollable.getScrollElement().then(el => {
+  //     this.scrollTop = el.scrollTop;
+  //     this.scrollHeight = el.scrollHeight;
+  //     this.offsetHeight = el.offsetHeight;
+  //   });
+  // }
 
-  onTouchStart(event: TouchEvent) {
-    if (this.isRefresherInProgress) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-    this.scrollable.getScrollElement().then(el => {
-      this.pageX = event.touches[0].pageX;
-      this.pageY = event.touches[0].pageY;
-    });
-  }
+  // onTouchStart(event: TouchEvent) {
+  //   if (this.isRefresherInProgress) {
+  //     event.stopPropagation();
+  //     event.preventDefault();
+  //   }
+  //   this.scrollable.getScrollElement().then(el => {
+  //     this.pageX = event.touches[0].pageX;
+  //     this.pageY = event.touches[0].pageY;
+  //   });
+  // }
 
   onProductClick() {
     this.navCtrl.navigateForward(['/product']);
