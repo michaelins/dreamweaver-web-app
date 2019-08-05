@@ -1,4 +1,4 @@
-<ion-header no-border>
+<!-- <ion-header no-border>
   <ion-toolbar>
     <ion-buttons slot="end">
       <ion-button>
@@ -6,10 +6,9 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-</ion-header>
+</ion-header> -->
 
-<ion-content #scrollable forceOverscroll="false" fullscreen="true" [scrollEvents]="scrollEvents"
-  (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)">
+<ion-content fullscreen="true">
   <ion-grid class="ion-no-padding main">
     <ion-row>
       <ion-col>
@@ -28,6 +27,7 @@
           </ion-label>
         </ion-item>
         <ion-card>
+          <!-- <div class="custom-card"> -->
           <ion-item detail lines="full" [routerLink]="['/orders']">
             <ion-label>
               <h3>我的订单</h3>
@@ -35,6 +35,7 @@
           </ion-item>
 
           <ion-card-content>
+            <!-- <div class="custom-card-content"> -->
             <ion-grid>
               <ion-row class="ion-padding">
                 <ion-col size=3>
@@ -69,6 +70,8 @@
             </ion-grid>
           </ion-card-content>
         </ion-card>
+        <!-- </div>
+        </div> -->
         <ion-card class="vip">
           <ion-item detail lines="full">
             <ion-label>

@@ -91,6 +91,19 @@ ul {
   border-bottom: 1px solid var(--ion-color-light);
 }
 
+// custom card
+
+.custom-card {
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  .custom-card-content {
+    // padding: 0 var(--ion-padding);
+    background: #ffffff;
+  }
+}
+
 // custom radios
 .custom-radios {
   div {

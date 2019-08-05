@@ -13,19 +13,8 @@ import { $enum } from 'ts-enum-util';
 })
 export class OrdersPage implements OnInit {
 
-  @ViewChild('slides') slides: IonSlides;
-  @ViewChild('scrollable') scrollable: IonContent;
-
-  refresherPullProgress = 0;
-  isRefresherInProgress: boolean;
-  scrollEvents = true;
-  scrollTop: number;
-  scrollHeight: number;
-  offsetHeight: number;
-  pageX: number;
-  pageY: number;
-  refresherAnimationTimer: any;
-  bodyTouchMoveEventSubscription: Subscription;
+  // @ViewChild('slides') slides: IonSlides;
+  // @ViewChild('scrollable') scrollable: IonContent;
 
   activeSlideId = 0;
   slideOpts = {
@@ -65,80 +54,15 @@ export class OrdersPage implements OnInit {
   ngOnInit() {
   }
 
-  ionViewWillEnter() {
-    this.scrollEvents = true;
-    this.bodyTouchMoveEventSubscription = fromEvent<TouchEvent>(document.body, 'touchmove', { passive: false }).subscribe(e => {
-      const bottomFaVal = this.scrollHeight - this.offsetHeight;
-      if (this.scrollTop === 0) {
-        if (e.touches[0].clientY > this.pageY) {
-          e.preventDefault();
-        } else {
-          e.stopPropagation();
-        }
-      } else if (this.scrollTop === bottomFaVal) {
-        if (e.touches[0].clientY < this.pageY) {
-          e.preventDefault();
-        } else {
-          e.stopPropagation();
-        }
-      } else if (this.scrollTop > 0 && this.scrollTop < bottomFaVal) {
-        e.stopPropagation();
-      } else {
-        e.preventDefault();
-      }
-    });
-  }
-
   ionViewDidEnter() {
-    for (let index = 0; index < 5; index++) {
-      this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(index), this.sortObjs).subscribe(resp => {
-        this.setOrdersFromResonse(index, resp);
-        this.onRefreshHeight();
-      }, error => {
-        console.log(error);
-      });
-    }
-  }
-
-  ionViewWillLeave() {
-    this.scrollEvents = false;
-    this.bodyTouchMoveEventSubscription.unsubscribe();
-    console.log('ionViewWillLeave');
-  }
-
-  onTouchEnd(event: TouchEvent) {
-    if (this.refresherAnimationTimer) {
-      clearTimeout(this.refresherAnimationTimer);
-    }
-    this.refresherAnimationTimer = setTimeout(() => {
-      if (this.refresherPullProgress > 0 && this.refresherPullProgress < 1) {
-        this.isRefresherInProgress = false;
-        this.refresherPullProgress = 0;
-      }
-    }, 280);
-  }
-
-  onTouchMove(event: TouchEvent) {
-    if (this.isRefresherInProgress) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-    this.scrollable.getScrollElement().then(el => {
-      this.scrollTop = el.scrollTop;
-      this.scrollHeight = el.scrollHeight;
-      this.offsetHeight = el.offsetHeight;
+    // for (let index = 0; index < 5; index++) {
+    this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(this.activeSlideId), this.sortObjs).subscribe(resp => {
+      this.setOrdersFromResonse(this.activeSlideId, resp);
+      this.onRefreshHeight();
+    }, error => {
+      console.log(error);
     });
-  }
-
-  onTouchStart(event: TouchEvent) {
-    if (this.isRefresherInProgress) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-    this.scrollable.getScrollElement().then(el => {
-      this.pageX = event.touches[0].pageX;
-      this.pageY = event.touches[0].pageY;
-    });
+    // }
   }
 
   loadData(event) {
@@ -165,28 +89,28 @@ export class OrdersPage implements OnInit {
   }
 
   onRefreshHeight() {
-    console.log('updateAutoHeight');
-    console.log(this.elRef.nativeElement.querySelector('.swiper-wrapper'));
-    // this.renderer.removeStyle(this.elRef.nativeElement.querySelector('.swiper-wrapper'), 'height');
-    setTimeout(() => {
-      this.slides.updateAutoHeight();
-    }, 100);
+    // console.log('updateAutoHeight');
+    // console.log(this.elRef.nativeElement.querySelector('.swiper-wrapper'));
+    // // this.renderer.removeStyle(this.elRef.nativeElement.querySelector('.swiper-wrapper'), 'height');
+    // setTimeout(() => {
+    //   this.slides.updateAutoHeight();
+    // }, 100);
   }
 
   doRefresh(event?) {
     console.log('doRefresh', this.activeSlideId);
-    for (let index = 0; index < 5; index++) {
-      this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(index), this.sortObjs).subscribe(resp => {
-        this.setOrdersFromResonse(index, resp);
-        this.onRefreshHeight();
-      }, error => {
-        console.log(error);
-      }, () => {
-        if (event) {
-          event.target.complete();
-        }
-      });
-    }
+    // for (let index = 0; index < 5; index++) {
+    this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(this.activeSlideId), this.sortObjs).subscribe(resp => {
+      this.setOrdersFromResonse(this.activeSlideId, resp);
+      this.onRefreshHeight();
+    }, error => {
+      console.log(error);
+    }, () => {
+      if (event) {
+        event.target.complete();
+      }
+    });
+    // }
     // this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(this.activeSlideId), this.sortObjs).subscribe(resp => {
     //   // console.log(resp);
     //   // this.orders = resp.content;
@@ -203,19 +127,21 @@ export class OrdersPage implements OnInit {
   }
 
   onNavTab(id: number) {
-    this.slides.slideTo(id).then(() => {
-      // this.doRefresh();
-    });
+    // this.slides.slideTo(id).then(() => {
+    //   // this.doRefresh();
+    // });
+    this.activeSlideId = id;
+    this.doRefresh();
   }
 
-  onIonSlideWillChange(event) {
-    this.slides.getActiveIndex().then(id => {
-      console.log(id);
-      this.activeSlideId = id;
-      // this.doRefresh();
-      this.scrollable.scrollToTop();
-    });
-  }
+  // onIonSlideWillChange(event) {
+  //   this.slides.getActiveIndex().then(id => {
+  //     console.log(id);
+  //     this.activeSlideId = id;
+  //     // this.doRefresh();
+  //     this.scrollable.scrollToTop();
+  //   });
+  // }
 
   getEqualObj(slideId: number): EqualObject[] {
     let equalObjsToPay: EqualObject[] = [{
@@ -248,21 +174,21 @@ export class OrdersPage implements OnInit {
   getCollectionOfOrders(slideId: number): CollectionOfOrders {
     let collectionOfOrders: CollectionOfOrders;
     switch (slideId) {
-      case 0:
-        collectionOfOrders = this.collectionOfOrders;
-        break;
-      case 1:
-        collectionOfOrders = this.collectionOfOrdersToPay;
-        break;
-      case 2:
-        collectionOfOrders = this.collectionOfOrdersUnshipped;
-        break;
-      case 3:
-        collectionOfOrders = this.collectionOfOrdersShipped;
-        break;
-      case 4:
-        collectionOfOrders = this.collectionOfOrdersDone;
-        break;
+      // case 0:
+      //   collectionOfOrders = this.collectionOfOrders;
+      //   break;
+      // case 1:
+      //   collectionOfOrders = this.collectionOfOrdersToPay;
+      //   break;
+      // case 2:
+      //   collectionOfOrders = this.collectionOfOrdersUnshipped;
+      //   break;
+      // case 3:
+      //   collectionOfOrders = this.collectionOfOrdersShipped;
+      //   break;
+      // case 4:
+      //   collectionOfOrders = this.collectionOfOrdersDone;
+      //   break;
       default:
         collectionOfOrders = this.collectionOfOrders;
         break;
@@ -273,27 +199,29 @@ export class OrdersPage implements OnInit {
   setOrdersFromResonse(slideId: number, resp: CollectionOfOrders) {
     console.log(this.activeSlideId, resp);
     switch (slideId) {
-      case 0:
+      // case 0:
+      //   this.orders = resp.content;
+      //   this.collectionOfOrders = resp;
+      //   break;
+      // case 1:
+      //   this.ordersToPay = resp.content;
+      //   this.collectionOfOrdersToPay = resp;
+      //   break;
+      // case 2:
+      //   this.ordersUnshipped = resp.content;
+      //   this.collectionOfOrdersUnshipped = resp;
+      //   break;
+      // case 3:
+      //   this.ordersShipped = resp.content;
+      //   this.collectionOfOrdersShipped = resp;
+      //   break;
+      // case 4:
+      //   this.ordersDone = resp.content;
+      //   this.collectionOfOrdersDone = resp;
+      //   break;
+      default:
         this.orders = resp.content;
         this.collectionOfOrders = resp;
-        break;
-      case 1:
-        this.ordersToPay = resp.content;
-        this.collectionOfOrdersToPay = resp;
-        break;
-      case 2:
-        this.ordersUnshipped = resp.content;
-        this.collectionOfOrdersUnshipped = resp;
-        break;
-      case 3:
-        this.ordersShipped = resp.content;
-        this.collectionOfOrdersShipped = resp;
-        break;
-      case 4:
-        this.ordersDone = resp.content;
-        this.collectionOfOrdersDone = resp;
-        break;
-      default:
         break;
     }
   }
@@ -301,27 +229,29 @@ export class OrdersPage implements OnInit {
   pushOrdersFromResonse(slideId: number, resp: CollectionOfOrders) {
     console.log(this.activeSlideId, resp);
     switch (slideId) {
-      case 0:
+      // case 0:
+      //   this.orders.push(...resp.content);
+      //   this.collectionOfOrders = resp;
+      //   break;
+      // case 1:
+      //   this.ordersToPay.push(...resp.content);
+      //   this.collectionOfOrdersToPay = resp;
+      //   break;
+      // case 2:
+      //   this.ordersUnshipped.push(...resp.content);
+      //   this.collectionOfOrdersUnshipped = resp;
+      //   break;
+      // case 3:
+      //   this.ordersShipped.push(...resp.content);
+      //   this.collectionOfOrdersShipped = resp;
+      //   break;
+      // case 4:
+      //   this.ordersDone.push(...resp.content);
+      //   this.collectionOfOrdersDone = resp;
+      //   break;
+      default:
         this.orders.push(...resp.content);
         this.collectionOfOrders = resp;
-        break;
-      case 1:
-        this.ordersToPay.push(...resp.content);
-        this.collectionOfOrdersToPay = resp;
-        break;
-      case 2:
-        this.ordersUnshipped.push(...resp.content);
-        this.collectionOfOrdersUnshipped = resp;
-        break;
-      case 3:
-        this.ordersShipped.push(...resp.content);
-        this.collectionOfOrdersShipped = resp;
-        break;
-      case 4:
-        this.ordersDone.push(...resp.content);
-        this.collectionOfOrdersDone = resp;
-        break;
-      default:
         break;
     }
   }
