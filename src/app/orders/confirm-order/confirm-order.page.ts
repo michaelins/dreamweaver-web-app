@@ -92,7 +92,7 @@ export class ConfirmOrderPage implements OnInit, OnDestroy {
     } else {
       this.orderService.createOrder(orderReq).subscribe(resp => {
         console.log(resp);
-        this.navCtrl.navigateForward(['/orders', 'pay', resp.id]);
+        this.navCtrl.navigateForward(['/orders', 'pay', resp.data.id]);
       });
     }
   }

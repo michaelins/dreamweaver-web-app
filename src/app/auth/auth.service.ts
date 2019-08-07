@@ -1,10 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, from } from 'rxjs';
-import { tap, map } from 'rxjs/operators';
-import { User } from './user.model';
 import { Plugins } from '@capacitor/core';
+import { BehaviorSubject, from, of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import { User } from './user.model';
 
 export interface SmsSendAuthCodeRsp {
     authKey: string; // 发送验证码短信成功后返回，验证时需要传递到通知服务系统 ,
@@ -47,7 +47,15 @@ export class AuthService {
     private userSubject = new BehaviorSubject<User>(null);
 
     get user() {
-        return this.userSubject.asObservable();
+        return this.userSubject.asObservable().pipe(
+            switchMap(user => {
+                if (!user) {
+                    return this.autoLogin();
+                } else {
+                    return of(user);
+                }
+            }),
+        );
     }
 
     public registerReq: RegisterReq = {

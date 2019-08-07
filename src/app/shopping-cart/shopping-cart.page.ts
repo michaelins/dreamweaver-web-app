@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
-import { from } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { OrderService, CreateOrderReq, CreateOrderReqItem } from '../orders/order.service';
+import { AuthService } from '../auth/auth.service';
 import { UiStateService } from '../shared/ui-state.service';
 import { ShoppingCart, ShoppingCartItem, ShoppingCartItemRef, ShoppingCartService } from './shopping-cart.service';
 
@@ -11,37 +11,45 @@ import { ShoppingCart, ShoppingCartItem, ShoppingCartItemRef, ShoppingCartServic
   templateUrl: './shopping-cart.page.html',
   styleUrls: ['./shopping-cart.page.scss'],
 })
-export class ShoppingCartPage implements OnInit {
+export class ShoppingCartPage implements OnInit, OnDestroy {
 
   cart: ShoppingCart;
   quantity = 0;
   editMode = false;
   price = 0;
+  userSubscription: Subscription;
+  shoppingCartSubscription: Subscription;
 
   constructor(
     private uiStateService: UiStateService,
+    private authService: AuthService,
     private shoppingCartService: ShoppingCartService,
-    private orderService: OrderService,
     private alertCtrl: AlertController,
     private navCtrl: NavController
   ) { }
 
   ngOnInit() {
-    this.shoppingCartService.shoppingCartObservable.subscribe(resp => {
+    this.userSubscription = this.authService.user.subscribe(() => {
+      this.shoppingCartService.getShoppingCart().subscribe();
+    }, error => {
+      console.log(error);
+    });
+    this.shoppingCartSubscription = this.shoppingCartService.shoppingCartObservable.subscribe(resp => {
       if (resp) {
         this.cart = resp;
       }
     });
   }
 
+  ngOnDestroy() {
+    console.log('shopping cart page destroyed.');
+    this.userSubscription.unsubscribe();
+    this.shoppingCartSubscription.unsubscribe();
+  }
+
   ionViewWillEnter() {
     this.uiStateService.setTabBarHidden(false);
     console.log('ionViewWillEnter');
-    this.shoppingCartService.getShoppingCart().subscribe(resp => {
-      console.log(resp);
-    }, error => {
-      console.log(error);
-    });
   }
 
   ionViewWillLeave() {

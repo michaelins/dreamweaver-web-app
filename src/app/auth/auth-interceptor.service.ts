@@ -1,29 +1,32 @@
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse } from '@angular/common/http';
-import { tap, take, switchMap } from 'rxjs/operators';
-import { NavController, ModalController } from '@ionic/angular';
+import { HttpErrorResponse, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LoadingController, ModalController, NavController } from '@ionic/angular';
+import { switchMap, take, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
-import { of } from 'rxjs';
 
 @Injectable()
 export class AuthInterceptorService implements HttpInterceptor {
 
     constructor(
         private modalCtrl: ModalController,
+        private loadingCtrl: LoadingController,
         private navCtrl: NavController,
+        private route: ActivatedRoute,
+        private router: Router,
         private authService: AuthService
     ) { }
 
     intercept(req: HttpRequest<any>, next: HttpHandler) {
         return this.authService.user.pipe(
             take(1),
-            switchMap(user => {
-                if (!user) {
-                    return this.authService.autoLogin();
-                } else {
-                    return of(user);
-                }
-            }),
+            // switchMap(user => {
+            //     if (!user) {
+            //         return this.authService.autoLogin();
+            //     } else {
+            //         return of(user);
+            //     }
+            // }),
             switchMap(user => {
                 const authorization = 'Bearer ' + (user ? user.token : '');
                 const modifiedReq = req.clone({
@@ -38,7 +41,7 @@ export class AuthInterceptorService implements HttpInterceptor {
                                 }).then(result => {
                                     console.log('modal dismissed: ' + result);
                                 }).finally(() => {
-                                    this.navCtrl.navigateForward(['/auth/login']);
+                                    this.navCtrl.navigateForward(['/auth/login'], { queryParams: { from: this.router.url } });
                                 });
                             }
                         }

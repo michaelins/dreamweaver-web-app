@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, AlertController } from '@ionic/angular';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { AlertController, NavController } from '@ionic/angular';
 import { AuthService } from '../auth.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -12,8 +13,10 @@ export class LoginPage implements OnInit {
 
   form: FormGroup;
   loginInProcess = false;
+  fromUrl: string;
 
   constructor(
+    private route: ActivatedRoute,
     private authService: AuthService,
     private navCtrl: NavController,
     private alertCtrl: AlertController
@@ -31,10 +34,15 @@ export class LoginPage implements OnInit {
       })
     });
     this.loginInProcess = false;
+    this.fromUrl = this.route.snapshot.queryParamMap.get('from');
   }
 
   onDismiss() {
-    this.navCtrl.pop();
+    if (this.fromUrl) {
+      this.navCtrl.navigateBack(this.fromUrl);
+    } else {
+      this.navCtrl.navigateBack(['/tabs/home']);
+    }
   }
 
   onLogin() {
@@ -57,8 +65,11 @@ export class LoginPage implements OnInit {
       loginDeviceNum: '1234567890'
     }).subscribe(response => {
       this.loginInProcess = false;
-      // this.navCtrl.navigateRoot(['/tabs/profile']);
-      this.navCtrl.pop();
+      if (this.fromUrl) {
+        this.navCtrl.navigateBack(this.fromUrl);
+      } else {
+        this.navCtrl.navigateBack(['/tabs/home']);
+      }
     }, error => {
       console.log(error);
       if (error.status === 404 || error.status === 400) {

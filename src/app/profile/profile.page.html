@@ -42,28 +42,32 @@
                   <ion-tab-button [routerLink]="['/orders']">
                     <ion-icon src="../../assets/icon/wallet.svg" color="primary"></ion-icon>
                     <ion-label>待付款</ion-label>
-                    <!-- <ion-badge>6</ion-badge> -->
+                    <ion-badge *ngIf="collectionOfOrdersToPay && collectionOfOrdersToPay.totalElements">
+                      {{collectionOfOrdersToPay.totalElements}}</ion-badge>
                   </ion-tab-button>
                 </ion-col>
                 <ion-col size=3>
                   <ion-tab-button [routerLink]="['/orders']">
                     <ion-icon src="../../assets/icon/shipping.svg" color="primary"></ion-icon>
                     <ion-label>待发货</ion-label>
-                    <ion-badge>6</ion-badge>
+                    <ion-badge *ngIf="collectionOfOrdersPaid && collectionOfOrdersPaid.totalElements">
+                      {{collectionOfOrdersPaid.totalElements}}</ion-badge>
                   </ion-tab-button>
                 </ion-col>
                 <ion-col size=3>
                   <ion-tab-button [routerLink]="['/orders']">
                     <ion-icon src="../../assets/icon/receiving.svg" color="primary"></ion-icon>
                     <ion-label>待收货</ion-label>
-                    <!-- <ion-badge>6</ion-badge> -->
+                    <ion-badge *ngIf="collectionOfOrdersShipped && collectionOfOrdersShipped.totalElements">
+                      {{collectionOfOrdersShipped.totalElements}}</ion-badge>
                   </ion-tab-button>
                 </ion-col>
                 <ion-col size=3>
                   <ion-tab-button [routerLink]="['/orders']">
                     <ion-icon src="../../assets/icon/done.svg" color="primary"></ion-icon>
                     <ion-label>已完成</ion-label>
-                    <!-- <ion-badge>6</ion-badge> -->
+                    <ion-badge *ngIf="collectionOfOrdersDone && collectionOfOrdersDone.totalElements">
+                      {{collectionOfOrdersDone.totalElements}}</ion-badge>
                   </ion-tab-button>
                 </ion-col>
               </ion-row>
