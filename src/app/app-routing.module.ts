@@ -15,6 +15,10 @@ const routes: Routes = [
     loadChildren: './clockin/clockin.module#ClockinPageModule'
   },
   {
+    path: 'finance',
+    loadChildren: './finance/finance.module#FinancePageModule'
+  },
+  {
     path: 'orders',
     loadChildren: './orders/orders.module#OrdersPageModule'
   },
