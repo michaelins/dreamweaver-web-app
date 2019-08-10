@@ -1,9 +1,22 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>withdraw-detail</ion-title>
+    <ion-title>提现明细</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium" defaultHref="/finance/balance"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <ion-list>
+    <ion-item [lines]="isLast?'none':'full'" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]; index as i; last as isLast">
+      <ion-label color="dark">
+        <h2>提现到银行卡</h2>
+        <ion-text color="medium">
+          <p>2019.05.29 17:16</p>
+        </ion-text>
+      </ion-label>
+      <ion-label color="dark" slot="end" text-right>{{12.38 | currency: 'CNY':'symbol-narrow'}}</ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
