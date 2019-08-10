@@ -38,6 +38,24 @@ export interface LoginRsp {
     userId?: string;
 }
 
+export interface UserInfo {
+    userId?: string;
+    accountNo?: string;
+    name: string;
+    nickName: string;
+    birthDay: string;
+    headPortrait: string;
+    personalizedSignature: string;
+    accountStatus: string;
+    userPoint: number;
+    referralCode: string;
+    levelId: number;
+    userLevel: number;
+    id: number;
+    createTime: string;
+    updateTime: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -68,6 +86,8 @@ export class AuthService {
         password: null
     };
 
+    public referralInfo: { userAccount: string, userName: string };
+
     get userIsAuthenticated() {
         return this.userSubject.asObservable().pipe(
             map(user => {
@@ -82,6 +102,18 @@ export class AuthService {
 
     constructor(private http: HttpClient) { }
 
+    getUserInfo() {
+        return this.http.get<UserInfo>(`${environment.apiServer}/user/userinfo`);
+    }
+
+    getReferralInfo(referralCode: string) {
+        return this.http.get<{ userAccount: string, userName: string }>(`${environment.apiServer}/user/referraluser/${referralCode}`);
+    }
+
+    bindReferralCode(referralCode: string) {
+        return this.http.put(`${environment.apiServer}/user/bindinguser/${referralCode}`, {});
+    }
+
     getAuthCode(phoneNo: string, templateCode: string) {
         return this.http.post<SmsSendAuthCodeRsp>(`${environment.apiServer}/sms/sendauthcode`, {
             phoneNo,
@@ -89,12 +121,84 @@ export class AuthService {
         });
     }
 
+    changeUserInfo(userInfo: { headPortrait?: string, nickName?: string }) {
+        return this.http.post<UserInfo>(`${environment.apiServer}/user/updateuserinfo`, userInfo).pipe(
+            tap(resp => {
+                const user = this.userSubject.value;
+                user.nickName = resp.nickName;
+                user.headPortrait = resp.headPortrait;
+                this.userSubject.next(user);
+                this.storeAuthData(
+                    user.accountNo,
+                    user.accountStatus,
+                    user.headPortrait,
+                    user.nickName,
+                    user.token,
+                    user.userId,
+                    null);
+            })
+        );
+    }
+
+    findPassword(accountNo: string, authKey: string, code: string, password: string) {
+        return this.http.post(`${environment.apiServer}/user/password/retrieve`, {
+            accountNo,
+            authKey,
+            code,
+            password
+        });
+    }
+
+    changePassword(
+        accountNo: string,
+        authKey: string,
+        code: string,
+        newPassword: string,
+        loginDeviceNum?: string,
+        loginDeviceType?: string) {
+        return this.http.post<LoginRsp>(`${environment.apiServer}/user/password/update`, {
+            accountNo,
+            authKey,
+            code,
+            loginDeviceNum: loginDeviceNum ? loginDeviceNum : '1234567890',
+            loginDeviceType: loginDeviceType ? loginDeviceType : 'WXH5',
+            newPassword
+        }).pipe(
+            tap(this.setUserData.bind(this))
+        );
+    }
+
     register() {
         return this.http.post<LoginRsp>(`${environment.apiServer}/user/register`, this.registerReq).pipe(tap(this.setUserData.bind(this)));
     }
 
+    loginBySms(
+        accountNo: string,
+        authKey: string,
+        code: string,
+        loginDeviceNum?: string,
+        loginDeviceType?: string) {
+        return this.http.post<LoginRsp>(`${environment.apiServer}/user/login/sms`, {
+            accountNo,
+            authKey,
+            code,
+            loginDeviceNum: loginDeviceNum ? loginDeviceNum : '1234567890',
+            loginDeviceType: loginDeviceType ? loginDeviceType : 'WXH5'
+        }).pipe(
+            tap(this.setUserData.bind(this))
+        );
+    }
+
     login(loginReq: LoginReq) {
         return this.http.post<LoginRsp>(`${environment.apiServer}/user/login`, loginReq).pipe(tap(this.setUserData.bind(this)));
+    }
+
+    logout() {
+        return from(Plugins.Storage.remove({ key: 'authData' })).pipe(
+            tap(() => {
+                this.userSubject.next(null);
+            })
+        );
     }
 
     autoLogin() {

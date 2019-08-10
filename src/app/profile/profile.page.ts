@@ -7,6 +7,7 @@ import { ClockinService } from '../clockin/clockin.service';
 import { CollectionOfOrders, OrderService } from '../orders/order.service';
 import { LoginComponent } from '../shared/login/login.component';
 import { UiStateService } from '../shared/ui-state.service';
+import { User } from '../auth/user.model';
 
 @Component({
   selector: 'app-profile',
@@ -16,7 +17,7 @@ import { UiStateService } from '../shared/ui-state.service';
 export class ProfilePage implements OnInit, OnDestroy {
   // @ViewChild('scrollable') scrollable: IonContent;
 
-  nickName: string;
+  user: User;
   // scrollEvents = true;
   // scrollTop: number;
   // scrollHeight: number;
@@ -57,8 +58,14 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.authService.user.subscribe(user => {
       console.log(user);
       if (user) {
-        this.nickName = user.nickName;
+        this.user = user;
         this.orderService.refreshOrders(this.ordersPageSize).subscribe();
+      } else {
+        this.user = null;
+        this.collectionOfOrdersToPay = null;
+        this.collectionOfOrdersPaid = null;
+        this.collectionOfOrdersShipped = null;
+        this.collectionOfOrdersDone = null;
       }
     }, error => {
       console.log(error);

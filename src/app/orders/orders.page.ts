@@ -3,6 +3,8 @@ import { IonContent, IonSlides } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { SortObject } from '../shared/interfaces/common-interfaces';
 import { CollectionOfOrders, Order, OrderService, OrderStatus } from './order.service';
+import { AuthService } from '../auth/auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
@@ -16,7 +18,8 @@ export class OrdersPage implements OnInit, OnDestroy {
 
   activeSlideId = 0;
   slideOpts = {
-    autoHeight: true
+    autoHeight: true,
+    initialSlide: +this.route.snapshot.queryParamMap.get('slideId')
   };
 
   OrderStatus = OrderStatus;
@@ -48,22 +51,38 @@ export class OrdersPage implements OnInit, OnDestroy {
 
   constructor(
     private orderService: OrderService,
-    private elRef: ElementRef
+    private authService: AuthService,
+    private elRef: ElementRef,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
+    this.authService.user.subscribe(user => {
+      console.log(user);
+      if (!user) {
+        this.collectionOfOrders = null;
+        this.collectionOfOrdersToPay = null;
+        this.collectionOfOrdersPaid = null;
+        this.collectionOfOrdersShipped = null;
+        this.collectionOfOrdersDone = null;
+        this.orders = null;
+        this.ordersToPay = null;
+        this.ordersPaid = null;
+        this.ordersShipped = null;
+        this.ordersDone = null;
+      }
+      this.orderService.refreshOrders(this.ordersPageSize).subscribe();
+    }, error => {
+      console.log(error);
+    });
     this.ordersSubscription = this.orderService.ordersObs.subscribe(resp => {
-      console.log(resp);
       if (resp) {
         this.orders = resp.content;
         this.collectionOfOrders = resp;
         this.onRefreshHeight();
-      } else {
-        this.orderService.refreshOrders(this.ordersPageSize).subscribe();
       }
     });
     this.ordersToPaySubscription = this.orderService.ordersToPayObs.subscribe(resp => {
-      console.log(resp);
       if (resp) {
         this.ordersToPay = resp.content;
         this.collectionOfOrdersToPay = resp;
@@ -71,7 +90,6 @@ export class OrdersPage implements OnInit, OnDestroy {
       }
     });
     this.ordersPaidSubscription = this.orderService.ordersPaidObs.subscribe(resp => {
-      console.log(resp);
       if (resp) {
         this.ordersPaid = resp.content;
         this.collectionOfOrdersPaid = resp;
@@ -79,7 +97,6 @@ export class OrdersPage implements OnInit, OnDestroy {
       }
     });
     this.ordersShippedSubscription = this.orderService.ordersShippedObs.subscribe(resp => {
-      console.log(resp);
       if (resp) {
         this.ordersShipped = resp.content;
         this.collectionOfOrdersShipped = resp;
@@ -87,7 +104,6 @@ export class OrdersPage implements OnInit, OnDestroy {
       }
     });
     this.ordersDoneSubscription = this.orderService.ordersDoneObs.subscribe(resp => {
-      console.log(resp);
       if (resp) {
         this.ordersDone = resp.content;
         this.collectionOfOrdersDone = resp;

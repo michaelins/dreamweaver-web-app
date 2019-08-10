@@ -1,0 +1,31 @@
+ion-content {
+  --background: #f2f2f2;
+}
+ion-footer {
+  background: #f2f2f2;
+  padding: 20px;
+}
+
+ion-grid.main {
+  background: #ffffff;
+}
+
+.custom-card {
+  .custom-card-content {
+    padding: 0 20px;
+    ion-item {
+      --min-height: 60px;
+      --padding-start: 0;
+      --padding-end: 0;
+      --inner-padding-start: 0;
+      --inner-padding-end: 0;
+      ion-label {
+        &.right {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-<ion-grid *ngIf="orders">
+<ion-grid *ngIf="orders && orders.length > 0">
   <ion-row>
     <ion-col>
       <!-- <ion-card *ngFor="let order of orders"> -->
@@ -76,3 +76,8 @@
     </ion-col>
   </ion-row>
 </ion-grid>
+<div *ngIf="!orders || orders.length === 0" class="empty-orders">
+  <ion-text color="medium">
+    <p class="ion-margin ion-padding-horizontal">还没有{{orderStatus?orderStatus+'的':''}}订单哦，快去下单吧！</p>
+  </ion-text>
+</div>

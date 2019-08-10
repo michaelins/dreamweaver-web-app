@@ -11,22 +11,25 @@
 <ion-content fullscreen="true">
   <ion-grid class="ion-no-padding main">
     <ion-row>
-      <ion-col>
+      <ion-col class="settings">
+        <ion-icon name="settings" color="light" *ngIf="user" [routerLink]="['/tabs/profile/settings']"></ion-icon>
+        <ion-icon name="settings" color="light" *ngIf="!user"></ion-icon>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
         <ion-item class="profile ion-margin-bottom" lines="none">
-          <ion-thumbnail slot="start">
-            <ion-img [src]="'/assets/images/avatar.png'"></ion-img>
-          </ion-thumbnail>
+          <ion-avatar slot="start">
+            <ion-img [src]="user&&user.headPortrait?user.headPortrait:'.././../assets/images/avatar.png'">
+            </ion-img>
+          </ion-avatar>
           <ion-label>
-            <h2 *ngIf="!nickName" [routerLink]="['/auth/login']">登录/注册</h2>
-            <h2 *ngIf="nickName">{{nickName}}</h2>
+            <h2 *ngIf="!user" [routerLink]="['/auth/login']">登录/注册</h2>
+            <h2 *ngIf="user">{{user.nickName}}</h2>
             <!-- <ion-badge color="primary">注册用户</ion-badge> -->
           </ion-label>
         </ion-item>
-        <ion-card>
+        <div class="custom-card">
           <!-- <div class="custom-card"> -->
           <ion-item detail lines="full" [routerLink]="['/orders']">
             <ion-label>
@@ -34,12 +37,12 @@
             </ion-label>
           </ion-item>
 
-          <ion-card-content>
+          <div class="custom-card-content">
             <!-- <div class="custom-card-content"> -->
             <ion-grid>
               <ion-row class="ion-padding">
                 <ion-col size=3>
-                  <ion-tab-button [routerLink]="['/orders']">
+                  <ion-tab-button [routerLink]="['/orders']" [queryParams]="{slideId: 1}">
                     <ion-icon src="../../assets/icon/wallet.svg" color="primary"></ion-icon>
                     <ion-label>待付款</ion-label>
                     <ion-badge *ngIf="collectionOfOrdersToPay && collectionOfOrdersToPay.totalElements">
@@ -47,7 +50,7 @@
                   </ion-tab-button>
                 </ion-col>
                 <ion-col size=3>
-                  <ion-tab-button [routerLink]="['/orders']">
+                  <ion-tab-button [routerLink]="['/orders']" [queryParams]="{slideId: 2}">
                     <ion-icon src="../../assets/icon/shipping.svg" color="primary"></ion-icon>
                     <ion-label>待发货</ion-label>
                     <ion-badge *ngIf="collectionOfOrdersPaid && collectionOfOrdersPaid.totalElements">
@@ -55,7 +58,7 @@
                   </ion-tab-button>
                 </ion-col>
                 <ion-col size=3>
-                  <ion-tab-button [routerLink]="['/orders']">
+                  <ion-tab-button [routerLink]="['/orders']" [queryParams]="{slideId: 3}">
                     <ion-icon src="../../assets/icon/receiving.svg" color="primary"></ion-icon>
                     <ion-label>待收货</ion-label>
                     <ion-badge *ngIf="collectionOfOrdersShipped && collectionOfOrdersShipped.totalElements">
@@ -63,7 +66,7 @@
                   </ion-tab-button>
                 </ion-col>
                 <ion-col size=3>
-                  <ion-tab-button [routerLink]="['/orders']">
+                  <ion-tab-button [routerLink]="['/orders']" [queryParams]="{slideId: 4}">
                     <ion-icon src="../../assets/icon/done.svg" color="primary"></ion-icon>
                     <ion-label>已完成</ion-label>
                     <ion-badge *ngIf="collectionOfOrdersDone && collectionOfOrdersDone.totalElements">
@@ -72,60 +75,58 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
-          </ion-card-content>
-        </ion-card>
-        <!-- </div>
-        </div> -->
-        <ion-card class="vip">
+          </div>
+        </div>
+        <div class="custom-card vip">
           <ion-item detail lines="full">
             <ion-label>
               <h3>特惠直升</h3>
             </ion-label>
           </ion-item>
 
-          <ion-card-content>
+          <div class="custom-card-content">
             <ion-grid class="ion-no-padding">
               <ion-row>
                 <ion-col class="activity ion-margin ion-padding-top ion-padding-start ion-padding-bottom">
-                  <h1 class="ion-no-margin"><small>VIP会员</small></h1>
-                  <h4>全场购物享约85折</h4>
+                  <h5 class="ion-no-margin"><small>VIP会员</small></h5>
+                  <h6>全场购物享约85折</h6>
                   <ion-button class="ion-margin-top" size="small">立即开通</ion-button>
                 </ion-col>
               </ion-row>
             </ion-grid>
-          </ion-card-content>
-        </ion-card>
-        <ion-card class="sign">
+          </div>
+        </div>
+        <div class="custom-card sign">
           <ion-item detail lines="full" (click)="onClockin()">
             <ion-label>
               <h3>打卡达人</h3>
             </ion-label>
           </ion-item>
 
-          <ion-card-content>
+          <div class="custom-card-content">
             <ion-grid class="ion-no-padding">
               <ion-row>
                 <ion-col class="activity ion-margin ion-padding-top ion-padding-start ion-padding-bottom">
-                  <h1 class="ion-no-margin"><small>全民打卡挑战</small></h1>
-                  <h4>签到打卡乐享好礼</h4>
+                  <h5 class="ion-no-margin"><small>全民打卡挑战</small></h5>
+                  <h6>签到打卡乐享好礼</h6>
                   <ion-button class="ion-margin-top" size="small" (click)="onClockin()">去打卡</ion-button>
                 </ion-col>
               </ion-row>
             </ion-grid>
-          </ion-card-content>
-        </ion-card>
-        <ion-card>
+          </div>
+        </div>
+        <div class="custom-card">
           <ion-item detail lines="full">
             <ion-label>
               <h3>我的应用</h3>
             </ion-label>
           </ion-item>
 
-          <ion-card-content>
+          <div class="custom-card-content">
             <ion-grid>
               <ion-row class="ion-padding">
                 <ion-col size=3>
-                  <ion-tab-button>
+                  <ion-tab-button [routerLink]="['/tabs/profile/settings/change-referral-code']">
                     <ion-icon src="../../assets/icon/coupon.svg" color="primary"></ion-icon>
                     <ion-label>优惠码</ion-label>
                     <!-- <ion-badge>6</ion-badge> -->
@@ -154,8 +155,8 @@
                 </ion-col>
               </ion-row>
             </ion-grid>
-          </ion-card-content>
-        </ion-card>
+          </div>
+        </div>
       </ion-col>
     </ion-row>
   </ion-grid>

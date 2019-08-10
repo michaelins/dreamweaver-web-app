@@ -9,7 +9,6 @@
 
 <ion-content forceOverscroll="false">
   <form [formGroup]="form">
-
     <ion-grid class="ion-padding">
       <ion-row>
         <ion-col size="12" class="ion-no-padding">
@@ -21,17 +20,19 @@
       </ion-row>
       <ion-row>
         <ion-col size="12" class="ion-padding-vertical">
-          <ion-button expand="block" (click)="onPrevStep()">上一步</ion-button>
+          <ion-button expand="block" [routerLink]="['/auth/register']" routerDirection="back">上一步</ion-button>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col size="12" class="ion-padding-bottom">
-          <ion-button expand="block" (click)="onNextStep()" [disabled]="!form.valid">下一步</ion-button>
+          <ion-button expand="block" (click)="onNextStep()" [disabled]="checkInProcess || !form.valid">
+            <ion-spinner name="crescent" class="ion-margin-end" *ngIf="checkInProcess"></ion-spinner>下一步
+          </ion-button>
         </ion-col>
       </ion-row>
       <ion-row>
         <ion-col text-center>
-          <ion-label [routerLink]="['/auth/register/complete']">没有优惠码</ion-label>
+          <ion-label (click)="onNoReferralCodeClick()">没有优惠码</ion-label>
         </ion-col>
       </ion-row>
     </ion-grid>

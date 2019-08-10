@@ -1,9 +1,47 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>personal</ion-title>
+    <ion-title>个人信息</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium" defaultHref="/tabs/profile/settings"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <div class="custom-card">
+    <div class="custom-card-content">
+      <ion-item detail lines="full">
+        <ion-label color="dark">个人头像</ion-label>
+        <ion-label color="primary" slot="end" class="right" *ngIf="user">
+          <!-- <ion-thumbnail>
+            <ion-img [src]="user.headPortrait?user.headPortrait:'../../../../assets/images/avatar.png'"></ion-img>
+          </ion-thumbnail> -->
+          <label for="file-upload" class="custom-file-upload">
+            <img [src]="user.headPortrait?user.headPortrait:'../../../../assets/images/avatar.png'">
+          </label>
+          <input #file id="file-upload" type="file" accept="image/*" (change)="preview($event)" />
+        </ion-label>
+      </ion-item>
+      <ion-item detail lines="full" [routerLink]="['/tabs/profile/settings/personal/reset-nickname']">
+        <ion-label color="dark">昵称</ion-label>
+        <ion-label color="primary" slot="end" text-right *ngIf="user">{{user.nickName}}</ion-label>
+      </ion-item>
+      <ion-item lines="full">
+        <ion-label color="dark">登录手机号</ion-label>
+        <ion-label color="primary" slot="end" text-right *ngIf="user">{{user.accountNo | hidePhoneNumber}}</ion-label>
+      </ion-item>
+      <ion-item detail lines="none" [routerLink]="['/tabs/profile/settings/personal/reset-password']">
+        <ion-label color="dark">修改密码</ion-label>
+      </ion-item>
+    </div>
+  </div>
 
+  <div class="custom-card">
+    <div class="custom-card-content">
+      <ion-item detail lines="none">
+        <ion-label color="dark">邀请</ion-label>
+        <ion-label color="primary" slot="end" text-right *ngIf="user">{{user.referralCode}}</ion-label>
+      </ion-item>
+    </div>
+  </div>
 </ion-content>
