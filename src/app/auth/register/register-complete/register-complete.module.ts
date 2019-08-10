@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { RegisterCompletePage } from './register-complete.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 const routes: Routes = [
   {
@@ -18,6 +19,7 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
+    SharedModule,
     RouterModule.forChild(routes)
   ],
   declarations: [RegisterCompletePage]

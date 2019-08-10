@@ -21,11 +21,21 @@
               </ion-input>
             </ion-item>
           </ion-col>
-          <ion-col size="12" class="ion-no-padding">
+          <!-- <ion-col size="12" class="ion-no-padding" *ngIf="!isSmsLogin">
             <ion-item lines="full">
               <ion-button slot="end" fill="outline" color="medium" style="--border-radius: 12px"
                 [routerLink]="['/auth/password']">忘记密码</ion-button>
               <ion-input class="ion-padding-vertical" placeholder="请输入密码" type="password" formControlName="password">
+              </ion-input>
+            </ion-item>
+          </ion-col> -->
+          <ion-col size="12" class="ion-no-padding">
+            <ion-item lines="full">
+              <ion-button slot="end" fill="outline" color="medium" style="--border-radius: 12px"
+                (click)="onGetAuthCode()" [disabled]="isSmsLogin && isGetAuthCodeDisabled">{{isSmsLogin?'获取验证码':'忘记密码'}}
+              </ion-button>
+              <ion-input class="ion-padding-vertical" [placeholder]="isSmsLogin?'请输入验证码':'请输入密码'"
+                [type]="isSmsLogin?'text':'password'" formControlName="code">
               </ion-input>
             </ion-item>
           </ion-col>
@@ -37,7 +47,7 @@
             </ion-button>
           </ion-col>
           <ion-col size="6" class="ion-padding-start">
-            <ion-text color="medium">短信验证码登录</ion-text>
+            <ion-text color="medium" (click)="onChangeLoginMethod()">{{isSmsLogin?'账号密码登录':'短信验证码登录'}}</ion-text>
           </ion-col>
           <ion-col size="6" class="ion-padding-end" text-right>
             <a [routerLink]="['/auth/register']">账号注册</a>

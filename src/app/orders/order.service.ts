@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AlertController, NavController } from '@ionic/angular';
+import { BehaviorSubject, concat, from, Observable, of } from 'rxjs';
+import { concatMap, map, switchMap, tap } from 'rxjs/operators';
+import { $enum } from 'ts-enum-util';
 import { environment } from '../../environments/environment';
-import { BehaviorSubject, Observable, from, of } from 'rxjs';
-import { EqualObject, SortObject } from '../shared/interfaces/common-interfaces';
-import { map, switchMap } from 'rxjs/operators';
-import { NavController, AlertController } from '@ionic/angular';
+import { SortObject } from '../shared/interfaces/common-interfaces';
 
 export interface CreateOrderReqItem {
     amount: number;
@@ -133,7 +134,19 @@ export enum OrderStatus {
 })
 export class OrderService {
 
-    // private orders : BehaviorSubject<O
+    defaultPageNum = 3;
+
+    private orders = new BehaviorSubject<CollectionOfOrders>(null);
+    public ordersToPay = new BehaviorSubject<CollectionOfOrders>(null);
+    private ordersPaid = new BehaviorSubject<CollectionOfOrders>(null);
+    private ordersShipped = new BehaviorSubject<CollectionOfOrders>(null);
+    private ordersDone = new BehaviorSubject<CollectionOfOrders>(null);
+
+    get ordersObs() { return this.orders.asObservable(); }
+    get ordersToPayObs() { return this.ordersToPay.asObservable(); }
+    get ordersPaidObs() { return this.ordersPaid.asObservable(); }
+    get ordersShippedObs() { return this.ordersShipped.asObservable(); }
+    get ordersDoneObs() { return this.ordersDone.asObservable(); }
 
     constructor(
         private http: HttpClient,
@@ -144,19 +157,31 @@ export class OrderService {
     public orderReq: CreateOrderReq;
 
     createOrder(orderReq: CreateOrderReq) {
-        return this.http.post<{ id: string }>(`${environment.apiServer}/order`, orderReq);
+        return this.http.post<{ id: string }>(`${environment.apiServer}/order`, orderReq).pipe(
+            concatMap(data => {
+                return this.refreshOrders(this.defaultPageNum).pipe(
+                    map(updatedOrders => {
+                        return { data, updatedOrders };
+                    })
+                );
+            })
+        );
     }
 
     getOrder(orderId: string) {
         return this.http.get<Order>(`${environment.apiServer}/order/${orderId}`);
     }
 
-    getOrders(pageNum: number, pageSize: number, equalObjs?: EqualObject[], sortObjs?: SortObject[]) {
-        console.log(OrderStatus.TO_PAY);
-        console.log(OrderStatus[OrderStatus.TO_PAY]);
+    getOrders(pageNum: number, pageSize: number, orderStatus: OrderStatus, sortObjs?: SortObject[], silent?: boolean) {
         return this.http.post<CollectionOfOrders>(`${environment.apiServer}/order/users/${pageNum}/${pageSize}`, {
-            equal: equalObjs ? equalObjs : [],
-            sort: sortObjs ? sortObjs : []
+            equal: $enum(OrderStatus).indexOfValue(orderStatus) === -1 ? [] : [{
+                field: 'orderStatus',
+                eqObj: $enum(OrderStatus).indexOfValue(orderStatus)
+            }],
+            sort: sortObjs ? sortObjs : [{
+                field: 'createTime',
+                direction: 0
+            }]
         }).pipe(
             map(collectionOfOrders => {
                 if (collectionOfOrders.content && collectionOfOrders.content.length > 0) {
@@ -168,7 +193,40 @@ export class OrderService {
                     });
                 }
                 return collectionOfOrders;
+            }),
+            tap(resp => {
+                if (!silent) {
+                    switch (orderStatus) {
+                        case OrderStatus.TO_PAY:
+                            this.ordersToPay.next(resp);
+                            break;
+                        case OrderStatus.PAID:
+                            this.ordersPaid.next(resp);
+                            break;
+                        case OrderStatus.SHIPPED:
+                            this.ordersShipped.next(resp);
+                            break;
+                        case OrderStatus.THXGOD:
+                            this.ordersDone.next(resp);
+                            break;
+                        default:
+                            this.orders.next(resp);
+                            break;
+                    }
+                } else {
+                    console.log('silent...');
+                }
             })
+        );
+    }
+
+    refreshOrders(pageSize: number, sortObjs?: SortObject[]) {
+        return concat(
+            this.getOrders(1, pageSize, null, sortObjs),
+            this.getOrders(1, pageSize, OrderStatus.TO_PAY, sortObjs),
+            this.getOrders(1, pageSize, OrderStatus.PAID, sortObjs),
+            this.getOrders(1, pageSize, OrderStatus.SHIPPED, sortObjs),
+            this.getOrders(1, pageSize, OrderStatus.THXGOD, sortObjs)
         );
     }
 

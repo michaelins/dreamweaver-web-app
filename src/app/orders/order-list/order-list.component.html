@@ -1,8 +1,8 @@
-<ion-grid *ngIf="orders">
+<ion-grid *ngIf="orders && orders.length > 0">
   <ion-row>
     <ion-col>
-      <ion-card *ngFor="let order of orders">
-        <!-- <div *ngFor="let order of orders" class="custom-card"> -->
+      <!-- <ion-card *ngFor="let order of orders"> -->
+      <div *ngFor="let order of orders" class="custom-card">
         <ion-item lines="full" [routerLink]="['/orders',order.orderId]">
           <ion-label>
             <h6>订单号：{{order.orderId}}</h6>
@@ -11,8 +11,8 @@
             <p>{{OrderStatus[order.orderStatus]}}</p>
           </ion-text>
         </ion-item>
-        <ion-card-content>
-          <!-- <div class="custom-card-content"> -->
+        <!-- <ion-card-content> -->
+        <div class="custom-card-content">
           <ion-list [routerLink]="['/orders',order.orderId]">
             <ion-item class="product" [lines]="isLast?'none':'full'" detail="false"
               *ngFor="let item of order.items; index as i; last as isLast">
@@ -69,11 +69,15 @@
               </ion-col>
             </ion-row>
           </ion-grid>
-        </ion-card-content>
-
-      </ion-card>
-      <!-- </div> -->
-      <!-- </div> -->
+          <!-- </ion-card-content>
+      </ion-card> -->
+        </div>
+      </div>
     </ion-col>
   </ion-row>
 </ion-grid>
+<div *ngIf="!orders || orders.length === 0" class="empty-orders">
+  <ion-text color="medium">
+    <p class="ion-margin ion-padding-horizontal">还没有{{orderStatus?orderStatus+'的':''}}订单哦，快去下单吧！</p>
+  </ion-text>
+</div>

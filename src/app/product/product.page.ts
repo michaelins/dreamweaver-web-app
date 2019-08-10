@@ -1,9 +1,11 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IonContent, ModalController } from '@ionic/angular';
+import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AddressPage } from '../address/address.page';
 import { Address, AddressService } from '../address/address.service';
+import { AuthService } from '../auth/auth.service';
 import { AddToCartComponent } from '../shared/add-to-cart/add-to-cart.component';
 import { ShoppingCartService } from '../shopping-cart/shopping-cart.service';
 import { Product, ProductService, Specification, Warehouse } from './product.service';
@@ -34,6 +36,7 @@ export class ProductPage implements OnInit {
   };
 
   constructor(
+    private authService: AuthService,
     private productService: ProductService,
     private shoppingCartService: ShoppingCartService,
     private addressService: AddressService,
@@ -74,9 +77,23 @@ export class ProductPage implements OnInit {
         this.shoppingCartItemSize = resp.items.length;
       }
     });
-    this.addressService.getDefaultAddress().subscribe(resp => {
-      this.address = resp;
+    this.authService.user.pipe(
+      switchMap(user => {
+        console.log(user);
+        if (user) {
+          return this.addressService.getDefaultAddress();
+        } else {
+          return of(null);
+        }
+      })
+    ).subscribe(resp => {
+      if (resp) {
+        this.address = resp;
+      }
     });
+    // this.addressService.getDefaultAddress().subscribe(resp => {
+    //   this.address = resp;
+    // });
   }
 
   onClickWarehouse(warehouse: Warehouse) {

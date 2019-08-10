@@ -11,6 +11,8 @@ import { FormGroup } from '@angular/forms';
 export class RegisterCompletePage implements OnInit {
 
   form: FormGroup;
+  referralInfo: { userAccount: string, userName: string };
+
   constructor(
     private authService: AuthService,
     private navCtrl: NavController
@@ -18,16 +20,15 @@ export class RegisterCompletePage implements OnInit {
 
   ngOnInit() {
     this.form = new FormGroup({});
-  }
-
-  onPrevStep() {
-    this.navCtrl.pop();
+    this.referralInfo = this.authService.referralInfo;
   }
 
   onRegister() {
     console.log(this.authService.registerReq);
     this.authService.register().subscribe(response => {
       console.log(response);
+      this.authService.referralInfo = null;
+      delete this.authService.registerReq.referralCode;
       this.navCtrl.navigateRoot(['/tabs/profile']);
     }, error => {
       console.log(error);

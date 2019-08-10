@@ -1,18 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { UiStateService } from '../shared/ui-state.service';
 import { ShoppingCartService } from '../shopping-cart/shopping-cart.service';
-import { switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.page.html',
   styleUrls: ['./tabs.page.scss'],
 })
-export class TabsPage implements OnInit {
-
+export class TabsPage implements OnInit, OnDestroy {
   isTabBarHidden: boolean;
   shoppingCartItemSize: number;
+  shoppingCartSubscription: Subscription;
 
   constructor(
     public uiStateService: UiStateService,
@@ -20,20 +19,18 @@ export class TabsPage implements OnInit {
 
   ngOnInit() {
     this.isTabBarHidden = this.uiStateService.getTabBarHidden();
-    this.shoppingCartService.shoppingCartObservable.pipe(
-      switchMap(cart => {
-        if (!cart) {
-          return this.shoppingCartService.getShoppingCart();
-        } else {
-          return of(cart);
-        }
-      })
-    ).subscribe(resp => {
+    this.shoppingCartSubscription = this.shoppingCartService.shoppingCartObservable.subscribe(resp => {
       console.log(resp);
-      if (resp && resp.items && resp.items.length > 0) {
+      if (resp && resp.items && resp.items.length >= 0) {
         this.shoppingCartItemSize = resp.items.length;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.shoppingCartSubscription) {
+      this.shoppingCartSubscription.unsubscribe();
+    }
   }
 
   onTouchMove(event) {

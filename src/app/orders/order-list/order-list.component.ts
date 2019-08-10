@@ -24,6 +24,7 @@ export class OrderListComponent implements OnInit {
 
   ngOnInit() {
     console.log(this.orders);
+    console.log(this.orderStatus);
   }
 
 }

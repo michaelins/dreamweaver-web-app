@@ -1,20 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Routes, RouterModule } from '@angular/router';
-
 import { IonicModule } from '@ionic/angular';
-
-import { ProfilePage } from './profile.page';
-import { SharedModule } from '../shared/shared.module';
 import { LoginComponent } from '../shared/login/login.component';
-
-const routes: Routes = [
-  {
-    path: '',
-    component: ProfilePage
-  }
-];
+import { SharedModule } from '../shared/shared.module';
+import { ProfileRoutingModule } from './profile-routing.module';
+import { ProfilePage } from './profile.page';
 
 @NgModule({
   imports: [
@@ -22,7 +13,7 @@ const routes: Routes = [
     SharedModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    ProfileRoutingModule
   ],
   declarations: [ProfilePage],
   entryComponents: [LoginComponent]

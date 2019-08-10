@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>修改优惠码</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium" defaultHref="/tabs/profile"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form">
+    <div class="custom-card">
+      <div class="custom-card-content">
+        <ion-item lines="none">
+          <ion-label color="dark" slot="start">优惠码</ion-label>
+          <ion-input placeholder="请输入优惠码" formControlName="referralCode"></ion-input>
+        </ion-item>
+      </div>
+    </div>
+    <ion-text color="medium">
+      <p class="ion-margin ion-padding-horizontal">您只有一次修改优惠码的机会，请谨慎操作！</p>
+    </ion-text>
+    <div class="ion-padding ion-margin">
+      <ion-button expand="block" (click)="onSubmit()" [disabled]="saveInProgress || form.invalid">
+        <ion-spinner name="crescent" class="ion-margin-end" *ngIf="saveInProgress"></ion-spinner>保存
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

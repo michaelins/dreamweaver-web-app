@@ -11,6 +11,13 @@ ion-grid {
   // min-height: 100%;
 }
 
+.empty-slide {
+  height: calc(100vh - 168px);
+  app-order-list {
+    height: 100%;
+  }
+}
+
 ul {
   background: #ffffff;
   display: flex;

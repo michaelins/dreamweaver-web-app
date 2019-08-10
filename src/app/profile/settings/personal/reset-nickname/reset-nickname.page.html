@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>修改昵称</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium" defaultHref="/tabs/profile/settings/personal"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="form">
+    <div class="custom-card">
+      <div class="custom-card-content">
+        <ion-item lines="none">
+          <ion-label color="dark" slot="start">新昵称</ion-label>
+          <ion-input placeholder="请输入新昵称" formControlName="nickname"></ion-input>
+        </ion-item>
+      </div>
+    </div>
+    <div class="ion-padding ion-margin">
+      <ion-button expand="block" (click)="onSubmit()" [disabled]="saveInProgress || form.invalid">
+        <ion-spinner name="crescent" class="ion-margin-end" *ngIf="saveInProgress"></ion-spinner>保存
+      </ion-button>
+    </div>
+  </form>
+</ion-content>

@@ -19,8 +19,6 @@
     (ionRefresh)="doRefresh($event)">
     <ion-refresher-content refreshingSpinner="crescent"></ion-refresher-content>
   </ion-refresher>
-
-
   <ion-grid *ngIf="!orders">
     <ion-row>
       <ion-col>
@@ -76,27 +74,24 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-
-  <app-order-list *ngIf="orders" [orders]="orders"></app-order-list>
-
-  <!-- <ion-slides *ngIf="orders && ordersToPay && ordersUnshipped && ordersShipped && ordersDone" #slides
-    [options]="slideOpts" (ionSlideWillChange)="onIonSlideWillChange($event)">
-    <ion-slide>
+  <ion-slides *ngIf="orders && ordersToPay && ordersPaid && ordersShipped && ordersDone" #slides [options]="slideOpts"
+    (ionSlideWillChange)="onIonSlideWillChange($event)">
+    <ion-slide [ngClass]="{'empty-slide': !orders || orders.length === 0}">
       <app-order-list [orders]="orders"></app-order-list>
     </ion-slide>
-    <ion-slide>
-      <app-order-list [orders]="ordersToPay"></app-order-list>
+    <ion-slide [ngClass]="{'empty-slide': !ordersToPay || ordersToPay.length === 0}">
+      <app-order-list [orders]="ordersToPay" [orderStatus]="OrderStatus.TO_PAY"></app-order-list>
     </ion-slide>
-    <ion-slide>
-      <app-order-list [orders]="ordersUnshipped"></app-order-list>
+    <ion-slide [ngClass]="{'empty-slide': !ordersPaid || ordersPaid.length === 0}">
+      <app-order-list [orders]="ordersPaid" [orderStatus]="OrderStatus.PAID"></app-order-list>
     </ion-slide>
-    <ion-slide>
-      <app-order-list [orders]="ordersShipped"></app-order-list>
+    <ion-slide [ngClass]="{'empty-slide': !ordersShipped || ordersShipped.length === 0}">
+      <app-order-list [orders]="ordersShipped" [orderStatus]="OrderStatus.SHIPPED"></app-order-list>
     </ion-slide>
-    <ion-slide>
-      <app-order-list [orders]="ordersDone"></app-order-list>
+    <ion-slide [ngClass]="{'empty-slide': !ordersDone || ordersDone.length === 0}">
+      <app-order-list [orders]="ordersDone" [orderStatus]="OrderStatus.THXGOD"></app-order-list>
     </ion-slide>
-  </ion-slides> -->
+  </ion-slides>
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
     <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="正在加载更多...">
     </ion-infinite-scroll-content>

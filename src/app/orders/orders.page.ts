@@ -1,28 +1,29 @@
-import { Component, OnChanges, OnInit, SimpleChanges, ViewChild, DoCheck, ElementRef, Renderer2 } from '@angular/core';
-import { AlertController, IonSlides, NavController, IonContent } from '@ionic/angular';
-import { from, Observable, of, Subscription, fromEvent } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { EqualObject, SortObject } from '../shared/interfaces/common-interfaces';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { IonContent, IonSlides } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { SortObject } from '../shared/interfaces/common-interfaces';
 import { CollectionOfOrders, Order, OrderService, OrderStatus } from './order.service';
-import { $enum } from 'ts-enum-util';
+import { AuthService } from '../auth/auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-orders',
   templateUrl: './orders.page.html',
   styleUrls: ['./orders.page.scss'],
 })
-export class OrdersPage implements OnInit {
+export class OrdersPage implements OnInit, OnDestroy {
 
-  // @ViewChild('slides') slides: IonSlides;
-  // @ViewChild('scrollable') scrollable: IonContent;
+  @ViewChild('slides') slides: IonSlides;
+  @ViewChild('scrollable') scrollable: IonContent;
 
   activeSlideId = 0;
   slideOpts = {
-    autoHeight: true
+    autoHeight: true,
+    initialSlide: +this.route.snapshot.queryParamMap.get('slideId')
   };
 
   OrderStatus = OrderStatus;
-  ordersPpageSize = 3;
+  ordersPageSize = 3;
   sortObjs: SortObject[] = [{
     field: 'createTime',
     direction: 0
@@ -30,56 +31,108 @@ export class OrdersPage implements OnInit {
 
   orders: Order[];
   collectionOfOrders: CollectionOfOrders;
+  ordersSubscription: Subscription;
 
   ordersToPay: Order[];
   collectionOfOrdersToPay: CollectionOfOrders;
+  ordersToPaySubscription: Subscription;
 
-  ordersUnshipped: Order[];
-  collectionOfOrdersUnshipped: CollectionOfOrders;
+  ordersPaid: Order[];
+  collectionOfOrdersPaid: CollectionOfOrders;
+  ordersPaidSubscription: Subscription;
 
   ordersShipped: Order[];
   collectionOfOrdersShipped: CollectionOfOrders;
+  ordersShippedSubscription: Subscription;
 
   ordersDone: Order[];
   collectionOfOrdersDone: CollectionOfOrders;
+  ordersDoneSubscription: Subscription;
 
   constructor(
     private orderService: OrderService,
-    private alertCtrl: AlertController,
-    private navCtrl: NavController,
+    private authService: AuthService,
     private elRef: ElementRef,
-    private renderer: Renderer2
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
-  }
-
-  ionViewDidEnter() {
-    // for (let index = 0; index < 5; index++) {
-    this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(this.activeSlideId), this.sortObjs).subscribe(resp => {
-      this.setOrdersFromResonse(this.activeSlideId, resp);
-      this.onRefreshHeight();
+    this.authService.user.subscribe(user => {
+      console.log(user);
+      if (!user) {
+        this.collectionOfOrders = null;
+        this.collectionOfOrdersToPay = null;
+        this.collectionOfOrdersPaid = null;
+        this.collectionOfOrdersShipped = null;
+        this.collectionOfOrdersDone = null;
+        this.orders = null;
+        this.ordersToPay = null;
+        this.ordersPaid = null;
+        this.ordersShipped = null;
+        this.ordersDone = null;
+      }
+      this.orderService.refreshOrders(this.ordersPageSize).subscribe();
     }, error => {
       console.log(error);
     });
-    // }
+    this.ordersSubscription = this.orderService.ordersObs.subscribe(resp => {
+      if (resp) {
+        this.orders = resp.content;
+        this.collectionOfOrders = resp;
+        this.onRefreshHeight();
+      }
+    });
+    this.ordersToPaySubscription = this.orderService.ordersToPayObs.subscribe(resp => {
+      if (resp) {
+        this.ordersToPay = resp.content;
+        this.collectionOfOrdersToPay = resp;
+        this.onRefreshHeight();
+      }
+    });
+    this.ordersPaidSubscription = this.orderService.ordersPaidObs.subscribe(resp => {
+      if (resp) {
+        this.ordersPaid = resp.content;
+        this.collectionOfOrdersPaid = resp;
+        this.onRefreshHeight();
+      }
+    });
+    this.ordersShippedSubscription = this.orderService.ordersShippedObs.subscribe(resp => {
+      if (resp) {
+        this.ordersShipped = resp.content;
+        this.collectionOfOrdersShipped = resp;
+        this.onRefreshHeight();
+      }
+    });
+    this.ordersDoneSubscription = this.orderService.ordersDoneObs.subscribe(resp => {
+      if (resp) {
+        this.ordersDone = resp.content;
+        this.collectionOfOrdersDone = resp;
+        this.onRefreshHeight();
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.ordersSubscription.unsubscribe();
+    this.ordersToPaySubscription.unsubscribe();
+    this.ordersPaidSubscription.unsubscribe();
+    this.ordersShippedSubscription.unsubscribe();
+    this.ordersDoneSubscription.unsubscribe();
   }
 
   loadData(event) {
-    console.log('loading more orders...');
     const collectionOfOrders = this.getCollectionOfOrders(this.activeSlideId);
     if (collectionOfOrders.last) {
       event.target.complete();
     } else if (collectionOfOrders.number + 2 <= collectionOfOrders.totalPages) {
       this.orderService.getOrders(
         collectionOfOrders.number + 2,
-        this.ordersPpageSize,
-        this.getEqualObj(this.activeSlideId),
-        this.sortObjs
+        this.ordersPageSize,
+        this.getOrderStatusBySlideId(this.activeSlideId),
+        this.sortObjs,
+        true
       ).subscribe(resp => {
         this.pushOrdersFromResonse(this.activeSlideId, resp);
-        // this.orders.push(...resp.content);
-        // this.collectionOfOrders = resp;
         event.target.complete();
         this.onRefreshHeight();
       }, error => {
@@ -89,20 +142,24 @@ export class OrdersPage implements OnInit {
   }
 
   onRefreshHeight() {
-    // console.log('updateAutoHeight');
-    // console.log(this.elRef.nativeElement.querySelector('.swiper-wrapper'));
-    // // this.renderer.removeStyle(this.elRef.nativeElement.querySelector('.swiper-wrapper'), 'height');
-    // setTimeout(() => {
-    //   this.slides.updateAutoHeight();
-    // }, 100);
+    console.log('updateAutoHeight');
+    console.log(this.elRef.nativeElement.querySelector('.swiper-wrapper'));
+    // this.renderer.removeStyle(this.elRef.nativeElement.querySelector('.swiper-wrapper'), 'height');
+    setTimeout(() => {
+      if (this.slides) {
+        try {
+          this.slides.updateAutoHeight();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }, 100);
   }
 
   doRefresh(event?) {
     console.log('doRefresh', this.activeSlideId);
-    // for (let index = 0; index < 5; index++) {
-    this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(this.activeSlideId), this.sortObjs).subscribe(resp => {
-      this.setOrdersFromResonse(this.activeSlideId, resp);
-      this.onRefreshHeight();
+    this.orderService.refreshOrders(this.ordersPageSize).subscribe(resp => {
+      console.log(resp);
     }, error => {
       console.log(error);
     }, () => {
@@ -110,85 +167,56 @@ export class OrdersPage implements OnInit {
         event.target.complete();
       }
     });
-    // }
-    // this.orderService.getOrders(1, this.ordersPpageSize, this.getEqualObj(this.activeSlideId), this.sortObjs).subscribe(resp => {
-    //   // console.log(resp);
-    //   // this.orders = resp.content;
-    //   // this.collectionOfOrders = resp;
-    //   this.setOrdersFromResonse(this.activeSlideId, resp);
-    //   this.onRefreshHeight();
-    // }, error => {
-    //   console.log(error);
-    // }, () => {
-    //   if (event) {
-    //     event.target.complete();
-    //   }
-    // });
   }
 
   onNavTab(id: number) {
-    // this.slides.slideTo(id).then(() => {
-    //   // this.doRefresh();
-    // });
-    this.activeSlideId = id;
-    this.doRefresh();
+    this.slides.slideTo(id);
   }
 
-  // onIonSlideWillChange(event) {
-  //   this.slides.getActiveIndex().then(id => {
-  //     console.log(id);
-  //     this.activeSlideId = id;
-  //     // this.doRefresh();
-  //     this.scrollable.scrollToTop();
-  //   });
-  // }
+  onIonSlideWillChange() {
+    this.slides.getActiveIndex().then(id => {
+      console.log(id);
+      this.activeSlideId = id;
+      this.scrollable.scrollToTop();
+    });
+  }
 
-  getEqualObj(slideId: number): EqualObject[] {
-    let equalObjsToPay: EqualObject[] = [{
-      field: 'orderStatus',
-      eqObj: 'TO_PAY'
-    }];
+  getOrderStatusBySlideId(slideId: number): OrderStatus {
     switch (slideId) {
       case 0:
-        equalObjsToPay = [];
-        break;
+        return null;
       case 1:
-        equalObjsToPay[0].eqObj = $enum(OrderStatus).indexOfKey('TO_PAY');
-        break;
+        return OrderStatus.TO_PAY;
       case 2:
-        equalObjsToPay[0].eqObj = $enum(OrderStatus).indexOfKey('PAID');
-        break;
+        return OrderStatus.PAID;
       case 3:
-        equalObjsToPay[0].eqObj = $enum(OrderStatus).indexOfKey('SHIPPED');
-        break;
+        return OrderStatus.SHIPPED;
       case 4:
-        equalObjsToPay[0].eqObj = $enum(OrderStatus).indexOfKey('THXGOD');
-        break;
+        return OrderStatus.THXGOD;
       default:
-        equalObjsToPay = [];
         break;
     }
-    return equalObjsToPay;
+    return null;
   }
 
   getCollectionOfOrders(slideId: number): CollectionOfOrders {
     let collectionOfOrders: CollectionOfOrders;
     switch (slideId) {
-      // case 0:
-      //   collectionOfOrders = this.collectionOfOrders;
-      //   break;
-      // case 1:
-      //   collectionOfOrders = this.collectionOfOrdersToPay;
-      //   break;
-      // case 2:
-      //   collectionOfOrders = this.collectionOfOrdersUnshipped;
-      //   break;
-      // case 3:
-      //   collectionOfOrders = this.collectionOfOrdersShipped;
-      //   break;
-      // case 4:
-      //   collectionOfOrders = this.collectionOfOrdersDone;
-      //   break;
+      case 0:
+        collectionOfOrders = this.collectionOfOrders;
+        break;
+      case 1:
+        collectionOfOrders = this.collectionOfOrdersToPay;
+        break;
+      case 2:
+        collectionOfOrders = this.collectionOfOrdersPaid;
+        break;
+      case 3:
+        collectionOfOrders = this.collectionOfOrdersShipped;
+        break;
+      case 4:
+        collectionOfOrders = this.collectionOfOrdersDone;
+        break;
       default:
         collectionOfOrders = this.collectionOfOrders;
         break;
@@ -196,59 +224,29 @@ export class OrdersPage implements OnInit {
     return collectionOfOrders;
   }
 
-  setOrdersFromResonse(slideId: number, resp: CollectionOfOrders) {
-    console.log(this.activeSlideId, resp);
+  pushOrdersFromResonse(slideId: number, resp: CollectionOfOrders) {
+    console.log(slideId, resp);
     switch (slideId) {
-      // case 0:
-      //   this.orders = resp.content;
-      //   this.collectionOfOrders = resp;
-      //   break;
-      // case 1:
-      //   this.ordersToPay = resp.content;
-      //   this.collectionOfOrdersToPay = resp;
-      //   break;
-      // case 2:
-      //   this.ordersUnshipped = resp.content;
-      //   this.collectionOfOrdersUnshipped = resp;
-      //   break;
-      // case 3:
-      //   this.ordersShipped = resp.content;
-      //   this.collectionOfOrdersShipped = resp;
-      //   break;
-      // case 4:
-      //   this.ordersDone = resp.content;
-      //   this.collectionOfOrdersDone = resp;
-      //   break;
-      default:
-        this.orders = resp.content;
+      case 0:
+        this.orders.push(...resp.content);
         this.collectionOfOrders = resp;
         break;
-    }
-  }
-
-  pushOrdersFromResonse(slideId: number, resp: CollectionOfOrders) {
-    console.log(this.activeSlideId, resp);
-    switch (slideId) {
-      // case 0:
-      //   this.orders.push(...resp.content);
-      //   this.collectionOfOrders = resp;
-      //   break;
-      // case 1:
-      //   this.ordersToPay.push(...resp.content);
-      //   this.collectionOfOrdersToPay = resp;
-      //   break;
-      // case 2:
-      //   this.ordersUnshipped.push(...resp.content);
-      //   this.collectionOfOrdersUnshipped = resp;
-      //   break;
-      // case 3:
-      //   this.ordersShipped.push(...resp.content);
-      //   this.collectionOfOrdersShipped = resp;
-      //   break;
-      // case 4:
-      //   this.ordersDone.push(...resp.content);
-      //   this.collectionOfOrdersDone = resp;
-      //   break;
+      case 1:
+        this.ordersToPay.push(...resp.content);
+        this.collectionOfOrdersToPay = resp;
+        break;
+      case 2:
+        this.ordersPaid.push(...resp.content);
+        this.collectionOfOrdersPaid = resp;
+        break;
+      case 3:
+        this.ordersShipped.push(...resp.content);
+        this.collectionOfOrdersShipped = resp;
+        break;
+      case 4:
+        this.ordersDone.push(...resp.content);
+        this.collectionOfOrdersDone = resp;
+        break;
       default:
         this.orders.push(...resp.content);
         this.collectionOfOrders = resp;
