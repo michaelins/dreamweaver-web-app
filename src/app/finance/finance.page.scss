@@ -1,0 +1,122 @@
+ion-content {
+  --background: #f2f2f2;
+}
+
+.header-info {
+  height: 38vw;
+  background: url("../../assets/images/bg_black.png") top left/100% no-repeat;
+  color: var(--ion-color-light);
+  h5 {
+    padding: 20px 20px 10px 20px;
+  }
+  p {
+    font-size: 12px;
+    line-height: 100%;
+    display: inline-block;
+    padding: 3px 5px;
+    margin: 0 20px;
+    border: 1px solid var(--ion-color-light);
+    border-radius: 10px;
+  }
+}
+
+.content-wrapper {
+  position: relative;
+  top: -60px;
+}
+
+.custom-card {
+  .custom-card-content {
+    min-height: 80px;
+  }
+}
+
+.money {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 10px 0;
+  .money-block {
+    width: 33.333333%;
+    flex-grow: 1;
+    border-right: 1px solid var(--ion-color-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &:last-child {
+      border-right: none;
+    }
+    h5 {
+      padding-bottom: 5px;
+    }
+  }
+}
+
+.rank-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.rank {
+  padding: 0 20px;
+}
+
+.rank-number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  ion-text {
+    font-size: 14px;
+  }
+  &.first {
+    background: url("../../assets/icon/1st.svg") top left/100% no-repeat;
+    padding-bottom: 4px;
+    ion-text {
+      font-size: 10px;
+      color: #ffffff;
+    }
+  }
+  &.second {
+    background: url("../../assets/icon/2nd.svg") top left/100% no-repeat;
+    padding-bottom: 4px;
+    ion-text {
+      font-size: 10px;
+      color: #ffffff;
+    }
+  }
+  &.third {
+    background: url("../../assets/icon/3rd.svg") top left/100% no-repeat;
+    padding-bottom: 4px;
+    ion-text {
+      color: #ffffff;
+      font-size: 10px;
+    }
+  }
+}
+
+ion-list {
+  margin: 0;
+  ion-item {
+    // --min-height: 60px;
+    --padding-start: 0;
+    --padding-end: 0;
+    --inner-padding-start: 0;
+    --inner-padding-end: 0;
+  }
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  ion-avatar {
+    margin: 0 10px 0 20px;
+    height: 32px;
+    width: 32px;
+  }
+}

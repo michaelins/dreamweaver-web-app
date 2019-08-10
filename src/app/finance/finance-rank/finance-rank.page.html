@@ -1,9 +1,33 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>finance-rank</ion-title>
+    <ion-title>排行榜</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button color="medium" defaultHref="/finance"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-
+  <div class="custom-card">
+    <div class="custom-card-content rank">
+      <ion-list>
+        <ion-item [lines]="isLast?'none':'full'"
+          *ngFor="let rank of [1,2,3,4,5,6,7,8,9,10]; index as i; last as isLast">
+          <div class="avatar ion-padding-vertical" slot="start">
+            <div class="rank-number" [ngClass]="{'first': i===0, 'second':i===1, 'third':i===2}">
+              <ion-text>{{i+1}}</ion-text>
+            </div>
+            <ion-avatar>
+              <img
+                [src]="'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/7bcbf5d74ddf44f28f312a1c4a2b77d6.jpeg?x-oss-process=image/resize,m_fill,h_108,w_108'">
+            </ion-avatar>
+          </div>
+          <ion-label>谈艾艳</ion-label>
+          <ion-label color="dark" slot="end" text-right>
+            {{9800.05| currency: 'CNY':'symbol-narrow'}}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
 </ion-content>

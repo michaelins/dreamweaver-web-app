@@ -1,0 +1,70 @@
+ion-content {
+  --background: #f2f2f2;
+}
+ion-footer {
+  background: #f2f2f2;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ion-button {
+    flex-grow: 1;
+    &:last-child {
+      margin: 0 0 0 20px;
+    }
+  }
+}
+
+.custom-card {
+  .custom-card-content {
+    &.title {
+      padding: 20px;
+      min-height: 38vw;
+      background: url("../../../assets/images/bg_black.png") top left/100%
+        no-repeat;
+      color: var(--ion-color-light);
+      p {
+        font-size: 17px;
+      }
+      h5 {
+        padding-top: 10px;
+        font-size: 40px;
+      }
+    }
+    &.deposit {
+      background: var(--ion-color-success);
+      padding: 10px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      color: #ffffff;
+      ion-icon {
+        margin: 0 10px;
+        color: #e3b568;
+      }
+      ion-text {
+        flex-grow: 1;
+        p {
+          font-size: 17px;
+        }
+      }
+    }
+    &.list {
+      padding: 0 20px;
+      ion-item {
+        --min-height: 60px;
+        --padding-start: 0;
+        --padding-end: 0;
+        --inner-padding-start: 0;
+        --inner-padding-end: 0;
+        ion-label {
+          &.right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
+}
