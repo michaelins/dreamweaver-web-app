@@ -66,7 +66,7 @@
         <ion-text color="light">加入购物车</ion-text>
       </ion-col> -->
       <ion-col class="footer buynow" (click)="onSubmit()">
-        <ion-text color="light">加入购物车</ion-text>
+        <ion-text color="light">{{buyNow?'立即购买':'加入购物车'}}</ion-text>
       </ion-col>
     </ion-row>
   </ion-grid>

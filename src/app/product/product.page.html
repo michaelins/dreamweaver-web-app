@@ -275,11 +275,11 @@
         <ion-col size=9>
           <ion-grid>
             <ion-row>
-              <ion-col class="addcart" size=6 (click)="onAddToCart()">
+              <ion-col class="addcart" size=6 (click)="onAddToCart(false)">
                 <ion-text color="light">加入购物车</ion-text>
               </ion-col>
               <ion-col class="buynow" size=6>
-                <ion-text color="light" [routerLink]="['/orders','confirm']">立即购买</ion-text>
+                <ion-text color="light" (click)="onAddToCart(true)">立即购买</ion-text>
               </ion-col>
             </ion-row>
           </ion-grid>

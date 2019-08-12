@@ -113,13 +113,14 @@ export class ProductPage implements OnInit {
     }
   }
 
-  onAddToCart() {
+  onAddToCart(buyNow: boolean) {
     this.modalCtrl.create({
       component: AddToCartComponent,
       componentProps: {
         product: this.product,
         selectedSpec: this.selectedSpec,
-        selectedWarehouse: this.selectedWarehouse
+        selectedWarehouse: this.selectedWarehouse,
+        buyNow
       },
       cssClass: 'auto-height bottom'
     }).then(modal => {
