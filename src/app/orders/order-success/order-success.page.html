@@ -13,10 +13,11 @@
     <ion-text>
       <h1 style="margin-bottom: 20px">支付成功</h1>
     </ion-text>
-    <ion-text>
+    <ion-text *ngIf="order">
       <h5 style="margin-bottom: 20px">订单金额：{{order.actuallyPaid | currency: 'CNY':'symbol-narrow'}}</h5>
     </ion-text>
-    <ion-button color="primary" fill="outline" class="rounded" [routerLink]="['/orders',order.orderId]">查看订单
+    <ion-button *ngIf="order" color="primary" fill="outline" class="rounded" [routerLink]="['/orders',order.orderId]">
+      查看订单
     </ion-button>
   </div>
 </ion-content>

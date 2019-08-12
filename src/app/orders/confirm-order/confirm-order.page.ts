@@ -1,8 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { ModalController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { map, concatMap } from 'rxjs/operators';
 import { AddressPage } from '../../address/address.page';
 import { Address, AddressService } from '../../address/address.service';
+import { Product, Specification, Warehouse } from '../../product/product.service';
 import { ShoppingCart, ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
 import { CreateOrderReq, CreateOrderReqItem, OrderService } from '../order.service';
 
@@ -13,26 +16,56 @@ import { CreateOrderReq, CreateOrderReqItem, OrderService } from '../order.servi
 })
 export class ConfirmOrderPage implements OnInit, OnDestroy {
 
-  shoppingCartObservableSubscription: Subscription;
+  subscription: Subscription;
   cart: ShoppingCart;
   address: Address;
   price = 0;
+  buyNow = false;
+  product: Product;
+  selectedWarehouse: Warehouse;
+  selectedSpec: Specification;
+  quantity: number;
 
   constructor(
     private shoppingCartService: ShoppingCartService,
     private addressService: AddressService,
     private orderService: OrderService,
     private navCtrl: NavController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
-    this.shoppingCartObservableSubscription = this.shoppingCartService.shoppingCartObservable.subscribe(resp => {
-      if (resp) {
-        resp.items = resp.items.filter(item => {
+    this.subscription = this.route.paramMap.pipe(
+      map(() => window.history.state as {
+        data: {
+          product: Product,
+          selectedWarehouse: Warehouse,
+          selectedSpec: Specification,
+          quantity: number;
+        }
+      }),
+      concatMap(state => {
+        return this.shoppingCartService.shoppingCartObservable.pipe(
+          map(shoppingCart => {
+            return { state, shoppingCart };
+          })
+        );
+      })
+    ).subscribe(resp => {
+      console.log(resp);
+      if (resp.state.data) {
+        this.buyNow = true;
+        this.product = resp.state.data.product;
+        this.selectedWarehouse = resp.state.data.selectedWarehouse;
+        this.selectedSpec = resp.state.data.selectedSpec;
+        this.quantity = resp.state.data.quantity;
+      } else if (resp.shoppingCart) {
+        this.buyNow = false;
+        resp.shoppingCart.items = resp.shoppingCart.items.filter(item => {
           return item.checked;
         });
-        this.cart = resp;
+        this.cart = resp.shoppingCart;
         let price = 0;
         this.cart.items.forEach(item => {
           if (item.checked) {
@@ -52,7 +85,7 @@ export class ConfirmOrderPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.shoppingCartObservableSubscription.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   onSelectAddress() {
@@ -77,16 +110,26 @@ export class ConfirmOrderPage implements OnInit, OnDestroy {
       addressId: this.address.addressId,
       items: []
     };
-    this.cart.items.forEach(item => {
-      if (item.checked) {
-        orderReq.items.push({
-          amount: item.number,
-          goodsId: item.goodsId,
-          specificationId: item.specificationId,
-          warehouseId: item.warehouseId
-        } as CreateOrderReqItem);
-      }
-    });
+    if (this.buyNow) {
+      orderReq.items.push({
+        amount: this.quantity,
+        goodsId: this.product.goodsId,
+        specificationId: this.selectedSpec.id,
+        warehouseId: this.selectedWarehouse.id
+      } as CreateOrderReqItem);
+    } else {
+      this.cart.items.forEach(item => {
+        if (item.checked) {
+          orderReq.items.push({
+            amount: item.number,
+            goodsId: item.goodsId,
+            specificationId: item.specificationId,
+            warehouseId: item.warehouseId
+          } as CreateOrderReqItem);
+        }
+      });
+    }
+
     if (orderReq.items.length === 0) {
       return;
     } else {

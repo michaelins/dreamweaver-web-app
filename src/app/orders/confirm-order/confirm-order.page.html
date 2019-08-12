@@ -8,40 +8,40 @@
 </ion-header>
 
 <ion-content>
-    <ion-grid *ngIf="!address">
-        <ion-row>
-          <ion-col class="notice-id">
-            <ion-text>
-              <p>未选择收货地址</p>
+  <ion-grid *ngIf="!address">
+    <ion-row>
+      <ion-col class="notice-id">
+        <ion-text>
+          <p>未选择收货地址</p>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="address" (click)="onSelectAddress()">
+        <ion-icon src="../../../assets/icon/address.svg" color="primary"
+          class="ion-padding-start ion-margin-horizontal"></ion-icon>
+        <div class="address-wrapper ion-padding">
+          <div class="address-name ion-margin-bottom">
+            <ion-text color="dark">
+              <h5>请选择收货地址</h5>
             </ion-text>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col class="address" (click)="onSelectAddress()">
-            <ion-icon src="../../../assets/icon/address.svg" color="primary"
-              class="ion-padding-start ion-margin-horizontal"></ion-icon>
-            <div class="address-wrapper ion-padding">
-              <div class="address-name ion-margin-bottom">
-                <ion-text color="dark">
-                  <h5>请选择收货地址</h5>
-                </ion-text>
-                <ion-text color="dark" class="phone ion-margin-start">
-                  <p></p>
-                </ion-text>
-                <!-- <ion-text color="primary" class="id-positive" *ngIf="address.addressStatus==='AUTHENTICATED'">有身份证
+            <ion-text color="dark" class="phone ion-margin-start">
+              <p></p>
+            </ion-text>
+            <!-- <ion-text color="primary" class="id-positive" *ngIf="address.addressStatus==='AUTHENTICATED'">有身份证
                 </ion-text>
                 <ion-text color="medium" class="id-negative" *ngIf="address.addressStatus!=='AUTHENTICATED'">无身份证</ion-text> -->
-              </div>
-              <div>
-                <ion-text color="dark">
-                  <p>选择收货地址后下单</p>
-                </ion-text>
-              </div>
-            </div>
-            <ion-icon name="arrow-forward" color="primary" class="ion-padding-end ion-margin-horizontal"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+          </div>
+          <div>
+            <ion-text color="dark">
+              <p>选择收货地址后下单</p>
+            </ion-text>
+          </div>
+        </div>
+        <ion-icon name="arrow-forward" color="primary" class="ion-padding-end ion-margin-horizontal"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
   <ion-grid *ngIf="address">
     <ion-row *ngIf="address.addressStatus!=='AUTHENTICATED'">
       <ion-col class="notice-id">
@@ -87,10 +87,10 @@
     </ion-row>
   </ion-grid>
 
-  <ion-grid *ngIf="cart">
+  <ion-grid>
     <ion-row>
       <ion-col class="ion-padding-horizontal">
-        <ion-list class="ion-padding-horizontal ion-padding-bottom">
+        <ion-list class="ion-padding-horizontal ion-padding-bottom" *ngIf="cart">
           <ion-item class="product" detail="false" *ngFor="let item of cart.items; index as i">
             <div slot="start" class="ion-margin-end product-image">
               <img class="thumbnail" [src]="item.goodsImg+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
@@ -125,6 +125,41 @@
             </ion-grid>
           </ion-item>
         </ion-list>
+        <ion-list class="ion-padding-horizontal ion-padding-bottom" *ngIf="product">
+          <ion-item class="product" detail="false">
+            <div slot="start" class="ion-margin-end product-image">
+              <img class="thumbnail" [src]="product.headImg+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
+            </div>
+            <ion-grid>
+              <ion-row>
+                <ion-col class="ion-padding-top ion-padding-bottom product-block">
+                  <div class="box-2lines-ellipsis">
+                    <div>
+                      <article>{{product.name}}</article>
+                    </div>
+                  </div>
+                  <div class="ion-padding-top ion-padding-bottom">
+                    <ion-text color="medium">
+                      <p>{{selectedSpec.name}}/{{selectedWarehouse.name}}</p>
+                    </ion-text>
+                  </div>
+                  <div class="product-price-amount-wrapper">
+                    <div class="product-price">
+                      <ion-text color="primary">
+                        <h5>{{product.price | currency: 'CNY':'symbol-narrow'}}</h5>
+                      </ion-text>
+                    </div>
+                    <div class="product-amount">
+                      <ion-text>
+                        <p>x{{quantity}}</p>
+                      </ion-text>
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -138,7 +173,8 @@
       </ion-col>
       <ion-col class="ion-padding-vertical" text-right>
         <ion-text>
-          <h6>{{price | currency: 'CNY':'symbol-narrow'}}</h6>
+          <h6 *ngIf="cart">{{price | currency: 'CNY':'symbol-narrow'}}</h6>
+          <h6 *ngIf="product">{{product.price | currency: 'CNY':'symbol-narrow'}}</h6>
         </ion-text>
       </ion-col>
     </ion-row>

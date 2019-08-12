@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
+import { ModalController, NavParams, NavController } from '@ionic/angular';
 import { Product, Specification, Warehouse } from '../../product/product.service';
 import { ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-to-cart',
@@ -13,11 +14,13 @@ export class AddToCartComponent implements OnInit {
   product: Product;
   selectedWarehouse: Warehouse;
   selectedSpec: Specification;
+  buyNow = false;
   quantity = 1;
 
   constructor(
     private shoppingCartService: ShoppingCartService,
     private modalCtrl: ModalController,
+    private navCtrl: NavController,
     private navParams: NavParams
   ) { }
 
@@ -25,9 +28,11 @@ export class AddToCartComponent implements OnInit {
     console.log(this.navParams.get('product'));
     console.log(this.navParams.get('selectedSpec'));
     console.log(this.navParams.get('selectedWarehouse'));
+    console.log(this.navParams.get('buyNow'));
     this.product = this.navParams.get('product');
     this.selectedSpec = this.navParams.get('selectedSpec');
     this.selectedWarehouse = this.navParams.get('selectedWarehouse');
+    this.buyNow = this.navParams.get('buyNow');
   }
 
   onSelectSpec(spec: Specification) {
@@ -49,17 +54,31 @@ export class AddToCartComponent implements OnInit {
   }
 
   onSubmit() {
-    this.shoppingCartService.addToShoppingCart({
-      goodsId: this.product.goodsId,
-      number: this.quantity,
-      specificationId: this.selectedSpec.id,
-      warehouseId: this.selectedWarehouse.id
-    }).subscribe(resp => {
+    if (this.buyNow) {
+      this.navCtrl.navigateForward(['/orders/confirm'], {
+        state: {
+          data: {
+            product: this.product,
+            selectedWarehouse: this.selectedWarehouse,
+            selectedSpec: this.selectedSpec,
+            quantity: this.quantity
+          }
+        }
+      });
       this.onDismiss();
-      console.log(resp);
-    }, error => {
-      console.log(error);
-    });
+    } else {
+      this.shoppingCartService.addToShoppingCart({
+        goodsId: this.product.goodsId,
+        number: this.quantity,
+        specificationId: this.selectedSpec.id,
+        warehouseId: this.selectedWarehouse.id
+      }).subscribe(resp => {
+        this.onDismiss();
+        console.log(resp);
+      }, error => {
+        console.log(error);
+      });
+    }
   }
 
   onDismiss() {
