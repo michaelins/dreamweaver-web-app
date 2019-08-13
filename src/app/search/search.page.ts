@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalController, IonSearchbar } from '@ionic/angular';
 
 @Component({
   selector: 'app-search',
@@ -7,9 +8,31 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchPage implements OnInit {
 
-  constructor() { }
+  @ViewChild('searchbar') searchbar: IonSearchbar;
+
+  constructor(
+    private modalCtrl: ModalController
+  ) { }
 
   ngOnInit() {
+    console.log(this.searchbar);
+  }
+
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter');
+    this.setFocus();
+  }
+
+  setFocus() {
+    this.searchbar.setFocus();
+  }
+
+  onDismiss() {
+    this.modalCtrl.dismiss();
+  }
+
+  onFocus() {
+    console.log('focused');
   }
 
 }

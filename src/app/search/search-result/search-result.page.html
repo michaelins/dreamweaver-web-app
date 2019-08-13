@@ -1,9 +1,12 @@
 <ion-header>
   <ion-toolbar class="ion-no-padding">
     <ion-buttons slot="start">
-      <ion-back-button color="medium"></ion-back-button>
+      <ion-back-button color="medium" defaultHref="/tabs/home"></ion-back-button>
     </ion-buttons>
-    <ion-searchbar placeholder="请输入商品名称" searchIcon="../../assets/icon/search.svg"></ion-searchbar>
+    <form action=".">
+      <ion-searchbar #searchbar placeholder="输入你正在找的宝贝" searchIcon="../../assets/icon/search.svg" [value]="keyword"
+        type="search" (search)="onSearch($event)"></ion-searchbar>
+    </form>
   </ion-toolbar>
 </ion-header>
 
@@ -11,15 +14,50 @@
   <ion-grid class="ion-margin-top">
     <ion-row>
       <ion-col>
+
         <ion-list class="ion-padding">
-          <ion-item class="product" *ngFor="let product of products" [routerLink]="['/product', product.goodsId]" detail="false">
+          <ion-item class="product" [lines]="isLast?'none':'inset'" detail="false"
+            *ngFor="let product of products; index as i; last as isLast" [routerLink]="['/product', product.goodsId]">
+            <div slot="start" class="ion-margin-end product-image">
+              <img class="thumbnail" [src]="product.headImg+'?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF'">
+            </div>
+            <ion-grid>
+              <ion-row>
+                <ion-col class="ion-padding-top ion-padding-bottom product-block">
+                  <div class="product-title box-2lines-ellipsis">
+                    <div>
+                      <article>{{product.name}}</article>
+                    </div>
+                  </div>
+                  <div class="product-info">
+                    <ion-badge *ngFor="let tag of product.tagsView" color="secondary" class="ion-margin-end">{{tag}}
+                    </ion-badge>
+                  </div>
+                  <div class="product-price-amount-wrapper">
+                    <div class="product-price">
+                      <ion-text color="primary">
+                        <h5>{{product.price | currency: 'CNY':'symbol-narrow'}}</h5>
+                      </ion-text>
+                    </div>
+                    <div class="product-amount">
+                      <ion-icon color="medium" src="../../../assets/icon/cart.svg">
+                      </ion-icon>
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+        </ion-list>
+
+
+        <!-- <ion-list class="ion-padding">
+          <ion-item class="product" *ngFor="let product of products" [routerLink]="['/product', product.goodsId]"
+            detail="false">
             <img slot="start" class="ion-margin-end"
               [src]="product.headImg+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
             <ion-grid class="ion-no-padding">
               <ion-row>
-                <!-- <ion-col size=4 class="ion-no-padding ion-padding-end ion-padding-top ion-padding-bottom">
-                  <ion-img [src]="product.headImg+'?x-oss-process=image/resize,m_fill,h_150,w_150'"></ion-img>
-                </ion-col> -->
                 <ion-col class="ion-padding-top ion-padding-bottom product-block">
                   <ion-label text-wrap>
                     <div class="box-2lines-ellipsis">
@@ -39,7 +77,8 @@
                           </ion-text>
                         </ion-col>
                         <ion-col size=6 text-right>
-                          <ion-icon color="medium" src="../../../assets/icon/cart.svg" style="font-size: 20px;"></ion-icon>
+                          <ion-icon color="medium" src="../../../assets/icon/cart.svg" style="font-size: 20px;">
+                          </ion-icon>
                         </ion-col>
                       </ion-row>
                     </ion-grid>
@@ -48,7 +87,7 @@
               </ion-row>
             </ion-grid>
           </ion-item>
-        </ion-list>
+        </ion-list> -->
       </ion-col>
     </ion-row>
   </ion-grid>

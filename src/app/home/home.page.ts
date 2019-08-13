@@ -1,9 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer, ViewChild } from '@angular/core';
+import { IonSearchbar, NavController } from '@ionic/angular';
 import { UiStateService } from '../shared/ui-state.service';
-import { HomeService, Banner, Product, CollectionOfProduct } from './home.service';
-import { IonicProperty } from '../shared/model/ionic-property.model';
-import { IonContent, ModalController, IonSearchbar, NavController } from '@ionic/angular';
-import { fromEvent, Subscription } from 'rxjs';
+import { Banner, CollectionOfProduct, HomeService, Product } from './home.service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +11,7 @@ import { fromEvent, Subscription } from 'rxjs';
 export class HomePage implements OnInit {
 
   // @ViewChild('scrollable') scrollable: IonContent;
-  // @ViewChild('searchbar') searchbar: ElementRef;
+  @ViewChild('searchbar') searchbar: IonSearchbar;
 
   banners: Banner[] = [];
   products: Product[];
@@ -46,7 +44,9 @@ export class HomePage implements OnInit {
   constructor(
     private uiStateService: UiStateService,
     private homeService: HomeService,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    // tslint:disable-next-line: deprecation
+    private renderer: Renderer
   ) { }
 
   ngOnInit(): void {
@@ -165,24 +165,26 @@ export class HomePage implements OnInit {
   }
 
   // onRefreshStart(event: CustomEvent) {
-    // this.isRefresherInProgress = true;
+  // this.isRefresherInProgress = true;
   // }
 
   // onRefreshPull(event) {
-    // const progress: Promise<number> = event.target.getProgress();
-    // progress.then(num => {
-    //   this.refresherPullProgress = num;
-    //   let ratio = 1 - num;
-    //   if (ratio < 0.03) {
-    //     ratio = 0;
-    //   } else if (ratio > 1) {
-    //     ratio = 1;
-    //   }
-    //   this.toolBarOpacity = ratio;
-    // });
+  // const progress: Promise<number> = event.target.getProgress();
+  // progress.then(num => {
+  //   this.refresherPullProgress = num;
+  //   let ratio = 1 - num;
+  //   if (ratio < 0.03) {
+  //     ratio = 0;
+  //   } else if (ratio > 1) {
+  //     ratio = 1;
+  //   }
+  //   this.toolBarOpacity = ratio;
+  // });
   // }
 
-  onSearch() {
+  onSearch(event) {
+    this.renderer.invokeElementMethod(event.target, 'blur');
+    this.navCtrl.navigateForward(['/search/result'], { queryParams: { keyword: this.searchbar.value } });
   }
 
   // onTouchEnd(event: TouchEvent) {
