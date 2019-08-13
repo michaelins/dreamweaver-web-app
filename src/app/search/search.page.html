@@ -1,9 +1,18 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>search</ion-title>
+<ion-header no-border>
+  <ion-toolbar class="ion-no-padding">
+    <form action=".">
+      <ion-searchbar #searchbar placeholder="输入你正在找的宝贝" searchIcon="../../assets/icon/search.svg" type="search"
+        (ionFocus)="onFocus()">
+      </ion-searchbar>
+    </form>
+    <ion-buttons slot="primary" (click)="onDismiss()">
+      <ion-button color="primary" sise="small">取消</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  aefaef
+  <ion-button color="primary" sise="small" (click)="setFocus()">focus</ion-button>
 
 </ion-content>

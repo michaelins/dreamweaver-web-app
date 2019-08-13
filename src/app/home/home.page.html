@@ -5,7 +5,7 @@
     </ion-label>
     <form action=".">
       <ion-searchbar #searchbar placeholder="输入你正在找的宝贝" searchIcon="../../assets/icon/search.svg" type="search"
-        (search)="onSearch()"></ion-searchbar>
+        (search)="onSearch($event)"></ion-searchbar>
     </form>
   </ion-toolbar>
 </ion-header>
@@ -123,7 +123,7 @@
 
     <ion-row>
       <ion-col class="ion-no-padding ion-padding-start ion-padding-end">
-        <ion-list>
+        <!-- <ion-list>
           <ion-item lines="full" class="product" *ngFor="let product of products"
             [routerLink]="['/product', product.goodsId]">
             <ion-grid class="ion-no-padding">
@@ -150,7 +150,43 @@
               </ion-row>
             </ion-grid>
           </ion-item>
+        </ion-list> -->
+
+        <ion-list>
+          <ion-item class="product" detail="false" *ngFor="let product of products; index as i; last as isLast"
+            [routerLink]="['/product', product.goodsId]">
+            <div slot="start" class="ion-margin-end product-image">
+              <img class="thumbnail"
+                [src]="product.headImg+'?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF'">
+            </div>
+            <ion-grid>
+              <ion-row>
+                <ion-col class="ion-padding-top ion-padding-bottom product-block">
+                  <div class="product-title box-2lines-ellipsis">
+                    <div>
+                      <article>{{product.name}}</article>
+                    </div>
+                  </div>
+                  <div class="product-info">
+                    <ion-badge *ngFor="let tag of product.tagsView" color="secondary" class="ion-margin-end">{{tag}}
+                    </ion-badge>
+                  </div>
+                  <div class="product-price-amount-wrapper">
+                    <div class="product-price">
+                      <ion-text color="primary">
+                        <h5>{{product.price | currency: 'CNY':'symbol-narrow'}}</h5>
+                      </ion-text>
+                    </div>
+                    <div class="product-amount">
+                    </div>
+                  </div>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
         </ion-list>
+
+
       </ion-col>
     </ion-row>
   </ion-grid>

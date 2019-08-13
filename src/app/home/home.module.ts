@@ -1,13 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-
-import { HomePage } from './home.page';
+import { IonicModule } from '@ionic/angular';
+import { SearchPageModule } from '../search/search.module';
 import { SharedModule } from '../shared/shared.module';
-import { IonicPropertyDirective } from '../shared/directives/ionic-property.directive';
-import { LoginComponent } from '../shared/login/login.component';
+import { HomeRoutingModule } from './home-routing.module';
+import { HomePage } from './home.page';
 
 @NgModule({
   imports: [
@@ -15,14 +13,9 @@ import { LoginComponent } from '../shared/login/login.component';
     SharedModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild([
-      {
-        path: '',
-        component: HomePage
-      }
-    ])
+    HomeRoutingModule,
+    SearchPageModule
   ],
-  declarations: [HomePage],
-  entryComponents: [LoginComponent]
+  declarations: [HomePage]
 })
 export class HomePageModule { }

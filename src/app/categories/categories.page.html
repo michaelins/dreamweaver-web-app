@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar class="ion-no-padding">
-    <ion-searchbar placeholder="请输入商品名称" searchIcon="../../assets/icon/search.svg"></ion-searchbar>
+    <form action=".">
+      <ion-searchbar #searchbar placeholder="输入你正在找的宝贝" searchIcon="../../assets/icon/search.svg" [value]="keyword"
+        type="search" (search)="onSearch($event)"></ion-searchbar>
+    </form>
   </ion-toolbar>
 </ion-header>
 

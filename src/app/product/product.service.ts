@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Category } from '../categories/categories.service';
-import { EqualObject, SortObject } from '../shared/interfaces/common-interfaces';
+import { EqualObject, SortObject, SearchObject } from '../shared/interfaces/common-interfaces';
 
 export interface Product {
     status: string;
@@ -98,10 +98,11 @@ export class ProductService {
     constructor(
         private http: HttpClient) { }
 
-    getProducts(pageNum: number, pageSize: number, equal: EqualObject[], sort: SortObject[]) {
+    getProducts(pageNum: number, pageSize: number, equal: EqualObject[], sort: SortObject[], search?: SearchObject[]) {
         return this.http.post<CollectionOfProduct>(`${environment.apiServer}/goods/${pageNum}/${pageSize}`, {
             equal,
-            sort
+            sort,
+            search: search ? search : []
         });
     }
 
