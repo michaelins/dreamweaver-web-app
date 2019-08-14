@@ -16,8 +16,8 @@
       <h6>{{OrderStatus[order.orderStatus]}}</h6>
     </ion-text>
   </div>
-  <ion-card>
-    <ion-card-content>
+  <div class="custom-card">
+    <div class="custom-card-content">
       <ion-grid>
         <ion-row *ngIf="orderLogistics && orderLogistics.status==='SHIPPED'">
           <ion-col class="order-address light-border-bottom">
@@ -67,8 +67,8 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-    </ion-card-content>
-  </ion-card>
+    </div>
+  </div>
 
   <ion-grid class="ion-margin-top ion-padding-horizontal total" *ngIf="order">
     <ion-row class="ion-padding-vertical ion-margin-horizontal">

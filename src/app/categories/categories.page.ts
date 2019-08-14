@@ -124,6 +124,8 @@ export class CategoriesPage implements OnInit {
         this.loadingCtrl.dismiss();
         this.toastCtrl.create({
           message: '服务器开小差了，请稍后再试...',
+          position: 'middle',
+          color: 'dark',
           duration: 2000
         }).then(toast => {
           toast.present();

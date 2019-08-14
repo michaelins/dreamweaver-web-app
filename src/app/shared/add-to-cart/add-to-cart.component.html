@@ -1,19 +1,31 @@
 <div class="inner-content">
   <ion-grid class="ion-padding">
     <ion-row>
-      <ion-col size=3>
-        <img [src]="product.headImg+'?x-oss-process=image/resize,m_fill,h_108,w_108'">
+      <ion-col size="11">
+        <ion-item class="product" lines="none" detail="false">
+          <div slot="start" class="ion-margin-end product-image">
+            <img class="thumbnail" [src]="product.headImg+'?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF'">
+          </div>
+          <ion-grid>
+            <ion-row>
+              <ion-col class="ion-padding-bottom product-block">
+                <div class="product-title ion-padding-top">
+                  <ion-text color="primary">
+                    <h5>{{product.price | currency: 'CNY':'symbol-narrow'}}</h5>
+                  </ion-text>
+                </div>
+                <div class="product-info">
+                  <ion-text color="dark">
+                    <p>库存 {{product.amount}} 件</p>
+                    <p>已选择 {{selectedSpec.name}} {{selectedWarehouse.name}}</p>
+                  </ion-text>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
       </ion-col>
-      <ion-col class="product-info ion-padding-top" size=8>
-        <ion-text color="primary">
-          <h5>{{product.price | currency: 'CNY':'symbol-narrow'}}</h5>
-        </ion-text>
-        <ion-text color="dark">
-          <p>库存 {{product.amount}} 件</p>
-          <p>已选择 {{selectedSpec.name}} {{selectedWarehouse.name}}</p>
-        </ion-text>
-      </ion-col>
-      <ion-col size=1 text-right>
+      <ion-col size="1" text-right>
         <ion-icon class="close" name="close" (click)="onDismiss()"></ion-icon>
       </ion-col>
     </ion-row>

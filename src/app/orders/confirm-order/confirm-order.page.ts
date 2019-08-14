@@ -61,11 +61,12 @@ export class ConfirmOrderPage implements OnInit, OnDestroy {
         this.selectedSpec = resp.state.data.selectedSpec;
         this.quantity = resp.state.data.quantity;
       } else if (resp.shoppingCart) {
+        const shoppingCart = { ...resp.shoppingCart };
         this.buyNow = false;
-        resp.shoppingCart.items = resp.shoppingCart.items.filter(item => {
+        shoppingCart.items = shoppingCart.items.filter(item => {
           return item.checked;
         });
-        this.cart = resp.shoppingCart;
+        this.cart = shoppingCart;
         let price = 0;
         this.cart.items.forEach(item => {
           if (item.checked) {

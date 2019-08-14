@@ -64,6 +64,17 @@ export class ShoppingCartService {
     addToShoppingCart(item: ShoppingCartItemRef) {
         return this.http.post<ShoppingCart>(`${environment.apiServer}/buyer-cart`, item).pipe(
             tap(resp => {
+                const oldCart = this.shoppingCart.value;
+                if (oldCart && oldCart.items.length > 0) {
+                    oldCart.items.forEach(oldItem => {
+                        if (oldItem.checked) {
+                            const foundItem = resp.items.find(newItem => newItem.id === oldItem.id);
+                            if (foundItem) {
+                                foundItem.checked = true;
+                            }
+                        }
+                    });
+                }
                 this.shoppingCart.next(resp);
             })
         );
@@ -74,6 +85,17 @@ export class ShoppingCartService {
             body: items
         }).pipe(
             tap(resp => {
+                const oldCart = this.shoppingCart.value;
+                if (oldCart && oldCart.items.length > 0) {
+                    oldCart.items.forEach(oldItem => {
+                        if (oldItem.checked) {
+                            const foundItem = resp.items.find(newItem => newItem.id === oldItem.id);
+                            if (foundItem) {
+                                foundItem.checked = true;
+                            }
+                        }
+                    });
+                }
                 this.shoppingCart.next(resp);
             })
         );
