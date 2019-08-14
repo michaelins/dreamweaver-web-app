@@ -16,52 +16,16 @@ ion-checkbox {
 
 .product {
   .product-image {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
     img.thumbnail {
-      margin: 0;
-      width: 108px;
-      height: 108px;
+      width: 100px;
+      height: 100px;
     }
   }
   .product-block {
-    // height: 128px;
-    // ion-label {
-    //   height: 108px;
-    //   margin: 0;
-    // }
-    font-size: 14px;
+    min-height: 120px;
     .product-price-amount-wrapper {
-      display: flex;
-      align-items: stretch;
-      justify-content: flex-start;
-      .product-price {
-        font-size: 16px;
-        flex-grow: 1; 
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-      }
       .product-amount {
         width: 110px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        &.title {
-          justify-content: flex-start;
-        }
-        ion-icon {
-          font-size: 20px;
-        }
-        ion-input {
-          --background: var(--ion-color-light);
-          --padding-top: 5px;
-          --padding-bottom: 5px;
-          --padding-start: 5px;
-          --padding-end: 5px;
-          border-radius: 5px;
-        }
       }
     }
   }

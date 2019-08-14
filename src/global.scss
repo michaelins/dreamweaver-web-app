@@ -166,6 +166,11 @@ ul {
   }
 }
 
+ion-toast {
+  --max-width: 75vw;
+  text-align: center;
+}
+
 ion-button {
   &.rounded {
     --padding-top: 0;

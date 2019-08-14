@@ -30,6 +30,12 @@ ion-col.product-amount {
   }
 }
 
+.product {
+  .product-block {
+    min-height: 100px;
+  }
+}
+
 ion-input {
   width: 40px;
   --background: var(--ion-color-light);

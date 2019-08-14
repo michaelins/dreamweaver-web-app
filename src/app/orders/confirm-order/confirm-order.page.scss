@@ -90,54 +90,6 @@ ion-footer {
   }
 }
 
-.product {
-  .product-image {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    img.thumbnail {
-      margin: 0;
-      width: 108px;
-      height: 108px;
-    }
-  }
-  .product-block {
-    font-size: 14px;
-    min-height: 132px;
-    .product-price-amount-wrapper {
-      display: flex;
-      align-items: stretch;
-      justify-content: flex-start;
-      .product-price {
-        font-size: 16px;
-        flex-grow: 1;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-      }
-      .product-amount {
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        &.title {
-          justify-content: flex-start;
-        }
-        ion-icon {
-          font-size: 20px;
-        }
-        ion-input {
-          --background: var(--ion-color-light);
-          --padding-top: 5px;
-          --padding-bottom: 5px;
-          --padding-start: 5px;
-          --padding-end: 5px;
-          border-radius: 5px;
-        }
-      }
-    }
-  }
-}
-
 .total {
   ion-row {
     border-bottom: 1px solid var(--ion-color-light);
