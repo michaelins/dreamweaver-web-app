@@ -56,7 +56,6 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authService.user.subscribe(user => {
-      console.log(user);
       if (user) {
         this.user = user;
         this.orderService.refreshOrders(this.ordersPageSize).subscribe();
@@ -71,23 +70,19 @@ export class ProfilePage implements OnInit, OnDestroy {
       console.log(error);
     });
     this.ordersToPaySubscription = this.orderService.ordersToPayObs.subscribe(resp => {
-      console.log(resp);
       this.collectionOfOrdersToPay = resp;
     });
     this.ordersPaidSubscription = this.orderService.ordersPaidObs.subscribe(resp => {
-      console.log(resp);
       if (resp) {
         this.collectionOfOrdersPaid = resp;
       }
     });
     this.ordersShippedSubscription = this.orderService.ordersShippedObs.subscribe(resp => {
-      console.log(resp);
       if (resp) {
         this.collectionOfOrdersShipped = resp;
       }
     });
     this.ordersDoneSubscription = this.orderService.ordersDoneObs.subscribe(resp => {
-      console.log(resp);
       if (resp) {
         this.collectionOfOrdersDone = resp;
       }
@@ -102,51 +97,11 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
   ionViewWillEnter() {
-    //   this.scrollEvents = true;
-    //   this.bodyTouchMoveEventSubscription = fromEvent<TouchEvent>(document.body, 'touchmove', { passive: false }).subscribe(e => {
-    //     const bottomFaVal = this.scrollHeight - this.offsetHeight;
-    //     if (this.scrollTop === 0) {
-    //       if (e.touches[0].clientY > this.pageY) {
-    //         e.preventDefault();
-    //       } else {
-    //         e.stopPropagation();
-    //       }
-    //     } else if (this.scrollTop === bottomFaVal) {
-    //       if (e.touches[0].clientY < this.pageY) {
-    //         e.preventDefault();
-    //       } else {
-    //         e.stopPropagation();
-    //       }
-    //     } else if (this.scrollTop > 0 && this.scrollTop < bottomFaVal) {
-    //       e.stopPropagation();
-    //     } else {
-    //       e.preventDefault();
-    //     }
-    //   });
     this.uiStateService.setTabBarHidden(false);
-    console.log('ionViewWillEnter');
   }
 
-  // onTouchMove(event: TouchEvent) {
-  //   this.scrollable.getScrollElement().then(el => {
-  //     this.scrollTop = el.scrollTop;
-  //     this.scrollHeight = el.scrollHeight;
-  //     this.offsetHeight = el.offsetHeight;
-  //   });
-  // }
-
-  // onTouchStart(event: TouchEvent) {
-  //   this.scrollable.getScrollElement().then(el => {
-  //     this.pageX = event.touches[0].pageX;
-  //     this.pageY = event.touches[0].pageY;
-  //   });
-  // }
-
   ionViewWillLeave() {
-    //   this.scrollEvents = false;
-    //   this.bodyTouchMoveEventSubscription.unsubscribe();
     this.uiStateService.setTabBarHidden(true);
-    console.log('ionViewWillLeave');
   }
 
   onClockin() {
@@ -202,40 +157,6 @@ export class ProfilePage implements OnInit, OnDestroy {
       }, error => {
         console.log(error);
       });
-    });
-
-    // if (!this.hasClockinPermission) {
-    //   from(this.alertCtrl.create({
-    //     header: '打卡达人',
-    //     message: '您尚未成为达人，请先购买产品',
-    //     buttons: [{
-    //       text: '暂不购买',
-    //       role: 'cancel'
-    //     }, {
-    //       text: '立即购买',
-    //       role: 'ok'
-    //     }]
-    //   })).pipe(
-    //     switchMap(dialog => {
-    //       dialog.present();
-    //       return dialog.onDidDismiss();
-    //     })
-    //   ).subscribe(data => {
-    //     console.log(data);
-    //     if (data.role === 'ok') {
-    //       this.navCtrl.navigateForward(['/home']);
-    //     }
-    //   }, console.log);
-    // } else {
-    //   this.navCtrl.navigateForward(['/clockin']);
-    // }
-  }
-
-  onClick() {
-    this.modalCtrl.create({
-      component: LoginComponent
-    }).then(modal => {
-      modal.present();
     });
   }
 }

@@ -58,7 +58,7 @@ export class OrdersPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.authService.user.subscribe(user => {
-      console.log(user);
+      // console.log(user);
       if (!user) {
         this.collectionOfOrders = null;
         this.collectionOfOrdersToPay = null;
@@ -71,7 +71,6 @@ export class OrdersPage implements OnInit, OnDestroy {
         this.ordersShipped = null;
         this.ordersDone = null;
       }
-      this.orderService.refreshOrders(this.ordersPageSize).subscribe();
     }, error => {
       console.log(error);
     });
@@ -80,6 +79,8 @@ export class OrdersPage implements OnInit, OnDestroy {
         this.orders = resp.content;
         this.collectionOfOrders = resp;
         this.onRefreshHeight();
+      } else {
+        this.orderService.refreshOrders(this.ordersPageSize).subscribe();
       }
     });
     this.ordersToPaySubscription = this.orderService.ordersToPayObs.subscribe(resp => {
@@ -142,8 +143,8 @@ export class OrdersPage implements OnInit, OnDestroy {
   }
 
   onRefreshHeight() {
-    console.log('updateAutoHeight');
-    console.log(this.elRef.nativeElement.querySelector('.swiper-wrapper'));
+    // console.log('updateAutoHeight');
+    // console.log(this.elRef.nativeElement.querySelector('.swiper-wrapper'));
     // this.renderer.removeStyle(this.elRef.nativeElement.querySelector('.swiper-wrapper'), 'height');
     setTimeout(() => {
       if (this.slides) {
@@ -157,9 +158,9 @@ export class OrdersPage implements OnInit, OnDestroy {
   }
 
   doRefresh(event?) {
-    console.log('doRefresh', this.activeSlideId);
+    // console.log('doRefresh', this.activeSlideId);
     this.orderService.refreshOrders(this.ordersPageSize).subscribe(resp => {
-      console.log(resp);
+      // console.log(resp);
     }, error => {
       console.log(error);
     }, () => {
@@ -175,7 +176,6 @@ export class OrdersPage implements OnInit, OnDestroy {
 
   onIonSlideWillChange() {
     this.slides.getActiveIndex().then(id => {
-      console.log(id);
       this.activeSlideId = id;
       this.scrollable.scrollToTop();
     });
@@ -225,7 +225,7 @@ export class OrdersPage implements OnInit, OnDestroy {
   }
 
   pushOrdersFromResonse(slideId: number, resp: CollectionOfOrders) {
-    console.log(slideId, resp);
+    // console.log(slideId, resp);
     switch (slideId) {
       case 0:
         this.orders.push(...resp.content);
