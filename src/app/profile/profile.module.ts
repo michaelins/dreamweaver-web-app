@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { LoginComponent } from '../shared/login/login.component';
 import { SharedModule } from '../shared/shared.module';
 import { ProfileRoutingModule } from './profile-routing.module';
 import { ProfilePage } from './profile.page';
@@ -15,7 +14,6 @@ import { ProfilePage } from './profile.page';
     IonicModule,
     ProfileRoutingModule
   ],
-  declarations: [ProfilePage],
-  entryComponents: [LoginComponent]
+  declarations: [ProfilePage]
 })
 export class ProfilePageModule { }

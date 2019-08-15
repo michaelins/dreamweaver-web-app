@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
-import { BehaviorSubject, concat, from, Observable, of } from 'rxjs';
+import { BehaviorSubject, concat, from, merge, Observable, of } from 'rxjs';
 import { concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { $enum } from 'ts-enum-util';
 import { environment } from '../../environments/environment';
@@ -126,7 +126,8 @@ export enum OrderStatus {
     // 交易成功
     THXGOD = '已完成',
     // 关闭交易
-    CLOSED = '已关闭'
+    CLOSED = '已关闭',
+    DELETED_BY_USER = '已删除'
 }
 
 @Injectable({
@@ -174,7 +175,11 @@ export class OrderService {
 
     getOrders(pageNum: number, pageSize: number, orderStatus: OrderStatus, sortObjs?: SortObject[], silent?: boolean) {
         return this.http.post<CollectionOfOrders>(`${environment.apiServer}/order/users/${pageNum}/${pageSize}`, {
-            equal: $enum(OrderStatus).indexOfValue(orderStatus) === -1 ? [] : [{
+            equal: $enum(OrderStatus).indexOfValue(orderStatus) === -1 ? [{
+                field: 'orderStatus',
+                eqObj: $enum(OrderStatus).indexOfValue(OrderStatus.DELETED_BY_USER),
+                isNot: true
+            }] : [{
                 field: 'orderStatus',
                 eqObj: $enum(OrderStatus).indexOfValue(orderStatus)
             }],
@@ -231,7 +236,40 @@ export class OrderService {
     }
 
     cancelOrder(orderId: string) {
-        return this.http.delete<Order>(`${environment.apiServer}/order/users/${orderId}`);
+        return this.http.delete(`${environment.apiServer}/order/users/${orderId}`).pipe(
+            switchMap(resp => {
+                console.log(resp);
+                return merge(
+                    this.getOrders(1, this.defaultPageNum, null),
+                    this.getOrders(1, this.defaultPageNum, OrderStatus.TO_PAY),
+                );
+            })
+        );
+    }
+
+    deleteOrder(orderId: string) {
+        return this.http.delete(`${environment.apiServer}/order/users/dustbin/${orderId}`).pipe(
+            switchMap(resp => {
+                console.log(resp);
+                return merge(
+                    this.getOrders(1, this.defaultPageNum, null),
+                    this.getOrders(1, this.defaultPageNum, OrderStatus.THXGOD),
+                );
+            })
+        );
+    }
+
+    receivedOrder(orderId: string) {
+        return this.http.post(`${environment.apiServer}/order/users/receiving/${orderId}`, {}).pipe(
+            switchMap(resp => {
+                console.log(resp);
+                return merge(
+                    this.getOrders(1, this.defaultPageNum, null),
+                    this.getOrders(1, this.defaultPageNum, OrderStatus.SHIPPED),
+                    this.getOrders(1, this.defaultPageNum, OrderStatus.THXGOD),
+                );
+            })
+        );
     }
 
     getOrderShippingInfo(orderId: string) {
@@ -244,10 +282,6 @@ export class OrderService {
 
     simulatePayOrder(orderId: string) {
         return this.http.post(`${environment.apiServer}/pay/wx/callback/test/${orderId}`, {});
-    }
-
-    receivedOrder(orderId: string) {
-        return this.http.post(`${environment.apiServer}/order/users/receiving/${orderId}`, {});
     }
 
     getOrderSecondaryButtonText(status: OrderStatus) {
@@ -349,7 +383,7 @@ export class OrderService {
     }
 
     confirmDeleteOrder(orderId: string) {
-        this.confirmOrderAction(orderId, '确认删除订单吗？删除后不可撤销', of(orderId));
+        this.confirmOrderAction(orderId, '确认删除订单吗？删除后不可撤销', this.deleteOrder(orderId));
     }
 
     confirmOrderAction(orderId: string, message: string, handlerObs: Observable<any>) {
@@ -369,11 +403,11 @@ export class OrderService {
             }),
             switchMap(data => {
                 if (data && data.role === 'ok') {
-                    console.log('orderId: ', orderId);
+                    // console.log('orderId: ', orderId);
                     return handlerObs;
                 }
             })
-        ).subscribe(console.log, console.log);
+        ).subscribe();
     }
 
 }

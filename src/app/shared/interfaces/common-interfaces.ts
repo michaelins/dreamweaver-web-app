@@ -1,6 +1,7 @@
 export interface EqualObject {
     eqObj: any;
     field: string;
+    isNot?: boolean;
 }
 export interface SortObject {
     direction: number;
