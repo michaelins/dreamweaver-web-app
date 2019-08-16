@@ -32,8 +32,8 @@
           <ion-item *ngFor="let record of records">
             <div class="date" slot="start">
               <ion-text>
-                <h3 class="ion-margin-end">{{record.day | date:'d'}}</h3>
-                <p class="ion-padding-end">{{record.day | date:'M'}}月</p>
+                <h3>{{record.day | date:'d'}}</h3>
+                <p>{{record.day | date:'M'}}月</p>
               </ion-text>
             </div>
             <ion-thumbnail class="ion-margin-vertical ion-margin-end">

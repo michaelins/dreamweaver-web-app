@@ -15,6 +15,14 @@ export class ClockinPage implements OnInit {
   sortObjs = [{ direction: 0, field: 'createTime' }];
   totalDays: number;
   bodyData: BodyData;
+  slideOpts = {
+    speed: 400,
+    loop: true,
+    autoplay: {
+      delay: 3000,
+    },
+    lazy: true
+  };
 
   constructor(
     private clockinRecordService: ClockinRecordService,

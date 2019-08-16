@@ -41,11 +41,17 @@ export class SettingsPage implements OnInit {
       switchMap(data => {
         if (data && data.role === 'ok') {
           return this.authService.logout();
+        } else {
+          return ['canceled'];
         }
       })
-    ).subscribe(() => {
+    ).subscribe(resp => {
       this.logoutInProgress = false;
-      this.navCtrl.navigateBack(['/tabs/profile']);
+      if (resp && resp === 'canceled') {
+        console.log('canceled');
+      } else {
+        this.navCtrl.navigateBack(['/tabs/profile']);
+      }
     }, console.log, () => {
       this.logoutInProgress = false;
     });

@@ -52,13 +52,11 @@ export class HomePage implements OnInit {
   ngOnInit(): void {
     // this.isRefresherInProgress = false;
     this.homeService.getBanners().subscribe(resp => {
-      console.log(resp);
       this.banners.push(...resp);
     }, error => {
       console.log(error);
     });
     this.homeService.getProducts(1, this.productsPageSize).subscribe(resp => {
-      console.log(resp);
       this.products = resp.content;
       this.collectionOfProduct = resp;
     }, error => {
@@ -222,7 +220,4 @@ export class HomePage implements OnInit {
   //   });
   // }
 
-  onProductClick() {
-    this.navCtrl.navigateForward(['/product']);
-  }
 }
