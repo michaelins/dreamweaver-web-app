@@ -13,6 +13,21 @@
 </ion-header>
 
 <ion-content>
+  <ion-slides pager="true" [options]="slideOpts">
+    <ion-slide>
+      <img
+        src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/75a46def995c437288982d1c74f7ca37.jpg?x-oss-process=image/resize,m_fill,h_166,w_480">
+    </ion-slide>
+    <ion-slide>
+      <img
+        src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/694427f0de8c4a36a7fe50451961625f.jpg?x-oss-process=image/resize,m_fill,h_166,w_480">
+    </ion-slide>
+    <ion-slide>
+      <img
+        src="https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/9001928efff442e8844486ea12674ab6.jpg?x-oss-process=image/resize,m_fill,h_166,w_480">
+    </ion-slide>
+  </ion-slides>
+
   <ion-grid class="ion-margin-top">
     <ion-row class="ion-padding-horizontal">
       <ion-col>
@@ -133,7 +148,7 @@
   <ion-grid class="ion-margin-top">
     <ion-row class="ion-padding-horizontal">
       <ion-col>
-        <ion-item detail lines="full" [routerLink]="['/clockin/record']">
+        <ion-item detail [lines]="(records && records.length>0)?'full':'none'" [routerLink]="['/clockin/record']">
           <ion-label>
             <h3>我的饮食记录</h3>
           </ion-label>

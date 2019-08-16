@@ -2,12 +2,12 @@ ion-content {
   --background: #f2f2f2;
 }
 
-ion-item {
-  --padding-start: 0px;
+ion-list {
+  margin: 0;
 }
 
-ion-card {
-  margin: var(--ion-margin);
+ion-item {
+  --padding-start: 0px;
 }
 
 ion-checkbox {

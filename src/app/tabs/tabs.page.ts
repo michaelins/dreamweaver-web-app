@@ -20,7 +20,6 @@ export class TabsPage implements OnInit, OnDestroy {
   ngOnInit() {
     this.isTabBarHidden = this.uiStateService.getTabBarHidden();
     this.shoppingCartSubscription = this.shoppingCartService.shoppingCartObservable.subscribe(resp => {
-      console.log(resp);
       if (resp && resp.items && resp.items.length >= 0) {
         this.shoppingCartItemSize = resp.items.length;
       }
@@ -34,9 +33,7 @@ export class TabsPage implements OnInit, OnDestroy {
   }
 
   onTouchMove(event) {
-    console.log(event);
     event.stopPropagation();
     event.preventDefault();
   }
-
 }

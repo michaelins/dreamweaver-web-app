@@ -18,15 +18,22 @@
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-item class="profile ion-margin-bottom" lines="none">
+        <ion-item *ngIf="user" class="profile ion-margin-bottom" lines="none">
+          <ion-avatar slot="start" [routerLink]="['/tabs/profile/settings/personal']">
+            <ion-img [src]="user.headPortrait?user.headPortrait:'.././../assets/images/avatar.png'">
+            </ion-img>
+          </ion-avatar>
+          <ion-label [routerLink]="['/tabs/profile/settings/personal']">
+            <h2 *ngIf="user">{{user.nickName}}</h2>
+          </ion-label>
+        </ion-item>
+        <ion-item *ngIf="!user" class="profile ion-margin-bottom" lines="none">
           <ion-avatar slot="start">
-            <ion-img [src]="user&&user.headPortrait?user.headPortrait:'.././../assets/images/avatar.png'">
+            <ion-img src="../../../assets/images/avatar.png">
             </ion-img>
           </ion-avatar>
           <ion-label>
             <h2 *ngIf="!user" [routerLink]="['/auth/login']">登录/注册</h2>
-            <h2 *ngIf="user">{{user.nickName}}</h2>
-            <!-- <ion-badge color="primary">注册用户</ion-badge> -->
           </ion-label>
         </ion-item>
         <div class="custom-card">

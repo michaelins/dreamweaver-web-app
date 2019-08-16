@@ -223,6 +223,10 @@ export class ShoppingCartPage implements OnInit, OnDestroy {
           return of(null);
         }
       })
-    ).subscribe();
+    ).subscribe(() => {
+      this.updateSelectAllStatus();
+      this.calcPriceAndQuantity();
+      this.editMode = !this.editMode;
+    });
   }
 }

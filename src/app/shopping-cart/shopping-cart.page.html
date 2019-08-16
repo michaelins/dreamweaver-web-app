@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngIf="cart && cart.items.length>0">
+  <div class="custom-card" *ngIf="cart && cart.items.length>0">
     <ion-grid>
       <ion-row>
         <ion-col>
@@ -70,7 +70,12 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </ion-card>
+  </div>
+  <div *ngIf="!cart || cart.items.length === 0" class="empty-content">
+    <ion-text color="medium">
+      <p class="ion-margin ion-padding-horizontal">购物车还空空如也呢，快去选择心仪的商品吧！</p>
+    </ion-text>
+  </div>
 </ion-content>
 
 <ion-footer *ngIf="editMode">
