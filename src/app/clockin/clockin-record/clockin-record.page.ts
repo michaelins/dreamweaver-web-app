@@ -5,7 +5,7 @@ import { from } from 'rxjs';
 import { switchMap, toArray, mergeMap, map } from 'rxjs/operators';
 import { ClockinRecordNewComponent } from './clockin-record-new/clockin-record-new.component';
 import { ClockinRecordService, CollectionOfRecord, Record } from './clockin-record.service';
-import * as PhotoSwipe from 'PhotoSwipe';
+import * as PhotoSwipe from 'photoswipe';
 import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
 import { OssService } from '../../shared/oss.service';
 
