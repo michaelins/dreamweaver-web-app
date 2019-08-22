@@ -27,4 +27,17 @@ export class OrderListComponent implements OnInit {
     console.log(this.orderStatus);
   }
 
+  onOrderPrimaryButtonClick(status: OrderStatus, orderId: string) {
+    const obs = this.orderService.onOrderPrimaryButtonClick(status, orderId);
+    if (obs) {
+      obs.subscribe();
+    }
+  }
+
+  onOrderSecondaryButtonClick(status: OrderStatus, orderId: string) {
+    const obs = this.orderService.onOrderSecondaryButtonClick(status, orderId);
+    if (obs) {
+      obs.subscribe();
+    }
+  }
 }

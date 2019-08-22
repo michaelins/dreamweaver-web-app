@@ -22,26 +22,11 @@ ion-item {
 }
 
 ion-footer {
-  ion-toolbar {
-    --padding-top: 0px;
-    --padding-bottom: 0px;
-    --padding-end: 0px;
-    --padding-start: 0px;
-  }
-  ion-col {
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    &.total {
-      padding: 0 0 0 20px;
-      justify-content: flex-start;
-      background: #ffffff;
-    }
-    &.purchase {
-      background: var(--ion-color-primary);
-    }
-  }
+  border-top: 1px solid var(--ion-color-light);
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .order-state {

@@ -287,8 +287,8 @@ export class OrderService {
     getOrderSecondaryButtonText(status: OrderStatus) {
         switch (status) {
             case OrderStatus.TO_PAY:
-            case OrderStatus.PAID:
-            case OrderStatus.UNSHIPPED:
+                // case OrderStatus.PAID:
+                // case OrderStatus.UNSHIPPED:
                 return '取消订单';
             case OrderStatus.SHIPPED:
                 return '查看物流';
@@ -326,6 +326,8 @@ export class OrderService {
     showOrderSecondaryButton(status: OrderStatus) {
         switch (status) {
             case OrderStatus.RETURNING:
+            case OrderStatus.PAID:
+            case OrderStatus.UNSHIPPED:
                 return false;
             default:
                 return true;
@@ -338,8 +340,7 @@ export class OrderService {
                 this.payOrder(orderId);
                 break;
             case OrderStatus.SHIPPED:
-                this.confirmOrderReceived(orderId);
-                break;
+                return this.confirmOrderReceived(orderId);
             default:
                 break;
         }
@@ -348,10 +349,9 @@ export class OrderService {
     onOrderSecondaryButtonClick(status: OrderStatus, orderId: string) {
         switch (status) {
             case OrderStatus.TO_PAY:
-            case OrderStatus.PAID:
-            case OrderStatus.UNSHIPPED:
-                this.confirmCancelOrder(orderId);
-                break;
+                // case OrderStatus.PAID:
+                // case OrderStatus.UNSHIPPED:
+                return this.confirmCancelOrder(orderId);
             case OrderStatus.SHIPPED:
                 this.trackingShipment(orderId);
                 break;
@@ -359,15 +359,14 @@ export class OrderService {
             case OrderStatus.RETURNED:
             case OrderStatus.THXGOD:
             case OrderStatus.CLOSED:
-                this.confirmDeleteOrder(orderId);
-                break;
+                return this.confirmDeleteOrder(orderId);
             default:
                 break;
         }
     }
 
     confirmCancelOrder(orderId: string) {
-        this.confirmOrderAction(orderId, '确认取消订单吗？取消后不可撤销', this.cancelOrder(orderId));
+        return this.confirmOrderAction(orderId, '确认取消订单吗？取消后不可撤销', this.cancelOrder(orderId));
     }
 
     payOrder(orderId: string) {
@@ -379,15 +378,15 @@ export class OrderService {
     }
 
     confirmOrderReceived(orderId: string) {
-        this.confirmOrderAction(orderId, '确认收货吗？确认后不可撤销', this.receivedOrder(orderId));
+        return this.confirmOrderAction(orderId, '确认收货吗？确认后不可撤销', this.receivedOrder(orderId));
     }
 
     confirmDeleteOrder(orderId: string) {
-        this.confirmOrderAction(orderId, '确认删除订单吗？删除后不可撤销', this.deleteOrder(orderId));
+        return this.confirmOrderAction(orderId, '确认删除订单吗？删除后不可撤销', this.deleteOrder(orderId));
     }
 
     confirmOrderAction(orderId: string, message: string, handlerObs: Observable<any>) {
-        from(this.alertCtrl.create({
+        return from(this.alertCtrl.create({
             message,
             buttons: [{
                 text: '取消',
@@ -407,7 +406,7 @@ export class OrderService {
                     return handlerObs;
                 }
             })
-        ).subscribe();
+        );
     }
 
 }

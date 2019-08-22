@@ -59,12 +59,12 @@
               <ion-col class="ion-padding">
                 <ion-button color="medium" fill="outline" class="rounded" size="small"
                   *ngIf="orderService.showOrderSecondaryButton(OrderStatus[order.orderStatus])"
-                  (click)="orderService.onOrderSecondaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
+                  (click)="onOrderSecondaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
                   {{orderService.getOrderSecondaryButtonText(OrderStatus[order.orderStatus])}}
                 </ion-button>
                 <ion-button color="primary" fill="outline" class="rounded ion-margin-start" size="small"
                   *ngIf="orderService.showOrderPrimaryButton(OrderStatus[order.orderStatus])"
-                  (click)="orderService.onOrderPrimaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
+                  (click)="onOrderPrimaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
                   {{orderService.getOrderPrimaryButtonText(OrderStatus[order.orderStatus])}}</ion-button>
               </ion-col>
             </ion-row>

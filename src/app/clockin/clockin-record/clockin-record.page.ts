@@ -138,61 +138,6 @@ export class ClockinRecordPage implements OnInit {
     }, () => {
       this.loadingCtrl.dismiss();
     });
-
-    // from(record.imgs).pipe(
-    //   mergeMap(img => {
-    //     return this.ossService.getImageInfo(img).pipe(
-    //       map(info => {
-    //         let width, height: number;
-    //         if (info.ImageWidth.value >= info.ImageHeight.value) {
-    //           if (info.ImageWidth.value <= 800) {
-    //             width = info.ImageWidth.value;
-    //             height = info.ImageHeight.value;
-    //           } else {
-    //             width = 800;
-    //             height = info.ImageHeight.value / info.ImageWidth.value * 800;
-    //           }
-    //         } else {
-    //           if (info.ImageHeight.value <= 800) {
-    //             width = info.ImageWidth.value;
-    //             height = info.ImageHeight.value;
-    //           } else {
-    //             height = 800;
-    //             width = info.ImageWidth.value / info.ImageHeight.value * 800;
-    //           }
-    //         }
-    //         return {
-    //           src: `${img}?x-oss-process=image/resize,m_lfit,h_800,w_800`,
-    //           w: Math.round(width),
-    //           h: Math.round(height)
-    //         };
-    //       })
-    //     );
-    //   }),
-    //   toArray()
-    // ).subscribe(resp => {
-    //   console.log(resp);
-    // });
-    // Build gallery images array
-    // const images = [
-    //   {
-    //     src: 'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/75a46def995c437288982d1c74f7ca37.jpg?x-oss-process=image/resize,m_fill,h_480,w_480',
-    //     w: 480,
-    //     h: 480
-    //   },
-    //   {
-    //     src: 'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/694427f0de8c4a36a7fe50451961625f.jpg?x-oss-process=image/resize,m_fill,h_480,w_480',
-    //     w: 480,
-    //     h: 480
-    //   },
-    //   {
-    //     src: 'https://r08872-dw-dev.oss-cn-zhangjiakou.aliyuncs.com/9001928efff442e8844486ea12674ab6.jpg?x-oss-process=image/resize,m_fill,h_480,w_480',
-    //     w: 480,
-    //     h: 480
-    //   }
-    // ];
-
-
   }
 
   preview(event) {
