@@ -1,8 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AlertController, NavController } from '@ionic/angular';
-import { from, Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { Order, OrderStatus, OrderService } from '../order.service';
+import { Order, OrderService, OrderStatus } from '../order.service';
 
 @Component({
   selector: 'app-order-list',
@@ -17,14 +14,28 @@ export class OrderListComponent implements OnInit {
   OrderStatus = OrderStatus;
 
   constructor(
-    private alertCtrl: AlertController,
-    private navCtrl: NavController,
-    protected orderService: OrderService
+    private orderService: OrderService
   ) { }
 
   ngOnInit() {
     console.log(this.orders);
     console.log(this.orderStatus);
+  }
+
+  showOrderPrimaryButton(status: OrderStatus) {
+    this.orderService.showOrderPrimaryButton(status);
+  }
+
+  showOrderSecondaryButton(status: OrderStatus) {
+    this.orderService.showOrderSecondaryButton(status);
+  }
+
+  getOrderPrimaryButtonText(status: OrderStatus) {
+    this.orderService.getOrderPrimaryButtonText(status);
+  }
+
+  getOrderSecondaryButtonText(status: OrderStatus) {
+    this.orderService.getOrderSecondaryButtonText(status);
   }
 
   onOrderPrimaryButtonClick(status: OrderStatus, orderId: string) {

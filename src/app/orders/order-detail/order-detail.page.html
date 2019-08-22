@@ -180,21 +180,13 @@
 </ion-content>
 
 <ion-footer>
-  <!-- <ion-toolbar>
-    <ion-grid>
-      <ion-row *ngIf="order">
-        <ion-col text-right> -->
-          <ion-button color="medium" fill="outline" class="rounded" size="small"
-            *ngIf="order && orderService.showOrderSecondaryButton(OrderStatus[order.orderStatus])"
-            (click)="onOrderSecondaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
-            {{orderService.getOrderSecondaryButtonText(OrderStatus[order.orderStatus])}}
-          </ion-button>
-          <ion-button color="primary" fill="outline" class="rounded ion-margin-start" size="small"
-            *ngIf="order && orderService.showOrderPrimaryButton(OrderStatus[order.orderStatus])"
-            (click)="onOrderPrimaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
-            {{orderService.getOrderPrimaryButtonText(OrderStatus[order.orderStatus])}}</ion-button>
-        <!-- </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-toolbar> -->
+  <ion-button color="medium" fill="outline" class="rounded" size="small"
+    *ngIf="order && showOrderSecondaryButton(OrderStatus[order.orderStatus])"
+    (click)="onOrderSecondaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
+    {{getOrderSecondaryButtonText(OrderStatus[order.orderStatus])}}
+  </ion-button>
+  <ion-button color="primary" fill="outline" class="rounded ion-margin-start" size="small"
+    *ngIf="order && showOrderPrimaryButton(OrderStatus[order.orderStatus])"
+    (click)="onOrderPrimaryButtonClick(OrderStatus[order.orderStatus],order.orderId)">
+    {{getOrderPrimaryButtonText(OrderStatus[order.orderStatus])}}</ion-button>
 </ion-footer>

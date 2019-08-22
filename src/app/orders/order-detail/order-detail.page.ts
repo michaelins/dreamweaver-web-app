@@ -20,7 +20,7 @@ export class OrderDetailPage implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private navCtrl: NavController,
-    protected orderService: OrderService
+    private orderService: OrderService
   ) { }
 
   ngOnInit() {
@@ -44,6 +44,22 @@ export class OrderDetailPage implements OnInit {
         this.navCtrl.navigateBack(['/orders']);
       }
     });
+  }
+
+  showOrderPrimaryButton(status: OrderStatus) {
+    this.orderService.showOrderPrimaryButton(status);
+  }
+
+  showOrderSecondaryButton(status: OrderStatus) {
+    this.orderService.showOrderSecondaryButton(status);
+  }
+
+  getOrderPrimaryButtonText(status: OrderStatus) {
+    this.orderService.getOrderPrimaryButtonText(status);
+  }
+
+  getOrderSecondaryButtonText(status: OrderStatus) {
+    this.orderService.getOrderSecondaryButtonText(status);
   }
 
   onOrderPrimaryButtonClick(status: OrderStatus, orderId: string) {
