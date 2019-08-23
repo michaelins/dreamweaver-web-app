@@ -58,7 +58,7 @@ export class ClockinRecordNewComponent implements OnInit {
     ).subscribe(resp => {
       console.log(resp);
       this.loadingCtrl.dismiss();
-      this.modalCtrl.dismiss({ refresh: true });
+      this.modalCtrl.dismiss();
     }, error => {
       alert(JSON.stringify(error));
       this.loadingCtrl.dismiss();

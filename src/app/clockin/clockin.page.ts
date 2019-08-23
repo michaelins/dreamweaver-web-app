@@ -1,19 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { Record, ClockinRecordService } from './clockin-record/clockin-record.service';
-import { ClockinService, BodyData } from './clockin.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ClockinRecordService, Record } from './clockin-record/clockin-record.service';
+import { BodyData, ClockinService } from './clockin.service';
 
 @Component({
   selector: 'app-clockin',
   templateUrl: './clockin.page.html',
   styleUrls: ['./clockin.page.scss'],
 })
-export class ClockinPage implements OnInit {
+export class ClockinPage implements OnInit, OnDestroy {
 
+  recordsSubscription: Subscription;
   records: Record[];
   recordsPageSize = 1;
   equalObjs = [{ eqObj: 0, field: 'status' }];
   sortObjs = [{ direction: 0, field: 'createTime' }];
   totalDays: number;
+  totalDaysSubscription: Subscription;
+  bodyDataSubscription: Subscription;
   bodyData: BodyData;
   slideOpts = {
     speed: 400,
@@ -30,22 +34,27 @@ export class ClockinPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.clockinRecordService.getRecords(1, this.recordsPageSize, this.equalObjs, this.sortObjs).subscribe(resp => {
-      console.log(resp);
-      this.records = resp.content;
-    }, error => {
-      console.log(error);
+    this.recordsSubscription = this.clockinRecordService.recordsObs.subscribe(resp => {
+      if (resp) {
+        this.records = resp.content;
+      }
     });
-    this.clockinService.getTotalDays().subscribe(resp => {
-      console.log(resp);
-      this.totalDays = resp.count;
+    this.totalDaysSubscription = this.clockinService.totalDaysObs.subscribe(resp => {
+      if (resp) {
+        this.totalDays = resp.count;
+      }
     });
-    this.clockinService.getBodyData().subscribe(bodyData => {
-      console.log(bodyData);
-      this.bodyData = bodyData;
-    }, error => {
-      console.log(error);
+    this.bodyDataSubscription = this.clockinService.bodyDataObs.subscribe(resp => {
+      this.bodyData = resp;
     });
+    this.clockinService.getTotalDays().subscribe();
+    this.clockinRecordService.getRecords(1, this.recordsPageSize, this.equalObjs, this.sortObjs).subscribe();
+    this.clockinService.getBodyData().subscribe();
   }
 
+  ngOnDestroy() {
+    this.bodyDataSubscription.unsubscribe();
+    this.recordsSubscription.unsubscribe();
+    this.totalDaysSubscription.unsubscribe();
+  }
 }

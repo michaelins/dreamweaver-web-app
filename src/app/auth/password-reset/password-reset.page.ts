@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { NavController, AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
+import { interval, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -8,12 +10,14 @@ import { AuthService } from '../auth.service';
   templateUrl: './password-reset.page.html',
   styleUrls: ['./password-reset.page.scss'],
 })
-export class PasswordResetPage implements OnInit {
+export class PasswordResetPage implements OnInit, OnDestroy {
 
   form: FormGroup;
   isGetAuthCodeDisabled = false;
   saveInProgress = false;
   authKey: string;
+  authCodeSubscription: Subscription;
+  authCodeCooldown: number;
 
   constructor(
     private authService: AuthService,
@@ -36,6 +40,23 @@ export class PasswordResetPage implements OnInit {
         validators: [Validators.required, Validators.minLength(6), Validators.maxLength(20)]
       })
     });
+  }
+
+  ngOnDestroy() {
+    if (this.authCodeSubscription) {
+      this.authCodeSubscription.unsubscribe();
+    }
+  }
+
+  ionViewWillEnter() {
+    this.isGetAuthCodeDisabled = false;
+    this.authCodeCooldown = undefined;
+  }
+
+  ionViewWillLeave() {
+    if (this.authCodeSubscription) {
+      this.authCodeSubscription.unsubscribe();
+    }
   }
 
   onSubmit() {
@@ -69,12 +90,34 @@ export class PasswordResetPage implements OnInit {
 
   onGetAuthCode() {
     this.isGetAuthCodeDisabled = true;
-    console.log(this.form.value.phoneNo);
-    this.authService.getAuthCode(this.form.value.phoneNo, 'password').subscribe(response => {
+    this.authCodeSubscription = this.authService.getAuthCode(this.form.value.phoneNo, 'password').pipe(
+      switchMap(response => {
+        console.log(response);
+        this.authKey = response.authKey;
+        return interval(1000);
+      })
+    ).subscribe(response => {
       console.log(response);
-      this.authKey = response.authKey;
+      const cooldown = 60 - response;
+      if (cooldown <= 0) {
+        this.authCodeSubscription.unsubscribe();
+        this.isGetAuthCodeDisabled = false;
+      } else {
+        this.authCodeCooldown = cooldown;
+      }
     }, error => {
       console.log(error);
+      if (error.status === 404 || error.status === 400) {
+        this.alertCtrl.create({
+          header: '短信验证失败',
+          message: error.error.message,
+          buttons: ['确定']
+        }).then(alert => {
+          alert.present();
+        }).finally(() => {
+          this.isGetAuthCodeDisabled = false;
+        });
+      }
     });
   }
 

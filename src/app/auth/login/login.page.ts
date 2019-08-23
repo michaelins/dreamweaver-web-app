@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AlertController, NavController } from '@ionic/angular';
+import { interval, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -9,7 +11,7 @@ import { AuthService } from '../auth.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, OnDestroy {
 
   form: FormGroup;
   loginInProcess = false;
@@ -17,6 +19,8 @@ export class LoginPage implements OnInit {
   isSmsLogin = false;
   isGetAuthCodeDisabled = false;
   authKey: string;
+  authCodeSubscription: Subscription;
+  authCodeCooldown: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -44,6 +48,23 @@ export class LoginPage implements OnInit {
     this.fromUrl = this.route.snapshot.queryParamMap.get('from');
   }
 
+  ngOnDestroy() {
+    if (this.authCodeSubscription) {
+      this.authCodeSubscription.unsubscribe();
+    }
+  }
+
+  ionViewWillEnter() {
+    this.isGetAuthCodeDisabled = false;
+    this.authCodeCooldown = undefined;
+  }
+
+  ionViewWillLeave() {
+    if (this.authCodeSubscription) {
+      this.authCodeSubscription.unsubscribe();
+    }
+  }
+
   onDismiss() {
     if (this.fromUrl) {
       this.navCtrl.navigateBack(this.fromUrl);
@@ -52,14 +73,48 @@ export class LoginPage implements OnInit {
     }
   }
 
+  getAuthBtnText() {
+    if (this.isSmsLogin) {
+      if (this.isGetAuthCodeDisabled && this.authCodeCooldown) {
+        return this.authCodeCooldown + '秒后重新获取';
+      } else {
+        return '获取验证码';
+      }
+    } else {
+      return '忘记密码';
+    }
+  }
+
   onGetAuthCode() {
     if (this.isSmsLogin) {
       this.isGetAuthCodeDisabled = true;
-      this.authService.getAuthCode(this.form.value.accountNo, 'smsLogin').subscribe(response => {
+      this.authCodeSubscription = this.authService.getAuthCode(this.form.value.accountNo, 'smsLogin').pipe(
+        switchMap(response => {
+          this.authKey = response.authKey;
+          return interval(1000);
+        })
+      ).subscribe(response => {
         console.log(response);
-        this.authKey = response.authKey;
+        const cooldown = 60 - response;
+        if (cooldown <= 0) {
+          this.authCodeSubscription.unsubscribe();
+          this.isGetAuthCodeDisabled = false;
+        } else {
+          this.authCodeCooldown = cooldown;
+        }
       }, error => {
         console.log(error);
+        if (error.status === 404 || error.status === 400) {
+          this.alertCtrl.create({
+            header: '短信验证失败',
+            message: error.error.message,
+            buttons: ['确定']
+          }).then(alert => {
+            alert.present();
+          }).finally(() => {
+            this.isGetAuthCodeDisabled = false;
+          });
+        }
       });
     } else {
       this.navCtrl.navigateForward(['/auth/password']);

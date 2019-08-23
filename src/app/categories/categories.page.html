@@ -18,6 +18,10 @@
                   (click)="onNav(category.id)">{{category.name}}</a></li>
             </ul>
           </div>
+          <ion-infinite-scroll threshold="100px" (ionInfinite)="loadData($event)">
+            <ion-infinite-scroll-content loadingSpinner="crescent" loadingText="">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
         </ion-content>
       </ion-col>
       <ion-col size=9>

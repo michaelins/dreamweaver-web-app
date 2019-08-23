@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { AlertController, NavController } from '@ionic/angular';
-import { from, of } from 'rxjs';
+import { from, interval, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService, UserInfo } from '../../../../auth/auth.service';
 
@@ -16,13 +16,15 @@ const passwordConfirmValidator: ValidatorFn = (form: FormGroup) => {
   templateUrl: './reset-password.page.html',
   styleUrls: ['./reset-password.page.scss'],
 })
-export class ResetPasswordPage implements OnInit {
+export class ResetPasswordPage implements OnInit, OnDestroy {
 
   form: FormGroup;
   saveInProgress = false;
   user: UserInfo;
   isGetAuthCodeDisabled = false;
   authKey: string;
+  authCodeSubscription: Subscription;
+  authCodeCooldown: number;
 
   constructor(
     private navCtrl: NavController,
@@ -61,14 +63,53 @@ export class ResetPasswordPage implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    if (this.authCodeSubscription) {
+      this.authCodeSubscription.unsubscribe();
+    }
+  }
+
+  ionViewWillEnter() {
+    this.isGetAuthCodeDisabled = false;
+    this.authCodeCooldown = undefined;
+  }
+
+  ionViewWillLeave() {
+    if (this.authCodeSubscription) {
+      this.authCodeSubscription.unsubscribe();
+    }
+  }
+
   onGetAuthCode() {
     this.isGetAuthCodeDisabled = true;
-    console.log(this.form.value.phoneNo);
-    this.authService.getAuthCode(this.user.accountNo, 'password').subscribe(response => {
+    this.authCodeSubscription = this.authService.getAuthCode(this.user.accountNo, 'password').pipe(
+      switchMap(response => {
+        console.log(response);
+        this.authKey = response.authKey;
+        return interval(1000);
+      })
+    ).subscribe(response => {
       console.log(response);
-      this.authKey = response.authKey;
+      const cooldown = 60 - response;
+      if (cooldown <= 0) {
+        this.authCodeSubscription.unsubscribe();
+        this.isGetAuthCodeDisabled = false;
+      } else {
+        this.authCodeCooldown = cooldown;
+      }
     }, error => {
       console.log(error);
+      if (error.status === 404 || error.status === 400) {
+        this.alertCtrl.create({
+          header: '短信验证失败',
+          message: error.error.message,
+          buttons: ['确定']
+        }).then(alert => {
+          alert.present();
+        }).finally(() => {
+          this.isGetAuthCodeDisabled = false;
+        });
+      }
     });
   }
 

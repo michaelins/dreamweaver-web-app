@@ -14,7 +14,7 @@ export class CategoriesPage implements OnInit {
 
   @ViewChild('searchbar') searchbar: IonSearchbar;
   selectedRootCategoryId = -1;
-  rootCategoriesPageSize = 10;
+  rootCategoriesPageSize = 20;
   rootCategories: Category[];
   detailCategories: Category[] = [];
   collectionOfRootCategories: CollectionOfCategories = {};
@@ -138,4 +138,19 @@ export class CategoriesPage implements OnInit {
     }
   }
 
+  loadData(event) {
+    if (this.collectionOfRootCategories.last) {
+      event.target.complete();
+      event.target.disabled = true;
+    } else if (this.collectionOfRootCategories.number + 2 <= this.collectionOfRootCategories.totalPages) {
+      this.categoriesService.getRootCategories(this.collectionOfRootCategories.number + 2, this.rootCategoriesPageSize).subscribe(resp => {
+        console.log(resp);
+        this.rootCategories.push(...resp.content);
+        this.collectionOfRootCategories = resp;
+        event.target.complete();
+      }, error => {
+        console.log(error);
+      });
+    }
+  }
 }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { AlertController, LoadingController, NavController } from '@ionic/angular';
-import { of, from } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AlertController, NavController } from '@ionic/angular';
+import { from, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { BodyData, ClockinService } from '../clockin.service';
 
@@ -17,9 +17,10 @@ export enum BodyDataType {
   templateUrl: './clockin-bodydata.page.html',
   styleUrls: ['./clockin-bodydata.page.scss'],
 })
-export class ClockinBodydataPage implements OnInit {
+export class ClockinBodydataPage implements OnInit, OnDestroy {
 
   BodyDataType = BodyDataType;
+  bodyDataSubscription: Subscription;
   bodyData: BodyData = {
     height: null,
     weight: null,
@@ -35,12 +36,14 @@ export class ClockinBodydataPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.clockinService.getBodyData().subscribe(bodyData => {
-      console.log(bodyData);
-      this.bodyData = bodyData;
-    }, error => {
-      console.log(error);
+    this.bodyDataSubscription = this.clockinService.bodyDataObs.subscribe(resp => {
+      this.bodyData = resp;
     });
+    this.clockinService.getBodyData().subscribe();
+  }
+
+  ngOnDestroy() {
+    this.bodyDataSubscription.unsubscribe();
   }
 
   onClick(dataType: BodyDataType) {

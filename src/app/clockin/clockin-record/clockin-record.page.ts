@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ModalController, LoadingController } from '@ionic/angular';
-import { from } from 'rxjs';
+import { from, Subscription } from 'rxjs';
 import { switchMap, toArray, mergeMap, map } from 'rxjs/operators';
 import { ClockinRecordNewComponent } from './clockin-record-new/clockin-record-new.component';
 import { ClockinRecordService, CollectionOfRecord, Record } from './clockin-record.service';
@@ -14,10 +14,11 @@ import { OssService } from '../../shared/oss.service';
   templateUrl: './clockin-record.page.html',
   styleUrls: ['./clockin-record.page.scss'],
 })
-export class ClockinRecordPage implements OnInit {
+export class ClockinRecordPage implements OnInit, OnDestroy {
 
   @ViewChild('photoSwipe') photoSwipe: ElementRef;
 
+  recordsSubscription: Subscription;
   records: Record[];
   collectionOfRecord: CollectionOfRecord = {};
   recordsPageSize = 10;
@@ -33,13 +34,17 @@ export class ClockinRecordPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.clockinRecordService.getRecords(1, this.recordsPageSize, this.equalObjs, this.sortObjs).subscribe(resp => {
-      console.log(resp);
-      this.records = resp.content;
-      this.collectionOfRecord = resp;
-    }, error => {
-      console.log(error);
+    this.recordsSubscription = this.clockinRecordService.recordsObs.subscribe(resp => {
+      if (resp) {
+        this.records = resp.content;
+        this.collectionOfRecord = resp;
+      }
     });
+    this.clockinRecordService.getRecords(1, this.recordsPageSize, this.equalObjs, this.sortObjs).subscribe();
+  }
+
+  ngOnDestroy() {
+    this.recordsSubscription.unsubscribe();
   }
 
   loadData(event) {
@@ -51,7 +56,8 @@ export class ClockinRecordPage implements OnInit {
         this.collectionOfRecord.number + 2,
         this.recordsPageSize,
         this.equalObjs,
-        this.sortObjs
+        this.sortObjs,
+        true
       ).subscribe(resp => {
         console.log(resp);
         this.records.push(...resp.content);
@@ -66,8 +72,6 @@ export class ClockinRecordPage implements OnInit {
   doRefresh(event?) {
     this.clockinRecordService.getRecords(1, this.recordsPageSize, this.equalObjs, this.sortObjs).subscribe(resp => {
       console.log(resp);
-      this.records = resp.content;
-      this.collectionOfRecord = resp;
     }, error => {
       console.log(error);
     }, () => {
@@ -162,11 +166,6 @@ export class ClockinRecordPage implements OnInit {
         modal.present();
         return modal.onDidDismiss();
       })
-    ).subscribe(data => {
-      console.log(data.data.refresh);
-      if (data.data.refresh) {
-        this.doRefresh();
-      }
-    }, console.log);
+    ).subscribe();
   }
 }
