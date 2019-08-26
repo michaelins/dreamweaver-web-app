@@ -37,7 +37,9 @@ export class ClockinBodydataPage implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.bodyDataSubscription = this.clockinService.bodyDataObs.subscribe(resp => {
-      this.bodyData = resp;
+      if (resp) {
+        this.bodyData = resp;
+      }
     });
     this.clockinService.getBodyData().subscribe();
   }
