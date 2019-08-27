@@ -45,19 +45,16 @@ export class ShoppingCartPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('shopping cart page destroyed.');
     this.userSubscription.unsubscribe();
     this.shoppingCartSubscription.unsubscribe();
   }
 
   ionViewWillEnter() {
     this.uiStateService.setTabBarHidden(false);
-    console.log('ionViewWillEnter');
   }
 
   ionViewWillLeave() {
     this.uiStateService.setTabBarHidden(true);
-    console.log('ionViewWillLeave');
   }
 
   ionViewDidLeave() {
@@ -145,7 +142,7 @@ export class ShoppingCartPage implements OnInit, OnDestroy {
     let price = 0, quantity = 0;
     this.cart.items.forEach(item => {
       if (item.checked) {
-        price += (item.goodsPrice * item.number);
+        price += (item.realGoodsPrice * item.number);
         quantity += 1;
       }
     });

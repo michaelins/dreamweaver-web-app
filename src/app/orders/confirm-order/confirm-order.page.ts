@@ -2,11 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { map, concatMap } from 'rxjs/operators';
+import { concatMap, map } from 'rxjs/operators';
 import { AddressPage } from '../../address/address.page';
 import { Address, AddressService } from '../../address/address.service';
 import { Product, Specification, Warehouse } from '../../product/product.service';
-import { ShoppingCart, ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
+import { ShoppingCart, ShoppingCartFeeInfoReqItem, ShoppingCartService, ShoppingCartFeeInfo } from '../../shopping-cart/shopping-cart.service';
 import { CreateOrderReq, CreateOrderReqItem, OrderService } from '../order.service';
 
 @Component({
@@ -19,12 +19,17 @@ export class ConfirmOrderPage implements OnInit, OnDestroy {
   subscription: Subscription;
   cart: ShoppingCart;
   address: Address;
-  price = 0;
   buyNow = false;
   product: Product;
   selectedWarehouse: Warehouse;
   selectedSpec: Specification;
   quantity: number;
+  feeInfo: ShoppingCartFeeInfo = {
+    actuallyGoodsPrice: 0,
+    actuallyPaid: 0,
+    totalFreight: 0,
+    totalTax: 0
+  };
 
   constructor(
     private shoppingCartService: ShoppingCartService,
@@ -47,40 +52,46 @@ export class ConfirmOrderPage implements OnInit, OnDestroy {
       }),
       concatMap(state => {
         return this.shoppingCartService.shoppingCartObservable.pipe(
-          map(shoppingCart => {
-            return { state, shoppingCart };
+          concatMap(shoppingCart => {
+            const feeInfoReqItems: ShoppingCartFeeInfoReqItem[] = [];
+            if (state.data) {
+              this.buyNow = true;
+              this.product = state.data.product;
+              this.selectedWarehouse = state.data.selectedWarehouse;
+              this.selectedSpec = state.data.selectedSpec;
+              this.quantity = state.data.quantity;
+              feeInfoReqItems.push({
+                goodsId: state.data.product.goodsId,
+                number: state.data.quantity,
+                realGoodsPrice: state.data.product.realPrice,
+                warehouseId: state.data.selectedWarehouse.id
+              });
+            } else if (shoppingCart) {
+              const localShoppingCart = { ...shoppingCart };
+              this.buyNow = false;
+              localShoppingCart.items = localShoppingCart.items.filter(item => {
+                return item.checked;
+              });
+              this.cart = localShoppingCart;
+              feeInfoReqItems.push(...localShoppingCart.items.map(item => {
+                return {
+                  goodsId: item.goodsId,
+                  number: item.number,
+                  realGoodsPrice: item.realGoodsPrice,
+                  warehouseId: item.warehouseId
+                } as ShoppingCartFeeInfoReqItem;
+              }));
+            }
+            return this.shoppingCartService.getShoppingCartFeeInfo(feeInfoReqItems);
           })
         );
-      })
-    ).subscribe(resp => {
-      console.log(resp);
-      if (resp.state.data) {
-        this.buyNow = true;
-        this.product = resp.state.data.product;
-        this.selectedWarehouse = resp.state.data.selectedWarehouse;
-        this.selectedSpec = resp.state.data.selectedSpec;
-        this.quantity = resp.state.data.quantity;
-      } else if (resp.shoppingCart) {
-        const shoppingCart = { ...resp.shoppingCart };
-        this.buyNow = false;
-        shoppingCart.items = shoppingCart.items.filter(item => {
-          return item.checked;
-        });
-        this.cart = shoppingCart;
-        let price = 0;
-        this.cart.items.forEach(item => {
-          if (item.checked) {
-            price += (item.goodsPrice * item.number);
-          }
-        });
-        this.price = price;
-        console.log(this.cart);
-      }
+      }),
+    ).subscribe(feeInfo => {
+      this.feeInfo = feeInfo;
     });
     if (!this.orderService.orderReq || !this.orderService.orderReq.addressId) {
       this.addressService.getDefaultAddress().subscribe(addr => {
         this.address = addr;
-        console.log(addr);
       });
     }
   }
@@ -135,7 +146,6 @@ export class ConfirmOrderPage implements OnInit, OnDestroy {
       return;
     } else {
       this.orderService.createOrder(orderReq).subscribe(resp => {
-        console.log(resp);
         this.navCtrl.navigateForward(['/orders', 'pay', resp.data.id]);
       });
     }

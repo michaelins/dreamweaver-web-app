@@ -36,6 +36,7 @@ export class OrderDetailPage implements OnInit {
         }
       })
     ).subscribe(resp => {
+      console.log(resp);
       if (resp && resp.order && OrderStatus[resp.order.orderStatus] !== OrderStatus.DELETED_BY_USER) {
         this.order = resp.order;
         this.shippingAddress = resp.shippingAddress;

@@ -14,6 +14,7 @@ export interface Product {
     h4text?: string;
     discountSeq: string;
     weight: number;
+    realPrice: number;
     price: number;
     unit: string;
     amount: number;
@@ -60,6 +61,8 @@ export interface Warehouse {
     weight: number;
     warehousesName: string;
     id: number;
+    freight?: number;
+    type?: string;
     createTime: string;
     updateTime: string;
 }
@@ -72,6 +75,7 @@ export interface Specification {
     weight: number;
     specificationsName: string;
     id: number;
+    intro?: string;
     createTime: string;
     updateTime: string;
 }

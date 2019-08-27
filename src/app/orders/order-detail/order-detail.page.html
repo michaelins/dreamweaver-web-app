@@ -88,13 +88,13 @@
                   </div>
                   <div class="ion-padding-top ion-padding-bottom">
                     <ion-text color="medium">
-                      <p>{{item.specificationId}}/{{item.warehouseId}}</p>
+                      <p>{{item.specification.name}}/{{item.warehouse.name}}</p>
                     </ion-text>
                   </div>
                   <div class="product-price-amount-wrapper">
                     <div class="product-price">
                       <ion-text color="primary">
-                        <h5>{{item.amountPayable | currency: 'CNY':'symbol-narrow'}}</h5>
+                        <h5>{{item.actuallyGoodsPrice | currency: 'CNY':'symbol-narrow'}}</h5>
                       </ion-text>
                     </div>
                     <div class="product-amount">
@@ -118,7 +118,7 @@
       </ion-col>
       <ion-col class="ion-padding-vertical" text-right>
         <ion-text>
-          <h6>{{order.actuallyPaid | currency: 'CNY':'symbol-narrow'}}</h6>
+          <h6>{{order.actuallyGoodsPrice | currency: 'CNY':'symbol-narrow'}}</h6>
         </ion-text>
       </ion-col>
     </ion-row>
@@ -131,6 +131,18 @@
       <ion-col class="ion-padding-vertical" text-right>
         <ion-text>
           <h6>{{order.totalFreight | currency: 'CNY':'symbol-narrow'}}</h6>
+        </ion-text>
+      </ion-col>
+    </ion-row>
+    <ion-row class="ion-margin-horizontal">
+      <ion-col class="ion-padding-vertical">
+        <ion-text>
+          <h6>税费</h6>
+        </ion-text>
+      </ion-col>
+      <ion-col class="ion-padding-vertical" text-right>
+        <ion-text>
+          <h6>{{order.totalTax | currency: 'CNY':'symbol-narrow'}}</h6>
         </ion-text>
       </ion-col>
     </ion-row>

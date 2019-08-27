@@ -11,6 +11,8 @@ export interface ShoppingCart {
     goodsPrice: number;
     freight: number;
     totalPrice: number;
+    realGoodsPrice: number;
+    favourablePrice: number;
 }
 
 export interface ShoppingCartItem {
@@ -22,6 +24,8 @@ export interface ShoppingCartItem {
     goodsImg: string;
     goodsName: string;
     goodsPrice: number;
+    realGoodsPrice: number;
+    favourablePrice: number;
     number: number;
     warehouseId: number;
     goodsWarehouseDesc: string;
@@ -45,6 +49,20 @@ export interface ShoppingCartItemRef {
     number: number;
     specificationId: number;
     warehouseId: number;
+}
+
+export interface ShoppingCartFeeInfoReqItem {
+    goodsId: string;
+    number: number;
+    realGoodsPrice: number;
+    warehouseId: number;
+}
+
+export interface ShoppingCartFeeInfo {
+    actuallyGoodsPrice: number;
+    actuallyPaid: number;
+    totalFreight: number;
+    totalTax: number;
 }
 
 @Injectable({
@@ -107,5 +125,9 @@ export class ShoppingCartService {
                 this.shoppingCart.next(resp);
             })
         );
+    }
+
+    getShoppingCartFeeInfo(items: ShoppingCartFeeInfoReqItem[]) {
+        return this.http.post<ShoppingCartFeeInfo>(`${environment.apiServer}/buyer-cart/data`, items);
     }
 }

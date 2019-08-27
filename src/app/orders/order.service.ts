@@ -6,6 +6,7 @@ import { concatMap, map, switchMap, tap } from 'rxjs/operators';
 import { $enum } from 'ts-enum-util';
 import { environment } from '../../environments/environment';
 import { SortObject } from '../shared/interfaces/common-interfaces';
+import { Warehouse, Specification } from '../product/product.service';
 
 export interface CreateOrderReqItem {
     amount: number;
@@ -27,6 +28,8 @@ export interface OrderItem {
     goodsId: string;
     userId: string;
     specificationId: number;
+    warehouse: Warehouse;
+    specification: Specification;
     warehouseId: number;
     goodsSnapshoot: string;
     specificationSnapshoot: string;
@@ -34,6 +37,7 @@ export interface OrderItem {
     num: number;
     title: string;
     price: number;
+    actuallyGoodsPrice: number;
     totalFee: number;
     amountPayable: number;
     favourablePrice: number;
@@ -51,6 +55,7 @@ export interface Order {
     items: OrderItem[];
     actuallyPaid: number;
     amountPayable: number;
+    actuallyGoodsPrice: number;
     totalTax: number;
     totalFreight: number;
     totalPoints: number;

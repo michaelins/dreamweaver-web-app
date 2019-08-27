@@ -32,7 +32,7 @@
                     <div class="product-price-amount-wrapper">
                       <div class="product-price">
                         <ion-text color="primary">
-                          <h5>{{item.price | currency: 'CNY':'symbol-narrow'}}</h5>
+                          <h5>{{item.actuallyGoodsPrice | currency: 'CNY':'symbol-narrow'}}</h5>
                         </ion-text>
                       </div>
                       <div class="product-amount">
@@ -51,7 +51,7 @@
               <ion-col class="ion-padding-horizontal ion-padding-top">
                 <ion-text>
                   <p>共 {{order.goodsNum}} 件商品
-                    合计{{order.amountPayable | currency: 'CNY':'symbol-narrow'}}</p>
+                    合计{{order.actuallyGoodsPrice | currency: 'CNY':'symbol-narrow'}}</p>
                 </ion-text>
               </ion-col>
             </ion-row>

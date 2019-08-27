@@ -1,7 +1,9 @@
 import { Component, OnInit, Renderer, ViewChild } from '@angular/core';
 import { IonSearchbar, NavController } from '@ionic/angular';
+import { CollectionOfProduct, Product, ProductService } from '../product/product.service';
+import { EqualObject, SortObject } from '../shared/interfaces/common-interfaces';
 import { UiStateService } from '../shared/ui-state.service';
-import { Banner, CollectionOfProduct, HomeService, Product } from './home.service';
+import { Banner, HomeService } from './home.service';
 
 @Component({
   selector: 'app-home',
@@ -25,6 +27,14 @@ export class HomePage implements OnInit {
     },
     lazy: true
   };
+  equalObj: EqualObject[] = [{
+    eqObj: 0,
+    field: 'status'
+  }];
+  sortObj: SortObject[] = [{
+    direction: 0,
+    field: 'weight'
+  }];
   // toolbarIonicProperties: IonicProperty[] = [{
   //   name: '--background',
   //   value: 'rgba(var(--ion-color-primary-rgb), 0)'
@@ -44,6 +54,7 @@ export class HomePage implements OnInit {
   constructor(
     private uiStateService: UiStateService,
     private homeService: HomeService,
+    private productService: ProductService,
     private navCtrl: NavController,
     // tslint:disable-next-line: deprecation
     private renderer: Renderer
@@ -56,7 +67,7 @@ export class HomePage implements OnInit {
     }, error => {
       console.log(error);
     });
-    this.homeService.getProducts(1, this.productsPageSize).subscribe(resp => {
+    this.productService.getProducts(1, this.productsPageSize, this.equalObj, this.sortObj).subscribe(resp => {
       this.products = resp.content;
       this.collectionOfProduct = resp;
     }, error => {
@@ -93,7 +104,6 @@ export class HomePage implements OnInit {
     // this.scrollEvents = false;
     // this.bodyTouchMoveEventSubscription.unsubscribe();
     this.uiStateService.setTabBarHidden(true);
-    console.log('ionViewWillLeave');
   }
 
   // onScroll(event: CustomEvent) {
@@ -118,8 +128,12 @@ export class HomePage implements OnInit {
       event.target.complete();
       event.target.disabled = true;
     } else if (this.collectionOfProduct.number + 2 <= this.collectionOfProduct.totalPages) {
-      this.homeService.getProducts(this.collectionOfProduct.number + 2, this.productsPageSize).subscribe(resp => {
-        console.log(resp);
+      this.productService.getProducts(
+        this.collectionOfProduct.number + 2,
+        this.productsPageSize,
+        this.equalObj,
+        this.sortObj
+      ).subscribe(resp => {
         this.products.push(...resp.content);
         this.collectionOfProduct = resp;
         event.target.complete();

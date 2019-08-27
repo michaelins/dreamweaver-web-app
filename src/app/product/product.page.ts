@@ -58,7 +58,6 @@ export class ProductPage implements OnInit {
   ionViewDidEnter() {
     this.route.params.pipe(switchMap(params => {
       if (params.productId) {
-        console.log(params.productId);
         return this.productService.getProduct(params.productId);
       }
     })).subscribe(resp => {
@@ -69,17 +68,14 @@ export class ProductPage implements OnInit {
       if (this.product.specifications && this.product.specifications.length > 0) {
         this.selectedSpec = this.product.specifications[0];
       }
-      console.log(resp);
     });
     this.shoppingCartService.shoppingCartObservable.subscribe(resp => {
-      console.log(resp);
       if (resp && resp.items && resp.items.length > 0) {
         this.shoppingCartItemSize = resp.items.length;
       }
     });
     this.authService.user.pipe(
       switchMap(user => {
-        console.log(user);
         if (user) {
           return this.addressService.getDefaultAddress();
         } else {
@@ -102,7 +98,6 @@ export class ProductPage implements OnInit {
 
   onNav(id: number) {
     if (this.isScrolling) {
-      console.log('scrolling, ignore nav');
       return;
     }
     this.sectionId = id;
@@ -171,11 +166,9 @@ export class ProductPage implements OnInit {
 
   onIonScrollStart() {
     this.isScrolling = true;
-    console.log('onIonScrollStart');
   }
 
   onIonScrollEnd() {
     this.isScrolling = false;
-    console.log('onIonScrollEnd');
   }
 }
