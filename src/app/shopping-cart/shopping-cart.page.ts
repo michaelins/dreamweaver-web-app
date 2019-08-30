@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AlertController, NavController, ToastController } from '@ionic/angular';
+import { AlertController, NavController, ToastController, LoadingController } from '@ionic/angular';
 import { from, Subscription, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
@@ -26,6 +26,7 @@ export class ShoppingCartPage implements OnInit, OnDestroy {
     private authService: AuthService,
     private shoppingCartService: ShoppingCartService,
     private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
     private navCtrl: NavController
   ) { }
@@ -72,13 +73,38 @@ export class ShoppingCartPage implements OnInit, OnDestroy {
   }
 
   onAddQuantity(item: ShoppingCartItem) {
-    this.shoppingCartService.addToShoppingCart({
-      goodsId: item.goodsId,
-      number: 1,
-      specificationId: item.specificationId,
-      warehouseId: item.warehouseId
-    }).subscribe(resp => {
-      console.log(resp.items.length);
+    from(this.loadingCtrl.create({
+      message: '请稍候...',
+      spinner: 'crescent'
+    })).pipe(
+      switchMap(loading => {
+        return loading.present();
+      }),
+      switchMap(() => {
+        return this.shoppingCartService.addToShoppingCart({
+          goodsId: item.goodsId,
+          number: 1,
+          specificationId: item.specificationId,
+          warehouseId: item.warehouseId
+        }, true);
+      })
+    ).subscribe(resp => {
+      const itemToAdd = this.cart.items.find(i => {
+        return i.id === item.id;
+      });
+      itemToAdd.number++;
+      this.cart.goodsNumber = resp.goodsNumber;
+      this.cart.goodsPrice = resp.goodsPrice;
+      this.cart.freight = resp.freight;
+      this.cart.totalPrice = resp.totalPrice;
+      this.cart.realGoodsPrice = resp.realGoodsPrice;
+      this.cart.favourablePrice = resp.favourablePrice;
+      this.calcPriceAndQuantity();
+    }, error => {
+      this.loadingCtrl.dismiss();
+      console.log(error);
+    }, () => {
+      this.loadingCtrl.dismiss();
     });
   }
 
@@ -93,13 +119,38 @@ export class ShoppingCartPage implements OnInit, OnDestroy {
         toast.present();
       });
     } else {
-      this.shoppingCartService.removeFromShoppingCart([{
-        goodsId: item.goodsId,
-        number: item.number - 1,
-        specificationId: item.specificationId,
-        warehouseId: item.warehouseId
-      }]).subscribe(resp => {
-        console.log(resp.items.length);
+      from(this.loadingCtrl.create({
+        message: '请稍候...',
+        spinner: 'crescent'
+      })).pipe(
+        switchMap(loading => {
+          return loading.present();
+        }),
+        switchMap(() => {
+          return this.shoppingCartService.removeFromShoppingCart([{
+            goodsId: item.goodsId,
+            number: item.number - 1,
+            specificationId: item.specificationId,
+            warehouseId: item.warehouseId
+          }], true);
+        })
+      ).subscribe(resp => {
+        const itemToReduce = this.cart.items.find(i => {
+          return i.id === item.id;
+        });
+        itemToReduce.number--;
+        this.cart.goodsNumber = resp.goodsNumber;
+        this.cart.goodsPrice = resp.goodsPrice;
+        this.cart.freight = resp.freight;
+        this.cart.totalPrice = resp.totalPrice;
+        this.cart.realGoodsPrice = resp.realGoodsPrice;
+        this.cart.favourablePrice = resp.favourablePrice;
+        this.calcPriceAndQuantity();
+      }, error => {
+        this.loadingCtrl.dismiss();
+        console.log(error);
+      }, () => {
+        this.loadingCtrl.dismiss();
       });
     }
   }

@@ -28,13 +28,13 @@
                       </label>
                     </div>
                   </div>
-                  <img class="thumbnail"
+                  <img class="thumbnail" [routerLink]="['/product', item.goodsId]"
                     [src]="item.goodsImg+'?x-oss-process=image/resize,m_pad,h_100,w_100,color_FFFFFF'">
                 </div>
                 <ion-grid>
                   <ion-row>
                     <ion-col class="ion-padding-top ion-padding-bottom product-block">
-                      <div class="product-title box-2lines-ellipsis">
+                      <div class="product-title box-2lines-ellipsis" [routerLink]="['/product', item.goodsId]">
                         <div>
                           <article>{{item.goodsName}}</article>
                         </div>

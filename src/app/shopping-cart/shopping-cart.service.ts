@@ -79,7 +79,7 @@ export class ShoppingCartService {
         return this.shoppingCart.asObservable();
     }
 
-    addToShoppingCart(item: ShoppingCartItemRef) {
+    addToShoppingCart(item: ShoppingCartItemRef, silent?: boolean) {
         return this.http.post<ShoppingCart>(`${environment.apiServer}/buyer-cart`, item).pipe(
             tap(resp => {
                 const oldCart = this.shoppingCart.value;
@@ -93,12 +93,14 @@ export class ShoppingCartService {
                         }
                     });
                 }
-                this.shoppingCart.next(resp);
+                if (!silent) {
+                    this.shoppingCart.next(resp);
+                }
             })
         );
     }
 
-    removeFromShoppingCart(items: ShoppingCartItemRef[]) {
+    removeFromShoppingCart(items: ShoppingCartItemRef[], silent?: boolean) {
         return this.http.request<ShoppingCart>('delete', `${environment.apiServer}/buyer-cart`, {
             body: items
         }).pipe(
@@ -114,7 +116,9 @@ export class ShoppingCartService {
                         }
                     });
                 }
-                this.shoppingCart.next(resp);
+                if (!silent) {
+                    this.shoppingCart.next(resp);
+                }
             })
         );
     }

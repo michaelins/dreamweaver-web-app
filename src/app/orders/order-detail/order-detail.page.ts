@@ -48,19 +48,19 @@ export class OrderDetailPage implements OnInit {
   }
 
   showOrderPrimaryButton(status: OrderStatus) {
-    this.orderService.showOrderPrimaryButton(status);
+    return this.orderService.showOrderPrimaryButton(status);
   }
 
   showOrderSecondaryButton(status: OrderStatus) {
-    this.orderService.showOrderSecondaryButton(status);
+    return this.orderService.showOrderSecondaryButton(status);
   }
 
   getOrderPrimaryButtonText(status: OrderStatus) {
-    this.orderService.getOrderPrimaryButtonText(status);
+    return this.orderService.getOrderPrimaryButtonText(status);
   }
 
   getOrderSecondaryButtonText(status: OrderStatus) {
-    this.orderService.getOrderSecondaryButtonText(status);
+    return this.orderService.getOrderSecondaryButtonText(status);
   }
 
   onOrderPrimaryButtonClick(status: OrderStatus, orderId: string) {

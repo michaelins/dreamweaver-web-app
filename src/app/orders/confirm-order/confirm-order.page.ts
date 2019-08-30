@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ModalController, NavController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { concatMap, map } from 'rxjs/operators';
+import { concatMap, map, take } from 'rxjs/operators';
 import { AddressPage } from '../../address/address.page';
 import { Address, AddressService } from '../../address/address.service';
 import { Product, Specification, Warehouse } from '../../product/product.service';
@@ -145,7 +145,9 @@ export class ConfirmOrderPage implements OnInit, OnDestroy {
     if (orderReq.items.length === 0) {
       return;
     } else {
-      this.orderService.createOrder(orderReq).subscribe(resp => {
+      this.orderService.createOrder(orderReq).pipe(
+        take(1)
+      ).subscribe(resp => {
         this.navCtrl.navigateForward(['/orders', 'pay', resp.data.id]);
       });
     }
