@@ -260,15 +260,15 @@ export class AddressDetailPage implements OnInit {
               // districtCode = picker.columns[2].options[0].value;
               cityCode = null;
               districtCode = null;
-              picker.columns = [JSON.parse(JSON.stringify(picker.columns[0]))];
+              // picker.columns = [JSON.parse(JSON.stringify(picker.columns[0]))];
             } else if (data.name === 'city') {
               // districtCode = picker.columns[2].options[0].value;
               districtCode = null;
-              picker.columns = [JSON.parse(JSON.stringify(picker.columns[0])), JSON.parse(JSON.stringify(picker.columns[1]))];
+              // picker.columns = [JSON.parse(JSON.stringify(picker.columns[0])), JSON.parse(JSON.stringify(picker.columns[1]))];
             } else {
               return of(null);
             }
-            console.log(provinceCode, cityCode, districtCode);
+            // console.log(provinceCode, cityCode, districtCode);
             return this.addressService.generateColumns(
               provinceCode,
               cityCode,
@@ -280,7 +280,7 @@ export class AddressDetailPage implements OnInit {
         return obs;
       })
     ).subscribe(columns => {
-      console.log(columns);
+      // console.log(columns);
       if (columns) {
         addressPicker.columns = columns;
       }

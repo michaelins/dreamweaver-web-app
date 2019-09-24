@@ -131,7 +131,10 @@ export class AddressService {
         }
     }
 
-    generateColumns(provinceCode: string, cityCode: string, districtCode: string): Observable<PickerColumn[]> {
+    generateColumns(
+        provinceCode: string,
+        cityCode: string,
+        districtCode: string): Observable<PickerColumn[]> {
 
         const columns: PickerColumn[] = [];
 
@@ -190,7 +193,7 @@ export class AddressService {
                     selectedIndex: cityIndex,
                     options: cities
                 });
-                // console.log('city', cities, cityIndex, cityCode);
+                // console.log('city', cities);
                 return this.getAddressDictList('district', cityCode);
             }),
             map(districts => {
@@ -224,7 +227,12 @@ export class AddressService {
                     selectedIndex: districtIndex,
                     options: districts
                 });
-                // console.log('district', districts, districtIndex, districtCode);
+                while (columns[1].options.length < 30) {
+                    columns[1].options.push({ value: -1, text: '', disabled: true });
+                }
+                while (columns[2].options.length < 30) {
+                    columns[2].options.push({ value: -1, text: '', disabled: true });
+                }
                 return of(columns);
             })
         );
